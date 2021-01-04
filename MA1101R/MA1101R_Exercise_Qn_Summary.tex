@@ -1,0 +1,292 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Overleaf Example: A quick guide to LaTeX
+%
+% Original Source: Dave Richeson (divisbyzero.com), Dickinson College
+% Modified By: Paul Gessler, Overleaf (overleaf.com)
+% 
+% A one-size-fits-all LaTeX cheat sheet. Kept to two pages, so it 
+% can be printed (double-sided) on one piece of paper
+% 
+% Feel free to distribute this example, but please keep the referral
+% to divisbyzero.com
+% 
+% Guidance on the use of the Overleaf logos can be found here:
+% https://www.overleaf.com/for/partners/logos 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt,landscape,letterpaper]{article}
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{multicol,multirow}
+\usepackage{spverbatim}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,urlcolor=olgreen]{hyperref}
+\usepackage{booktabs}
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX]{TeX Gyre Pagella}
+\setsansfont{Fira Sans}
+\setmonofont{Inconsolata}
+\usepackage{unicode-math}
+\setmathfont{TeX Gyre Pagella Math}
+\usepackage{microtype}
+% new:
+\def\MT@is@uni@comp#1\iffontchar#2\else#3\fi\relax{%
+  \ifx\\#2\\\else\edef\MT@char{\iffontchar#2\fi}\fi
+}
+\makeatother
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{margin=0.4in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\sffamily\large}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\sffamily\normalsize\itshape}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\itshape}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+% -----------------------------------------------------------------------
+
+\usepackage{academicons}
+
+
+\begin{document}
+\footnotesize
+%\raggedright
+
+\begin{center}
+  {\huge\sffamily\bfseries MA1101R Exercise Question Cheatsheet} \huge\bfseries\\
+  by Yiyang, AY20/21
+\end{center}
+\setlength{\premulticols}{0pt}
+\setlength{\postmulticols}{0pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{1.8em}
+\begin{multicols}{3}
+
+\section{Chapter 2 - Matrices}
+
+\subsection{Ex2Qn9}
+Suppose the homogeneous system $A \pmb x = \pmb 0$ has non-trivial solution. Then the linear system $A \pmb x = \pmb b$ has either no solution or infinitely many solution.
+
+\subsection{Ex2Qn11(e)}
+There are no square matrices $A$ and $B$ of same order such that $AB - BA = I$.
+
+\subsection{Ex2Qn23 (Block matrix multiplication)}
+Let $A$ be an $m \times n$ matrix,
+\begin{itemize}
+    \item For matrices $B_1$ and $B_2$ of size $n \times p$ and $n \times q$ respectively, 
+$$
+A(B_1 \ B_2) = (AB_1 \ AB_2)
+$$
+    \item For matrices $D_1$ and $D_2$ of size $p \times m$ and $q \times m$ respectively, 
+$$
+ \begin{pmatrix}
+   D_1 \\
+   D_2
+  \end{pmatrix} A = \begin{pmatrix}
+   D_1 A\\
+   D_2 A
+  \end{pmatrix} 
+$$
+\end{itemize}
+
+\subsection{Ex2Qn60}
+Suppose A is an invertible matrix, then $adj(A)$ is invertible.
+
+
+
+\section{Chapter 3 - Vector Space}
+
+\subsection{Ex3Qn30}
+Let $u_1, u_2, ..., u_k$ be vectors in $\mathbb{R^n}$ and $P$ a square matrix of order $n$,
+\begin{itemize}
+    \item If $Pu_1, Pu_2, ..., Pu_k$ are linearly independent, then $u_1, u_2, ..., u_k$ are linearly independent.
+    \item If $u_1, u_2, ..., u_k$ are linearly independent, \emph{and $P$ is invertible}, then  $Pu_1, Pu_2, ..., Pu_k$ are linearly independent.
+\end{itemize}
+
+
+\subsection{Ex3Qn41}
+Let $V$ be a vector space,
+\begin{itemize}
+    \item suppose $S$ is a finite subset of $V$ such that $span(S) = V$, then there exists a subset $S'$ such that $S'$ is a basis for V.
+    \item suppose $T$ is a finite subset of $V$ such that $T$ is linearly independent, then there exists a basis $T^*$ for $V$ such that $T \subseteq T^*$
+\end{itemize}
+
+\subsection{Ex3Qn43}
+Let $V, W$ be two subspaces of $\mathbb{R^n}$, then
+$$
+dim(V+W) = dim(V) + dim(W) - dim(V \cap W)
+$$
+
+\subsection{Ex3Qn45}
+Let $V, W$ be two subspaces of a given vector space,
+\begin{itemize}
+    \item there exists a basis $S_1$ for $V$ and a basis $S_2$ for $W$, such that $S_1 \cap S_2$ is a basis for $V \cap W$.
+    \item there exists a basis $T_1$ for $V$ and a basis $T_2$ for $W$, such that $T_1 \cup T_2$ is a basis for $V + W$.
+\end{itemize}
+
+
+
+
+\section{Chapter 4 - Rank \& Nullity}
+
+\subsection{Ex4Qn20}
+Suppose $A$ and $B$ are two matrices such that $AB=\pmb0$, then column space of $B$ is contained in the nullspace of $A$.
+
+\subsection{Ex4Qn21}
+There is no matrix whose row space and nullspace both contain the same nonzero vector.
+
+\subsection{Ex4Qn22}
+Let $A$ be an $m \times n$ matrix and $P$ an $m \times m$ matrix. If $P$ is invertible, then $rank(PA) = rank(A)$.
+(The inverse is not true)
+
+\subsection{Ex4Qn23}
+For two matrices $A, B$ of the same size,
+$$
+rank(A+B) \leq rank(A) + rank(B)
+$$
+
+\subsection{Ex4Qn24}
+Let $A$ be an $m \times n$ matrix. Suppose the linear system $A \pmb x = \pmb b$ is consistent for all $\pmb b \in \mathbb{R^n}$, then the linear system $A^T \pmb y = \pmb 0$ has only the trivial solution.
+
+\subsection{Ex4Qn25}
+For a matrix $A$ of size $m \times n$,
+\begin{itemize}
+    \item nullspace of $A$ is equal to nullspace of $A^T A$
+    \item $nullity(A) = nullity(A^T A)$
+    \item $rank(A) = rank(A^T A)$
+    \item $rank(A) = rank(A A^T)$
+\end{itemize}
+(However, $nullity(A) \neq nullity(AA^T)$)
+
+
+
+
+
+\section{Chapter 5 - Orthogonality}
+
+\subsection{Ex5Qn9}
+Let $\{ u_1, u_2, ..., u_n \}$ be an orthogonal set of vectors in a vector space, then
+$$
+\lVert u_1 + u_2 + ... + u_n \rVert^2 = \lVert u_1 \rVert^2 + \lVert u_2 \rVert^2 + ... + \lVert u_n \rVert^2
+$$
+
+\subsection{Ex5Qn18 Uniqueness of (Orthogonal) Projection}
+Let $V$ be a subspace of $\mathbb{R^n}$ and $\pmb u$ a vector in $\mathbb{R^n}$. $\pmb u$ can written uniquely as $\pmb u = \pmb n + \pmb p$ such that $\pmb n$ is a vector orthogonal to $V$ and $\pmb p$ a vector in $V$.
+
+\subsection{Ex5Qn19}
+Let $A$ be a square matrix of order $n$ such that $A^2 = A^T = A$,
+\begin{itemize}
+    \item for any two vectors $\pmb u, \pmb v \in \mathbb{R^n}$, $(A \pmb u) \cdot \pmb v = \pmb u \cdot (A \pmb v)$
+    \item for any vector $\pmb w \in \mathbb{R^n}$, $A \pmb w$ is the projection of $\pmb w$ onto the subspace $V = \{ \pmb u \in \mathbb{R^n} | A \pmb u = \pmb u \}$ of $\mathbb{R^n}$
+\end{itemize}
+
+
+\subsection{Ex5Qn32}
+Let $A$ be an orthogonal matrix of order $n$ and let $\pmb u, \pmb v$ be any two vectors in $\mathbb{R^n}$,
+\begin{itemize}
+    \item $\lVert \pmb u \rVert = \lVert A \pmb u \rVert$
+    \item $d(\pmb u, \pmb v) = d(A \pmb u, A \pmb v)$
+    \item the angle between $\pmb u$ and $\pmb v$ is equal to the angle between $A \pmb u$ and $A \pmb v$
+\end{itemize}
+
+\subsection{Ex5Qn33}
+Let $A$ be an orthogonal matrix of order $n$ and $S = \{\pmb u_1, \pmb u_2, ..., \pmb u_n \}$ be a basis for $\mathbb{R^n}$
+\begin{itemize}
+    \item $T = \{A \pmb u_1, A \pmb u_2, ..., A \pmb u_n \}$ is a basis for $\mathbb{R^n}$
+    \item $S$ is orthogonal $\to$ $T$ is orthogonal
+    \item $S$ is orthonormal $\to$ $T$ is orthonormal
+\end{itemize}
+
+
+\section{Chapter 6 - Diagonalisation}
+
+\subsection{Ex6Qn3}
+Let $\lambda$ be an eigenvalue of a square matrix $A$, 
+\begin{itemize}
+    \item $\lambda^n$ is an eigenvalue of $A^n$ for any $n \in \mathbb{Z_{\ge 1}}$
+    \item $\frac 1 \lambda$ is an eigenvalue for $A^{-1}$ if $A$ is invertible
+    \item $\lambda$ is an eigenvalue for $A^T$
+\end{itemize}
+
+\subsection{Ex6Qn4}
+Let $A$ be a square matrix such that $A^2 = A$. If $\lambda$ is an eigenvalue of $A$, then $\lambda = 0$ or $1$.
+
+\subsection{Ex6Qn16}
+Let $A$ be a stochastic matrix,
+\begin{itemize}
+    \item $1$ is an eigenvalue of $A$,
+    \item if $\lambda$ is an eigenvalue of $A$, then $|\lambda| \le 1$.
+\end{itemize}
+
+(A stochastic matrix $(a_{i_j})_{m \times n}$ is one where all entries are non-negative and sum of entries of each column is 1, i.e. $a_{1i} + a_{2i} + ... + a_{ni} = 1$, for all $i = 1, 2, ..., n$)
+
+
+\subsection{Ex6Qn25}
+Let $\pmb u$ be a column matrix, then $I - \pmb u \pmb u^T$ is orthogonally diagonablisable.
+
+\subsection{Ex6Qn26}
+Let $A$ be a symmetry matrix. If $\pmb u, \pmb v$ are two eigenvalues of $A$ associated with different eigenvalues, then $\pmb u \cdot \pmb v = 0$.
+
+\subsection{Ex6Qn30}
+For two orthogonally diagonalisable matrices of same order, $A, B$, $A+B$ is orthogonally diagonalisable .
+(However, $AB$ might not be.)
+
+
+
+
+\section{Chapter 7 - Linear Transformations}
+
+\subsection{Ex7Qn8}
+Let $T : \mathbb{R^n} \to \mathbb{R^n}$ be a linear transformation such that $T \circ T = T$,
+\begin{itemize}
+    \item if $T$ is not the zero transformation, then there exits a nonzero vector $u \in \mathbb{R^n}$ such that $T(\pmb u) = \pmb u$
+    \item if $T$ is no the identity transformation, then there exists a nonzero vector $\pmb v \in \mathbb{R^n}$ such that $T(\pmb v) = 0$
+\end{itemize}
+
+\subsection{Ex7Qn10}
+A linear operator $T$ on $\mathbb{R^n}$ is called isometry if $\lVert T(\pmb u) \rVert = \lVert \pmb u \rVert$ for all $\pmb u \in \mathbb{R^n}$.
+\begin{itemize}
+    \item if $T$ is an isometry on $\mathbb{R^n}$, then $T(\pmb u) \cdot T(\pmb v) = \pmb u \cdot \pmb v$ for all $\pmb u, \pmb v \in \mathbb{R^n}$
+    \item let $A$ be the standard matrix for a linear operator $T$. $T$ is isometry iff. $A$ is an orthogonal matrix.
+\end{itemize}
+
+
+\subsection{Ex7Qn16}
+Let $T : \mathbb{R^n} \to \mathbb{R^n}$ be a linear transformation. $Ker(T) = \{ \pmb 0 \}$ iff T is one-to-one (i.e. $\forall \ \pmb u, \pmb v \in \mathbb{R^n}$, $\pmb u \ne \pmb v \to T(\pmb u) \ne T(\pmb v)$)
+
+
+\subsection{Ex7Qn17}
+Let $S : \mathbb{R^n} \to \mathbb{R^m}$ and $T : \mathbb{R^m} \to \mathbb{R^k}$ be linear transformations,
+\begin{itemize}
+    \item $Ker(S) \subseteq Ker(T \circ S)$
+    \item $R(T \circ S) \subseteq R(T)$
+\end{itemize}
+
+
+
+
+
+
+
+
+\end{multicols}
+
+%\SetWatermarkHorCenter{0.65\paperwidth}
+\end{document}
