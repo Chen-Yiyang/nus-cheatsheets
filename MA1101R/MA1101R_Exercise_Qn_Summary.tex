@@ -131,7 +131,7 @@ Let $V$ be a vector space,
 \subsection{Ex3Qn43}
 Let $V, W$ be two subspaces of $\mathbb{R^n}$, then
 $$
-dim(V+W) = dim(V) + dim(W) - dim(V \cap W)
+\text{dim}(V+W) = \text{dim}(V) + \text{dim}(W) - \text{dim}(V \cap W)
 $$
 
 \subsection{Ex3Qn45}
@@ -153,13 +153,13 @@ Suppose $A$ and $B$ are two matrices such that $AB=\pmb0$, then column space of 
 There is no matrix whose row space and nullspace both contain the same nonzero vector.
 
 \subsection{Ex4Qn22}
-Let $A$ be an $m \times n$ matrix and $P$ an $m \times m$ matrix. If $P$ is invertible, then $rank(PA) = rank(A)$.
+Let $A$ be an $m \times n$ matrix and $P$ an $m \times m$ matrix. If $P$ is invertible, then $\text{rank}(PA) = \text{rank}(A)$.
 (The inverse is not true)
 
 \subsection{Ex4Qn23}
 For two matrices $A, B$ of the same size,
 $$
-rank(A+B) \leq rank(A) + rank(B)
+\text{rank}(A+B) \leq \text{rank}(A) + \text{rank}(B)
 $$
 
 \subsection{Ex4Qn24}
@@ -169,11 +169,11 @@ Let $A$ be an $m \times n$ matrix. Suppose the linear system $A \pmb x = \pmb b$
 For a matrix $A$ of size $m \times n$,
 \begin{itemize}
     \item nullspace of $A$ is equal to nullspace of $A^T A$
-    \item $nullity(A) = nullity(A^T A)$
-    \item $rank(A) = rank(A^T A)$
-    \item $rank(A) = rank(A A^T)$
+    \item $nullity(A) = \text{nullity}(A^T A)$
+    \item \text{rank}(A) = \text{rank}(A^T A)$
+    \item \text{rank}(A) = \text{rank}(A A^T)$
 \end{itemize}
-(However, $nullity(A) \neq nullity(AA^T)$)
+(However, \text{nullity}(A) \neq \text{nullity}(AA^T)$)
 
 
 
@@ -269,14 +269,14 @@ A linear operator $T$ on $\mathbb{R^n}$ is called isometry if $\lVert T(\pmb u) 
 
 
 \subsection{Ex7Qn16}
-Let $T : \mathbb{R^n} \to \mathbb{R^n}$ be a linear transformation. $Ker(T) = \{ \pmb 0 \}$ iff T is one-to-one (i.e. $\forall \ \pmb u, \pmb v \in \mathbb{R^n}$, $\pmb u \ne \pmb v \to T(\pmb u) \ne T(\pmb v)$)
+Let $T : \mathbb{R^n} \to \mathbb{R^n}$ be a linear transformation. $\text{Ker}(T) = \{ \pmb 0 \}$ iff T is one-to-one (i.e. $\forall \ \pmb u, \pmb v \in \mathbb{R^n}$, $\pmb u \ne \pmb v \to T(\pmb u) \ne T(\pmb v)$)
 
 
 \subsection{Ex7Qn17}
 Let $S : \mathbb{R^n} \to \mathbb{R^m}$ and $T : \mathbb{R^m} \to \mathbb{R^k}$ be linear transformations,
 \begin{itemize}
-    \item $Ker(S) \subseteq Ker(T \circ S)$
-    \item $R(T \circ S) \subseteq R(T)$
+    \item $\text{Ker}(S) \subseteq \text{Ker}(T \circ S)$
+    \item $\text{R}(T \circ S) \subseteq \text{R}(T)$
 \end{itemize}
 
 
