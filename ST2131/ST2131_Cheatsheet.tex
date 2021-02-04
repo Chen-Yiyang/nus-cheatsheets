@@ -1,0 +1,124 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Original Source: Dave Richeson (divisbyzero.com), Dickinson College
+% Modified By: Chen Yiyang
+% 
+% A one-size-fits-all LaTeX cheat sheet. Kept to two pages, so it 
+% can be printed (double-sided) on one piece of paper
+% 
+% Feel free to distribute this example, but please keep the referral
+% to divisbyzero.com
+% 
+% Guidance on the use of the Overleaf logos can be found here:
+% https://www.overleaf.com/for/partners/logos 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt,landscape,letterpaper]{article}
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{multicol,multirow}
+\usepackage{spverbatim}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,urlcolor=olgreen]{hyperref}
+\usepackage{booktabs}
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX]{TeX Gyre Pagella}
+\setsansfont{Fira Sans}
+\setmonofont{Inconsolata}
+\usepackage{unicode-math}
+\setmathfont{TeX Gyre Pagella Math}
+\usepackage{microtype}
+% new:
+\def\MT@is@uni@comp#1\iffontchar#2\else#3\fi\relax{%
+  \ifx\\#2\\\else\edef\MT@char{\iffontchar#2\fi}\fi
+}
+\makeatother
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{margin=0.4in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\sffamily\large}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\sffamily\normalsize\itshape}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\itshape}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+% -----------------------------------------------------------------------
+
+\usepackage{academicons}
+
+
+\begin{document}
+\footnotesize
+%\raggedright
+
+\begin{center}
+  {\huge\sffamily\bfseries ST2131 Cheatsheet} \huge\bfseries\\
+  by Yiyang, AY20/21
+\end{center}
+\setlength{\premulticols}{0pt}
+\setlength{\postmulticols}{0pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{1.8em}
+\begin{multicols}{3}
+
+\section{Chapter 01 - Combinatorial Analysis}
+\subsection{Multinomial Theorem}
+Let $n$ be a non-negative integer, then
+\[
+(x_1 + x_2 + ... + x_r)^n = \sum_{n_1 + ... + n_r = n} {{n}\choose{n_1, n_2, ..., n_r}} \ x_1^{r_1} x_2^{r_2} ... x_r^{n_r} 
+\]
+where ${{n}\choose{n_1, n_2, ..., n_r}}$ is the Multinomial Coefficient, and it satisfies 
+\begin{align*}
+    {{n}\choose{n_1, n_2, ..., n_r}} &= {{n}\choose{n_1}}{{n-n_1}\choose{n_2}} \ ... \ {{n-n_1-...-n_{r-1}}\choose{n_r}} 
+    \\
+    &= \frac{n!}{n_1!n_2!...n_r!}
+\end{align*}
+
+\subsection{Some Combinatorial Identities}
+For all non-negative integers $n, m, k$ and $k \leq n$,
+\begin{itemize}
+    \item $k {{n}\choose{k}} = (n-k+1) {{n}\choose{k-1}} = n {{n-1}\choose{k-1}}$ \ \emph{(AY20/21Sem2 Tut1Qn7)}
+    \item $\sum_{k=1}^{n}{k {n \choose{k}}} = n2^{n-1}$ \ \emph{(AY20/21Sem2 Tut1Qn8)}
+    \item ${{n+m}\choose{k}} = {{n}\choose{0}}{{m}\choose{k}} + {{n}\choose{1}}{{m}\choose{k-1}} + ... + {{n}\choose{r}}{{m}\choose{0}}$ \ \emph{(AY20/21Sem2 Tut1Qn9)}
+    \item ${{2n}\choose{n}} = \sum_{k=0}^{n} {{n}\choose{k}}^2$ \ \emph{(AY20/21Sem2 Tut1Qn10)}
+\end{itemize}
+
+\section{Chapter 02 - Axioms of Probability}
+\subsection{Inclusion/Exclusion Principle (Prop. 2.6)}
+Let $E_1, E_2, ..., E_n$ be any $n$ events, then
+\begin{align*}
+P(E_1 \cup E_2 \cup ... E_n) = & \sum_{i=1}^{n}P(E_i) - \sum_{1 \leq i_1 < i_2 \leq n}P(E_{i_1} \cap E_{i_2}) + ... 
+\\
+&+ (-1)^{r+1} \sum_{1 \leq i_1 < ... < i_r \leq n} P(E_{i_1} \cap ... \cap E_{i_r})
+\\
+&+ ... + (-1)^{n+1}P(E_1 \cap ... \cap E_n)
+\end{align*}
+
+\subsection{Generalised Bonferroni's Inequality}
+\emph{(AY20/21Sem2 Tut2Qn16)} Let $E_1, E_2, ..., E_n$ be any $n$ events, then
+\[
+P(E_1E_2 \ ... \ E_n) \geq P(E_1) + ... + P(E_n) - (n-1)
+\]
+When $n=2$,
+\[
+P(E_1E_2) \geq P(E_1) + P(E_2) - 1
+\]
+
+\end{multicols}
+\end{document}
