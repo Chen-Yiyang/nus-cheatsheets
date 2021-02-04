@@ -8,4 +8,9 @@ If you have noticed any typos or errors, please let me know. Thank you!
 -----
 ## Overview
 ### MA1101R
-- Exercise Question Summary: A compilation of Lemmas / statements left as proving questions in the Exercises of the textbook. 
+- Exercise Question Summary: A compilation of Lemmas / statements left as proving questions in the Exercises of the textbook.
+
+### ST2131
+- Cheatsheet: A compilation of important Theorems and notes from lectures, as well as lemmas / statements from tutorial questions.
+
+
