@@ -13,4 +13,6 @@ If you have noticed any typos or errors, please let me know. Thank you!
 ### ST2131
 - Cheatsheet: A compilation of important Theorems and notes from lectures, as well as lemmas / statements from tutorial questions.
 
-
+### CS2040S
+- Midterm Summary: A 2-page summary sheet for all the contents
+  coverred for AY20/21 Sem 2 Midterm
