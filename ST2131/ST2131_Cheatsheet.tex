@@ -10,10 +10,17 @@
 % 
 % Guidance on the use of the Overleaf logos can be found here:
 % https://www.overleaf.com/for/partners/logos 
+%
+% Credits: 
+% Jovyn Tan, https://github.com/jovyntls
+% for the nice navy blue colour for in-line and display Math.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[10pt,landscape,letterpaper]{article}
-\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+%\usepackage{fonts}
 \usepackage{multicol,multirow}
 \usepackage{spverbatim}
 \usepackage{graphicx}
@@ -28,6 +35,9 @@
 \usepackage{unicode-math}
 \setmathfont{TeX Gyre Pagella Math}
 \usepackage{microtype}
+
+\usepackage{empheq}
+
 % new:
 \def\MT@is@uni@comp#1\iffontchar#2\else#3\fi\relax{%
   \ifx\\#2\\\else\edef\MT@char{\iffontchar#2\fi}\fi
@@ -62,8 +72,12 @@
 
 \usepackage{academicons}
 
-
 \begin{document}
+
+\definecolor{myblue}{cmyk}{1,.72,0,.38}
+\everymath{\color{myblue}}
+\everydisplay{\color{myblue}}
+
 \footnotesize
 %\raggedright
 
@@ -78,20 +92,8 @@
 \begin{multicols}{3}
 
 \section{Chapter 01 - Combinatorial Analysis}
-\subsection{Multinomial Theorem}
-Let $n$ be a non-negative integer, then
-\[
-(x_1 + x_2 + ... + x_r)^n = \sum_{n_1 + ... + n_r = n} {{n}\choose{n_1, n_2, ..., n_r}} \ x_1^{r_1} x_2^{r_2} ... x_r^{n_r} 
-\]
-where ${{n}\choose{n_1, n_2, ..., n_r}}$ is the Multinomial Coefficient, and it satisfies 
-\begin{align*}
-    {{n}\choose{n_1, n_2, ..., n_r}} &= {{n}\choose{n_1}}{{n-n_1}\choose{n_2}} \ ... \ {{n-n_1-...-n_{r-1}}\choose{n_r}} 
-    \\
-    &= \frac{n!}{n_1!n_2!...n_r!}
-\end{align*}
-
 \subsection{Some Combinatorial Identities}
-For all non-negative integers $n, m, k$ and $k \leq n$,
+For all non-negative integers $m, n, k$ and $k \leq n$,
 \begin{itemize}
     \item $k {{n}\choose{k}} = (n-k+1) {{n}\choose{k-1}} = n {{n-1}\choose{k-1}}$ \ \emph{(AY20/21Sem2 Tut1Qn7)}
     \item $\sum_{k=1}^{n}{k {n \choose{k}}} = n2^{n-1}$ \ \emph{(AY20/21Sem2 Tut1Qn8)}
@@ -102,16 +104,12 @@ For all non-negative integers $n, m, k$ and $k \leq n$,
 \section{Chapter 02 - Axioms of Probability}
 \subsection{Inclusion/Exclusion Principle (Prop. 2.6)}
 Let $E_1, E_2, ..., E_n$ be any $n$ events, then
-\begin{align*}
-P(E_1 \cup E_2 \cup ... E_n) = & \sum_{i=1}^{n}P(E_i) - \sum_{1 \leq i_1 < i_2 \leq n}P(E_{i_1} \cap E_{i_2}) + ... 
-\\
-&+ (-1)^{r+1} \sum_{1 \leq i_1 < ... < i_r \leq n} P(E_{i_1} \cap ... \cap E_{i_r})
-\\
-&+ ... + (-1)^{n+1}P(E_1 \cap ... \cap E_n)
-\end{align*}
+\[
+P(E_1 \cup E_2 \cup ... E_n) = \sum_{r=1}^{n} \Big( (-1)^{r+1} \sum_{1 \leq i_1 < ... < i_r \leq n} P(E_{i_1} \cap ... \cap E_{i_r}) \Big)
+\]
 
-\subsection{Generalised Bonferroni's Inequality}
-\emph{(AY20/21Sem2 Tut2Qn16)} Let $E_1, E_2, ..., E_n$ be any $n$ events, then
+\subsection{Tut2Qn16 - Generalised Bonferroni's Inequality}
+Let $E_1, E_2, ..., E_n$ be any $n$ events, then
 \[
 P(E_1E_2 \ ... \ E_n) \geq P(E_1) + ... + P(E_n) - (n-1)
 \]
@@ -119,6 +117,380 @@ When $n=2$,
 \[
 P(E_1E_2) \geq P(E_1) + P(E_2) - 1
 \]
+
+\section{Chapter 03 - Conditional Probability}
+\subsection{Bayes' Formulae}
+Suppose events $A_1$, $A_2$, ..., $A_n$ partition the sample space, and $P(A_i) > 0$, for all $i = 1, 2, ..., n$. 
+\\
+Then for any event $B$, and any $1 \leq i \leq n$,
+\begin{align}
+P(B) &= \sum_{j=1}^{n} {P(B|A_j)P(A_j)}
+\\
+P(A_i|B) &= \frac{P(B|A_i)P(A_i)}{\sum_{j=1}^{n} {P(B|A_j)P(A_j)}}
+\end{align}
+
+\subsection{Some Identities Involving Conditional Probability}
+For any events $A$, $B$, $C$,
+\begin{align*}
+   P(A|C) &= P(AB|C) + P(AB^C|C) 
+   \\
+   &= P(A|BC)P(B|C) + P(A|B^CC)P(B^C|C) 
+\end{align*}
+
+
+
+\section{Chapter 04 - Random Variables}
+\subsection{Tail Sum Formula}
+For \emph{non-negative integer-valued} random variable $X$,
+if $X$ is a D.R.V. (i.e. $X = 0, 1,...,2$),
+\[
+E(X) = \sum_{k=1}^{\infty} P(X \geq k) = \sum_{k=0}^{\infty} P(X > k)
+\]
+or if $X$ is a C.R.V.,
+\[
+E(X)= \int_{0}^{\infty} P(X>x) \,dx = \int_{0}^{\infty} P(X \geq x) \,dx
+\]
+
+\section{Chapter 05 - Continuous Random Variable}
+\subsection{Distribution of a Function of R.V.}
+For r.v. $X$ with pdf. $f_X(x)$, assume $g(x)$ is a function of $X$ that is \textbf{strictly monotonic} and \textbf{differentiable}. Then the pdf. of $Y=g(X)$,
+\[
+f_Y(y) = \begin{cases}
+f_X(g^{-1}(y)) \big| \frac{d}{dy} g^{-1}(y)  \big|, \ &y=g(x) \text{ for some $x$}
+\\
+0, \ &\text{otherwise}
+\end{cases}
+\]
+
+\subsection{Binomial to Normal Approximation}
+(Remember \textbf{Continuity Correction}!!!)
+\\
+For $X \sim Bin(n, p)$ where $npq$ is large (generally good when $npq \geq 10$),
+\[
+Bin(n,p) \approx N(np, npq) \text{ , i.e. } \frac{X-np}{\sqrt{npq}} \approx Z
+\]
+
+\subsection{Binomial to Poisson Approximation}
+For $X \sim Bin(n, p)$ where $n$ is large and $p$ (or $q$) is small so that $np$ (or $nq$) is moderate.
+\begin{itemize}
+    \item when $p < 0.1$, $Bin(n, p) \approx Poisson(np)$
+    \item when $p > 0.9$, $Bin(n, q) \approx Poisson(nq)$
+\end{itemize}
+
+\section{Chapter 06 - Joint Distributions}
+\subsection{Convolution of Independent Distributions}
+\begin{align*}
+F_{X+Y}(a) &= \int_{-\infty}^{\infty}F_Y(a-x) \ f_X(x)\,\, dx = \int_{-\infty}^{\infty}F_X(a-y) \ f_Y(y) \, dy
+\\
+f_{X+Y}(a) &= \int_{-\infty}^{\infty}f_Y(a-x) \ f_X(x) \, dx = \int_{-\infty}^{\infty}f_X(a-y) \ f_Y(y) \, dy
+\end{align*}
+
+\subsection{Prop.6.4 - Sum of Independent Gamma R.V.s}
+Assume $X \sim Gamma(\alpha, \lambda)$ and $Y \sim Gamma(\beta, \lambda)$ are independent.
+\[ X+Y \sim Gamma(\alpha+\beta, \lambda)
+\]
+
+\subsection{Prop.6.5 - Sum of Independent Normal R.V.s}
+Assume $X_i, i=1,2,...,n$ are independent random variables that are normally distributed with parameters $\mu_i, \sigma_i^2, \ i = 1,2,...,n$.
+\[ \sum_{i=1}^n X_i \sim N(\sum_{i=1}^n \mu_i \ \sum_{i=1}^n \sigma_i^2)
+\]
+
+\subsection{Ex.6.18 - Sum of Independent Poisson R.V.s}
+Assume $X \sim Poisson(\lambda), \ Y \sim Poisson(\mu)$ are independent.
+\[
+X+Y \sim Poisson(\lambda + \mu)
+\]
+
+\subsection{Ex.6.19 - Sum of Independent Binomial R.V.s}
+Assume $X \sim Bin(n,p), \ Y \sim Bin(m, p)$ are independent.
+\[ X+Y \sim Bin(n+m, p)
+\]
+Note: This statement only works when the second parameter of both R.V.s are the same (i.e. both $p$). For problems with different parameters and large values, can consider using Normal Approximation with \emph{(Prop.6.5)}.
+
+\section{Ch 07 - Properties of Expectation}
+\subsection{Ex.7.20 - Expectation of a Random Sum}
+Suppose $X_1, X_2, ...$ are i.i.d. with common mean $\mu$. Suppose $N$ is a non-negative integer-valued random variable independent of the $X_i$.
+\[ \sum_{k=1}^N X_k = \mu E[N]
+\]
+
+\subsection{Common Moment Generating Functions}
+\begin{itemize}
+    \item $X \sim Be(p), \ M_X(t) = 1 - p + pe^t$
+    \item $X \sim Bin(n, p), \ M_X(t) = (1-p+pe^t)^n$
+    \item $X \sim Geom(p), \ M_X(t) = \frac{pe^t}{1-qe^t}$
+    \item $X \sim Poisson(\lambda), \ M_X(t) = e^{\lambda(e^t-1)}$
+    \item $X \sim U(\alpha, \beta), \ M_X(t) = \frac{e^{\beta t} - e^{\alpha t}}{(\beta - \alpha t) t}$
+    \item $X \sim Exp(\lambda), \ M_X(t) = \frac{\lambda}{\lambda - t}, \text{for } t < \lambda$
+    \item $X \sim N(\mu, \sigma^2), \ M_X(t) = e^{(\mu t + \sigma^2 t^2 / 2)}$
+\end{itemize}
+
+\subsection{Less Common MGFs}
+\begin{itemize}
+    \item \emph{(Ex.7.31)} X is a chi-squared r.v. with $n$ deg. of freedom, $M_X(t) = {(E[e^{tZ^2}])}^n = {(1-2t)}^{-n/2}$
+\end{itemize}
+
+\subsection{Ex.7.34 - "Partitioned" Poisson Distribution}
+Let $X$ be the r.v. that denotes total number of events. Suppose each event is a Ber. process with $p$ probability of being $A$ and $q = (1-p)$ being $B$. Let $X_A, X_B$ denote the number of events that are $A$ and $B$ respectively.
+If $X \sim Poisson(\lambda)$,
+\[
+X_A \sim Poisson(p\lambda), \ X_B \sim Poisson(q\lambda)
+\]
+
+\section{Ch 08 - Limit Theorems}
+\subsection{Markov's Inequality}
+For \textbf{non-negative} r.v. $X$ and any $a > 0$,
+\[
+P(X \geq a) \leq \frac{E{X}}{a}
+\]
+
+\subsection{Chebyshev's Inequality}
+Let $X$ be a r.v. with mean $\mu$, then for any $a > 0$,
+\[
+P(|X-\mu| \geq a) \leq \frac{\text{var}(X)}{a^2}
+\]
+
+\subsection{One-sided Chebyshev's Inequality}
+Let $X$ be a r.v. with \textbf{zero mean} and variance $\sigma^2$, then for any $a > 0$,
+\[
+P(X \geq a) \leq \frac{\sigma^2}{\sigma^2 + a^2}
+\]
+
+\subsection{Central Limit Theorem}
+(Remember \textbf{Continuity Correction} when a CRV is used to approximate a DRV!!!)
+For a sequence of i.i.d. r.v.s $X_1, X_2, ... $, each with mean $\mu$ and variance $\sigma^2$, 
+\[
+\frac{X_1 + ... + X_n - n\mu}{\sigma \sqrt{\pi}} \to Z, \ \text{as } n \to \infty
+\]
+
+\subsection{WLLN & SLLN}
+
+\subsection{Jensen's Inequality}
+For any r.v. $X$ and convex function $g(X)$,
+\[
+E[g(X)] \geq g(E[X])
+\]
+, provided the expectations exist and are finite.
+
+\midrule
+
+\section{D.R.V. Models}
+\subsection{Bernoulli}
+$X \sim Be(p)$, indicate whether an event is successful.
+\\
+\textbf{Parameter} - $p = P(X=1)$ : success rate
+\\
+\textbf{Distribution} - $P(X=1) = p, \ P(X=0) = q = 1-p$
+\\
+$E(X) = p, \ \text{var}(X) = pq = p(1-p)$
+
+
+\subsection{Binomial}
+$X \sim Bin(n, p)$, total number of successes in $n$ i.i.d. $Be(p)$ trials.
+\\
+\textbf{Parameters}
+\begin{itemize}
+    \item $n$ : number of trials
+    \item $p$ : success rate for each Bernoulli trial
+\end{itemize}
+
+\textbf{Distribution}
+\[
+P(X=k) = {n \choose k} p^x q^{n-x}, \ k = 0, 1, ..., n
+\]
+\\
+$E(X) = np, \ \text{var}(X) = npq = np(1-p)$
+
+\subsection{Geometric}
+$X \sim Geom(p)$, number of i.i.d $Be(p)$ trials until one success. $X = 1, 2, ...$
+\\
+\textbf{Parameter} - $p$ : success rate
+\\
+\textbf{Distribution}
+\[
+P(X=k) = pq^{k-1}, \ k = 1, 2, ... 
+\]
+Memoryless Property: $P(X > s+t | X > s) = P(X > t)， \ s, t > 0$.
+\\
+$E(X) = \frac{1}{p}, \ \text{var}(X) = \frac{1-p}{p^2}$
+
+
+
+\subsection{Negative Binomial}
+$X \sim NB(r, p)$, number of i.i.d $Be(p)$ trials for first $r$ successes. $X = r, r+1, ...$
+\\
+\textbf{Parameter}
+\begin{itemize}
+    \item $r$ : successes needed
+    \item $p$ : success rate
+\end{itemize}
+
+\textbf{Distribution}
+\[
+P(X=k) = {{k-1} \choose {r-1}} \ p^r q ^ {x-r}, \ k = r, r+1, ...
+\]
+\\
+$E(X) = \frac{r}{p}, \ \text{var}(X) = \frac{r(1-p)}{p^2}$
+\\
+$Geom(p) = NB(1, p)$
+
+\subsection{Poisson}
+$X \sim Poisson(\lambda)$
+\\
+\textbf{Parameter} - $\lambda$ : "average occurrence rate in unit time interval"
+\\
+\textbf{Distribution}
+\[
+P(X = k) = e^{-k} \frac{\lambda^k}{k!}, \ k = 0, 1, ...
+\]
+\\
+$E(X) = \text{var}(X) = \lambda$
+
+
+
+\subsection{Hypergeometric}
+Suppose there are $N$ identical balls, $m$ of them are red and $N-m$ are blue.
+$X \sim H(n, N, m)$ is the number of red balls obtained in $n$ draws without replacement.
+\\
+\textbf{Parameter}
+\begin{itemize}
+    \item $N$ : total number of objects ("red and blue balls")
+    \item $m$ : number of objects considered success ("red balls")
+    \item $n$ : number of trials without replacement ("draws")
+\end{itemize}
+\textbf{Distribution}
+\[
+P(X = k) = \frac{{m \choose k}{{N-m} \choose {n-k}}}{{N \choose n}}, \ k = 0, 1, ..., n 
+\]
+\\
+$E(X) = \frac{nm}{N}, \ \text{var}(X) = \frac{nm}{N} \big[ \frac{(n-1)(m-1}{N-1} + 1 - \frac{nm}{N}  \big]$
+
+\midrule
+
+\section{C.R.V. Models}
+\subsection{Uniform}
+$X \sim U(a, b)$, where $X$ has equal probability of taking any value in $(a, b)$.
+\\
+\textbf{Parameters} - $a$ and $b$ : the start and end value for the interval
+\\
+\textbf{Distribution}
+\[
+f(x) = \begin{cases}
+\frac{1}{b-a}, \ & a < x < b
+\\
+0, \ & \text{otherwise}
+\end{cases}
+\]
+\\
+\[
+F(x) = \begin{cases}
+0, \ & x \leq a
+\\
+\frac{x-a}{b-a}, \ & a < x < b
+\\
+1, \ & b \leq x
+\end{cases}
+\]
+\\
+$E(X) = \frac{a+b}{2}, \ \text{var}(X) = \frac{(b-a)^2}{12}$
+
+
+\subsection{Exponential}
+$X \sim Exp(\lambda)$ usually models the life time of a product, for $\lambda > 0$
+\\
+\textbf{Distribution}
+\[
+f(x) = \begin{cases}
+\lambda e^{-\lambda x}, \ & x \geq 0
+\\
+0, \ & otherwise
+\end{cases}
+\]
+\\
+\[
+F(x) = \begin{cases}
+0, \ & x \leq 0
+\\
+1 - e^{-\lambda x}, \ & x > 0
+\end{cases}
+\]
+\\
+Memoryless Property: $P(X > s+t | X > s) = P(X > t)， \ s, t > 0$.
+\\
+$E(X) = \frac{1}{\lambda}, \ \text{var}(X) = \frac{1}{\lambda^2}$
+
+
+\subsection{Normal}
+$X \sim N(\mu, \sigma^2)$. Special case : $Z \sim N(0, 1)$ standard normal
+\\
+\textbf{Parameters}
+\begin{itemize}
+    \item $\mu$ : mean
+    \item $\sigma$ : standard deviation
+\end{itemize}
+\textbf{Distribution}
+\begin{align*}
+    f_Z(z) &= \frac{1}{\sqrt{2 \pi}} e^{-z^2/2}, \ z \in \mathbb{R}
+    \\
+    f_X(x) &= \frac{1}{\sqrt{2 \pi} \sigma} e^{-(x-\mu)^2/(2\sigma^2)}, \ x \in \mathbb{R}
+\end{align*}
+\\
+$E(X) = \mu, \ \text{var}(X) = \sigma^2$
+
+
+\subsection{Gamma}
+$X \sim Gamma(\alpha, \lambda)$ can be seen as the sum of $\alpha$ independent $Exp(\lambda)$, for $\alpha, \lambda > 0$. (Refer to \emph{Prop.6.4})
+\\
+\textbf{Parameters}
+\begin{itemize}
+    \item $\alpha$ : shape parameter
+    \item $\lambda$ : rate parameter
+    \item ($\frac{1}{\lambda}$ : scale parameter)
+\end{itemize}
+\textbf{Distribution}
+\[
+f(x) = \begin{cases}
+\frac{\lambda e^{\lambda x}(\lambda x)^{\alpha-1}}{\Gamma(\alpha)}, \ & x \geq 0
+\\
+0, \ & x < 0
+\end{cases}
+\]
+\\
+$Exp(\lambda) = Gamma(1, \lambda)$ is a special case of Gamma r.v.
+\\
+$E(X) = \frac{\alpha}{\lambda}, \ \text{var}(X) = \frac{\alpha}{\lambda^2}$
+\\
+\textbf{Gamma Function} $\Gamma(\alpha) = \int_0^{\infty} e^{-y}y^{\alpha-1} \,dy$
+\\
+It satisfies that
+\begin{itemize}
+    \item $\Gamma(1) = 1, \ \Gamma(\frac{1}{2}) = \sqrt{\pi}$
+    \item $\Gamma(\alpha) = (\alpha-1)\Gamma(\alpha-1), \ \alpha > 0$
+    \item $\Gamma(n) = (n-1)!, \ n \in \mathbb{Z}^{+}$
+    
+\end{itemize}
+
+\subsection{Weibull Distribution}
+$S \sim W(\nu, \alpha, \beta)$ can be seen as the generalised form of Exponential r.v.
+\begin{itemize}
+    \item $E(\lambda) = W(1, \lambda, 0)$
+    \item If $X \sim E(\lambda)$, then linear transformation $Y = \alpha X + \nu \ \sim W(\nu, \alpha, \lambda)$ \emph{(Tut7Qn15)}
+\end{itemize}
+
+\subsection{Cauchy}
+$X \sim \text{Cauchy}(\theta, \alpha)$ for $\theta \in \mathbb{R}, \alpha > 0$ if it has the distribution:
+\[
+f(x) = \frac{1}{\pi \alpha \big[1 + (\frac{x-\theta}{\alpha})^2 \big]}, \ x \in \mathbb{R}
+\]
+\\
+$E(X)$ and $\text{var}(X)$ do not exist for Cauchy r.v.
+
+\subsection{Beta}
+$X \sim B(a, b)$. Specifically, $U(0, 1) = B(1,1)$ is a special case of Beta r.v.
+
+\midrule
+
+\section{Common Identities}
+$\sum_{i=1}^{\infty} i r^{i-1} = \frac{1}{(1-r)^2}$, for $|r| < 1$
 
 \end{multicols}
 \end{document}
