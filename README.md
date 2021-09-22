@@ -10,9 +10,18 @@ If you have noticed any typos or errors, please let me know. Thank you!
 ### MA1101R
 - Exercise Question Summary: A compilation of Lemmas / statements left as proving questions in the Exercises of the textbook.
 
+### MA2104
+- Cheatsheet: Summary and formula sheet for Midterm.
+
+
 ### ST2131
 - Cheatsheet: A compilation of important Theorems and notes from lectures, as well as lemmas / statements from tutorial questions. Also includes common distributions covered in the module.
 
 ### CS2040S
-- Midterm Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2 till Midterm
-- Final Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2
+- Midterm Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2 till Midterm.
+- Final Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2.
+
+-----
+## Todos
+### MA2104
+- [ ] Include 3d plots for visualisation.

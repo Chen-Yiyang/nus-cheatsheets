@@ -1,0 +1,241 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Original Source: Dave Richeson (divisbyzero.com), Dickinson College
+% Modified By: Chen Yiyang
+% 
+% A one-size-fits-all LaTeX cheat sheet. Kept to two pages, so it 
+% can be printed (double-sided) on one piece of paper
+% 
+% Feel free to distribute this example, but please keep the referral
+% to divisbyzero.com
+% 
+% Guidance on the use of the Overleaf logos can be found here:
+% https://www.overleaf.com/for/partners/logos 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt,landscape,letterpaper]{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{physics} % for vectors
+%\usepackage{fonts}
+\usepackage{multicol,multirow}
+\usepackage{spverbatim}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,urlcolor=olgreen]{hyperref}
+\usepackage{booktabs}
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX]{TeX Gyre Pagella}
+\setsansfont{Fira Sans}
+\setmonofont{Inconsolata}
+\usepackage{unicode-math}
+\setmathfont{TeX Gyre Pagella Math}
+\usepackage{microtype}
+
+\usepackage{empheq}
+
+% new:
+\def\MT@is@uni@comp#1\iffontchar#2\else#3\fi\relax{%
+  \ifx\\#2\\\else\edef\MT@char{\iffontchar#2\fi}\fi
+}
+\makeatother
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{margin=0.4in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\sffamily\large}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\sffamily\normalsize\itshape}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\itshape}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+% -----------------------------------------------------------------------
+
+\usepackage{academicons}
+
+\begin{document}
+
+\definecolor{mathBlue}{cmyk}{1,.72,0,.38}
+\everymath{\color{mathBlue}}
+\everydisplay{\color{mathBlue}}
+
+\footnotesize
+%\raggedright
+
+\begin{center}
+  {\huge\sffamily\bfseries MA2104 Cheatsheet} \huge\bfseries\\
+  by Yiyang, AY21/22
+\end{center}
+\setlength{\premulticols}{0pt}
+\setlength{\postmulticols}{0pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{1.8em}
+\begin{multicols}{3}
+
+
+
+
+% -----------------------------------------------------------------------
+
+\section{Chapter 01 -  Vectors in 3D Space}
+\subsection{Vectors}
+Vector project of $\vb*{a}$ onto $\vb*{b}$: $\text{proj}_{\vb*{b}} \vb*{a} = \frac{\vb*{a} \cdot \vb*{b}}{\vb*{b} \cdot \vb*{b}} \vb*{b}$
+\\
+Scalar project of $\vb*{a}$ onto $\vb*{b}$: $\text{comp}_{\vb*{b}} \vb*{a} = \frac{\vb*{a} \cdot \vb*{b}}{\norm{\vb*{b}}}$
+
+\subsection{Prop Ch01.3.5 - Scalar Triple Product}
+$|\vb*{a} \cdot (\vb*{b} \cross \vb*{c})|$ is the volume of the parallelepiped determined by the vectors $\vb*{a}$, $\vb*{b}$, and $\vb*{c}$.
+
+\section{Chapter 02 - Curves and Surfaces}
+\subsection{Curve}
+\subsubsection{Tangent Vector}
+Tangent vector to a curve $C$ paramaterised by $R(t) = (f(t), g(t), h(t))$ at $R(a)$ on the curve is given by:
+\[
+R'(a) = <f'(a), g'(a), h'(a)>
+\]
+, given that the three component functions are all differentiable at $a$.
+
+
+\subsubsection{Arc Length Formula} 
+The length of curve $C: R(t) = (f(t), g(t), h(t))$ between $R(a)$ and $R(b)$ is:
+\[
+\integral_a^b \ \norm{R'(t)} dt = \integral_a^b \ \sqrt{f'(t)^2 + g'(t)^2 + h'(t)^2} dt
+\]
+, given that the component functions are differentiable and their corresponding first derivatives are continuous.
+
+
+\subsection{Surfaces}
+\subsubsection{Cylinder}
+A surface is a cylinder if there is a plane $P$ such that all the planes parallel to $P$ intersect the surface in the same curve.
+
+\subsubsection{Quadric Surfaces}
+Below are a list of common quadric surfaces with their equations
+\begin{itemize}
+    \item Elliptic Paraboloid - $\frac{x^2}{a^2} + \frac{y^2}{b^2} = \frac{z}{c}$
+    \item Hyperbolic Paraboloid - $\frac{x^2}{a^2} - \frac{y^2}{b^2} = \frac{z}{c}$
+    \item Ellipsoid - $\frac{x^2}{a^2} + \frac{y^2}{b^2} + \frac{z^2}{c^2} = 1$
+    \item Elliptic Cone - $\frac{x^2}{a^2} + \frac{y^2}{b^2} - \frac{z^2}{c^2} = 0$
+    \item Hyperboloid of 1 Sheet - $\frac{x^2}{a^2} + \frac{y^2}{b^2} - \frac{z^2}{c^2} = 1$
+    \item Hyperboloid of 2 Sheet - $\frac{x^2}{a^2} + \frac{y^2}{b^2} - \frac{z^2}{c^2} = -1$
+\end{itemize}
+
+
+
+\section{Chapter 03 - Multivariable Functions}
+\subsection{Limit, Continuity \& Differentiability}
+\subsubsection{Limit for 2D Functions}
+Limit for two variable functions: For function $f$ with domain $D \subset \mathbb{R^2}$ that contains points arbitrarily close to $(a, b)$, then
+\[
+\lim_{(x, y) \to (a, b)} f(x, y) = L
+\]
+if for any number $\epsilon > 0$ there exists a number $\delta > 0$ such that $|f(x,y) - L| < \epsilon$ whenever $0 < \sqrt{(x-a)^2 + (y-b)^2} < \delta$.
+
+The limit exists iff. the limit \textbf{exists and is the same for all continuous paths} to $(a, b)$.
+
+\subsubsection{Clairaut's Theorem}
+For function $f$ defined on $D \subset \mathbb{R}^2$ that contains $(a, b)$, if the functions $f_{xy}$ and $f_{yx}$ are both defined and continuous on $D$, then
+\[
+f_{xy}(a,b) = f_{y, x}(a, b)
+\]
+
+\subsubsection{Differentiability for 2D Functions}
+If $f$ is a 2-var function differentiable at $(a,b)$ in the interior of its domain, then
+\[
+\lim_{(h, k) -> (0,0)} \ \frac{f(a+h, b+k)-f(a,b) - L(h,k)}{\sqrt{h^2+k^2}} = 0
+\]
+, where $L: \mathbb{R}^2 \to \mathbb{R}$ is a linear map, and it is equal to the total derivative of $f$ at $(a, b)$ \textbf{when $f$ is differentiable at $(a, b)$}. Then it can be defined as: 
+\[
+L(h, k) = D_{f(a, b)} (h, k) = f_x(a, b)h + f_y(a, b)k
+\]
+
+\subsubsection{Notes about Differentiability}
+Consider $f$ at a point $(a, b)$:
+\begin{itemize}
+    \item $f_x$ and $f_y$ exist $\not \implies$ $f$ differentiable
+    \item $f_x$ and $f_y$ exist \& continuous $\implies$ $f$ differentiable \emph{(Differentiability Theorem)}
+    \item  $f$ differentiable $\not \implies$ $f_x$ and $f_y$ continuous. (i.e. the converse does not hold.)
+\end{itemize}
+
+\subsubsection{Linear Approximation}
+\[
+f(a+h, b+k) \approx f(a,b) + f_x{a, b}h + f_y(a, b)k
+\]
+
+
+\subsection{Gradient Vector}
+\subsubsection{Gradient Vector}
+The gradient vector of $f$ at $(a, b)$ in its domain is defined as:
+\[
+\nabla f(a,b) = <f_x(a, b), f_y(a, b)>
+\]
+Therefore if $f$ is differentiable at $(a,b)$ then 
+\[
+D_{f(a,b)}(\vb*{u}) = \nablaf(a,b) \cdot \vb*{u}
+\]
+
+\subsubsection{Perpendicular Vector of Level Sets}
+\begin{itemize}
+    \item $\nabla f(a,b)$ is orthogonal to the $f(a,b)$-level curve of $f$ at $(a,b)$.
+    \item $\nabla f(a,b,c)$ is orthogonal to the $f(a,b,c)$-level surface of $f$ at $(a,b,c)$.
+\end{itemize}
+
+
+
+\section{Chapter 04 - Calculus on Surfaces}
+\subsection{Implicit Differentiation}
+\subsubsection{Prop Ch04.1.4}
+For a 3-var function $F$ where $F(a,b,c)=k$ defines $z$ as a differentiable function of $x$ and $y$ near $(a,b,c)$, and $F_z(a,b,c) \neq 0$, then
+\[
+\frac{\partial z}{\partial x}(a,b,c) = - \frac{F_x{a,b,c}}{F_z(a,b,c)}, \ 
+\frac{\partial z}{\partial y}(a,b,c) = - \frac{F_y{a,b,c}}{F_z(a,b,c)}
+\]
+
+\subsection{Extrema}
+\subsubsection{Extreme Value Theorem}
+If $f : D \to \mathbb{R}^2$ is continuous on a \textbf{closed and bounded} set $D \subset \mathbb{R}^2$, then $f$ has at least one global maximum and one global minimum.
+
+\subsubsection{Steps for Finding Gloabl Extrema}
+For $f : D \to \mathbb{R}^2$ where $D$ is closed and bounded,
+\begin{enumerate}
+    \item Find all critical points of $f$ and their corresponding $f$-values.
+    \item Find the extreme values of $f$ on boundary of $D$.
+    \item Compare.
+\end{enumerate}
+
+
+\subsubsection{Lagrange Multiplier}
+To find the extrema of differentiable $f : D \to \mathbb{R}^2$ subject to curve $C: g(x,y)=k$ for some $k \in \mathbb{R}$,
+\begin{enumerate}
+    \item Find all points $(a,b)$ and \textbf{non-zero} value $\lambda$ s.t.
+    \[
+    \nablaf(a,b) = \lambda \nabla g(a,b), \ g(a,b) = k
+    \]
+    \item Evaluate $f$ at all these points.
+    \item Find the extreme values of $f$ on the boundary of $C$.
+    \item Compare.
+\end{enumerate}
+
+
+
+%\section{Chapter 05 - }
+
+
+
+\end{multicols}
+\end{document}
