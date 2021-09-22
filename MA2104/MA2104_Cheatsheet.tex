@@ -107,7 +107,7 @@ $|\vb*{a} \cdot (\vb*{b} \cross \vb*{c})|$ is the volume of the parallelepiped d
 \subsubsection{Tangent Vector}
 Tangent vector to a curve $C$ paramaterised by $R(t) = (f(t), g(t), h(t))$ at $R(a)$ on the curve is given by:
 \[
-R'(a) = <f'(a), g'(a), h'(a)>
+R'(a) = \langle f'(a), g'(a), h'(a) \rangle
 \]
 , given that the three component functions are all differentiable at $a$.
 
@@ -115,7 +115,7 @@ R'(a) = <f'(a), g'(a), h'(a)>
 \subsubsection{Arc Length Formula} 
 The length of curve $C: R(t) = (f(t), g(t), h(t))$ between $R(a)$ and $R(b)$ is:
 \[
-\integral_a^b \ \norm{R'(t)} dt = \integral_a^b \ \sqrt{f'(t)^2 + g'(t)^2 + h'(t)^2} dt
+\int_a^b \ \norm{R'(t)} dt = \int_a^b \ \sqrt{f'(t)^2 + g'(t)^2 + h'(t)^2} dt
 \]
 , given that the component functions are differentiable and their corresponding first derivatives are continuous.
 
@@ -151,7 +151,7 @@ The limit exists iff. the limit \textbf{exists and is the same for all continuou
 \subsubsection{Clairaut's Theorem}
 For function $f$ defined on $D \subset \mathbb{R}^2$ that contains $(a, b)$, if the functions $f_{xy}$ and $f_{yx}$ are both defined and continuous on $D$, then
 \[
-f_{xy}(a,b) = f_{y, x}(a, b)
+f_{xy}(a,b) = f_{yx}(a, b)
 \]
 
 \subsubsection{Differentiability for 2D Functions}
@@ -169,12 +169,12 @@ Consider $f$ at a point $(a, b)$:
 \begin{itemize}
     \item $f_x$ and $f_y$ exist $\not \implies$ $f$ differentiable
     \item $f_x$ and $f_y$ exist \& continuous $\implies$ $f$ differentiable \emph{(Differentiability Theorem)}
-    \item  $f$ differentiable $\not \implies$ $f_x$ and $f_y$ continuous. (i.e. the converse does not hold.)
+    \item  $f$ differentiable $\not{\implies}$ $f_x$ and $f_y$ continuous. (i.e. the converse does not hold.)
 \end{itemize}
 
 \subsubsection{Linear Approximation}
 \[
-f(a+h, b+k) \approx f(a,b) + f_x{a, b}h + f_y(a, b)k
+f(a+h, b+k) \approx f(a,b) + f_x(a, b)h + f_y(a, b)k
 \]
 
 
@@ -182,7 +182,7 @@ f(a+h, b+k) \approx f(a,b) + f_x{a, b}h + f_y(a, b)k
 \subsubsection{Gradient Vector}
 The gradient vector of $f$ at $(a, b)$ in its domain is defined as:
 \[
-\nabla f(a,b) = <f_x(a, b), f_y(a, b)>
+\nabla f(a,b) = \langle f_x(a, b), f_y(a, b) \rangle
 \]
 Therefore if $f$ is differentiable at $(a,b)$ then 
 \[
@@ -202,8 +202,8 @@ D_{f(a,b)}(\vb*{u}) = \nablaf(a,b) \cdot \vb*{u}
 \subsubsection{Prop Ch04.1.4}
 For a 3-var function $F$ where $F(a,b,c)=k$ defines $z$ as a differentiable function of $x$ and $y$ near $(a,b,c)$, and $F_z(a,b,c) \neq 0$, then
 \[
-\frac{\partial z}{\partial x}(a,b,c) = - \frac{F_x{a,b,c}}{F_z(a,b,c)}, \ 
-\frac{\partial z}{\partial y}(a,b,c) = - \frac{F_y{a,b,c}}{F_z(a,b,c)}
+\frac{\partial z}{\partial x}(a,b,c) = - \frac{F_x(a,b,c)}{F_z(a,b,c)}, \ 
+\frac{\partial z}{\partial y}(a,b,c) = - \frac{F_y(a,b,c)}{F_z(a,b,c)}
 \]
 
 \subsection{Extrema}
@@ -224,9 +224,8 @@ To find the extrema of differentiable $f : D \to \mathbb{R}^2$ subject to curve 
 \begin{enumerate}
     \item Find all points $(a,b)$ and \textbf{non-zero} value $\lambda$ s.t.
     \[
-    \nablaf(a,b) = \lambda \nabla g(a,b), \ g(a,b) = k
-    \]
-    \item Evaluate $f$ at all these points.
+    \nabla f(a,b) = \lambda \nabla g(a,b), \ g(a,b) = k
+    \], and valuate $f$ at all these points.
     \item Find the extreme values of $f$ on the boundary of $C$.
     \item Compare.
 \end{enumerate}
