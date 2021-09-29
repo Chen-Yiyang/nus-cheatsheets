@@ -12,7 +12,7 @@ If you have noticed any typos or errors, please let me know. Thank you!
 
 ### MA2104
 - Cheatsheet: Summary and formula sheet for Midterm, worked together
-  withNg Wei Ng for the cheatsheet.
+  with [Ng Wei En](https://github.com/wei2912) for the cheatsheet.
 
 
 ### ST2131
