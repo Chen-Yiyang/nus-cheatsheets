@@ -80,7 +80,7 @@
 
 \begin{center}
   {\huge\sffamily\bfseries MA2104 Cheatsheet} \huge\bfseries\\
-  by Yiyang, AY21/22
+  by Wei En \& Yiyang, AY21/22
 \end{center}
 \setlength{\premulticols}{0pt}
 \setlength{\postmulticols}{0pt}
@@ -95,29 +95,35 @@
 
 \section{Chapter 01 -  Vectors in 3D Space}
 \subsection{Vectors}
-Vector project of $\vb*{a}$ onto $\vb*{b}$: $\text{proj}_{\vb*{b}} \vb*{a} = \frac{\vb*{a} \cdot \vb*{b}}{\vb*{b} \cdot \vb*{b}} \vb*{b}$
+Vector projection of $\vb*{a}$ onto $\vb*{b}$: $\text{proj}_{\vb*{b}} \vb*{a} = \frac{\vb*{a} \cdot \vb*{b}}{\vb*{b} \cdot \vb*{b}} \vb*{b}$
 \\
-Scalar project of $\vb*{a}$ onto $\vb*{b}$: $\text{comp}_{\vb*{b}} \vb*{a} = \frac{\vb*{a} \cdot \vb*{b}}{\norm{\vb*{b}}}$
+Scalar projection of $\vb*{a}$ onto $\vb*{b}$: $\text{comp}_{\vb*{b}} \vb*{a} = \frac{\vb*{a} \cdot \vb*{b}}{\norm{\vb*{b}}}$
+
+\subsection{Dot \& Cross Product}
+$$\vb*{a} \cdot \vb*{b} = \|a\|\|b\|\cos\theta,\quad
+\|\vb*{a} \times \vb*{b}\| = \|a\|\|b\|\sin\theta$$ where $\theta$ is the angle between vectors $\vb*{a}$ and $\vb*{b}$.
 
 \subsection{Prop Ch01.3.5 - Scalar Triple Product}
-$|\vb*{a} \cdot (\vb*{b} \cross \vb*{c})|$ is the volume of the parallelepiped determined by the vectors $\vb*{a}$, $\vb*{b}$, and $\vb*{c}$.
+$$|\vb*{a} \cdot (\vb*{b} \cross \vb*{c})| = \left|\det\begin{pmatrix}
+    \vb*{a}_1 & \vb*{a}_2 & \vb*{a}_3 \\
+    \vb*{b}_1 & \vb*{b}_2 & \vb*{b}_3 \\
+    \vb*{c}_1 & \vb*{c}_2 & \vb*{c}_3 \\
+\end{pmatrix}\right|$$ is the volume of the parallelepiped determined by vectors $\vb*{a}, \vb*{b}, \vb*{c}$.
 
 \section{Chapter 02 - Curves and Surfaces}
 \subsection{Curve}
 \subsubsection{Tangent Vector}
-Tangent vector to a curve $C$ paramaterised by $R(t) = (f(t), g(t), h(t))$ at $R(a)$ on the curve is given by:
+Tangent vector to a curve $C$ paramaterised by $R(t) = (f(t), g(t), h(t))$ at $R(a)$ on the curve is given by
 \[
-R'(a) = \langle f'(a), g'(a), h'(a) \rangle
+R'(a) = \langle f'(a), g'(a), h'(a) \rangle.
 \]
-, given that the three component functions are all differentiable at $a$.
-
 
 \subsubsection{Arc Length Formula} 
-The length of curve $C: R(t) = (f(t), g(t), h(t))$ between $R(a)$ and $R(b)$ is:
+The length of curve $C: R(t) = (f(t), g(t), h(t))$ between $R(a)$ and $R(b)$ is
 \[
-\int_a^b \ \norm{R'(t)} dt = \int_a^b \ \sqrt{f'(t)^2 + g'(t)^2 + h'(t)^2} dt
+\int_a^b \ \norm{R'(t)} \,dt = \int_a^b \ \sqrt{f'(t)^2 + g'(t)^2 + h'(t)^2} \,dt.
 \]
-, given that the component functions are differentiable and their corresponding first derivatives are continuous.
+provided the first derivatives are continuous.
 
 
 \subsection{Surfaces}
@@ -125,14 +131,13 @@ The length of curve $C: R(t) = (f(t), g(t), h(t))$ between $R(a)$ and $R(b)$ is:
 A surface is a cylinder if there is a plane $P$ such that all the planes parallel to $P$ intersect the surface in the same curve.
 
 \subsubsection{Quadric Surfaces}
-Below are a list of common quadric surfaces with their equations
 \begin{itemize}
-    \item Elliptic Paraboloid - $\frac{x^2}{a^2} + \frac{y^2}{b^2} = \frac{z}{c}$
-    \item Hyperbolic Paraboloid - $\frac{x^2}{a^2} - \frac{y^2}{b^2} = \frac{z}{c}$
-    \item Ellipsoid - $\frac{x^2}{a^2} + \frac{y^2}{b^2} + \frac{z^2}{c^2} = 1$
-    \item Elliptic Cone - $\frac{x^2}{a^2} + \frac{y^2}{b^2} - \frac{z^2}{c^2} = 0$
-    \item Hyperboloid of 1 Sheet - $\frac{x^2}{a^2} + \frac{y^2}{b^2} - \frac{z^2}{c^2} = 1$
-    \item Hyperboloid of 2 Sheet - $\frac{x^2}{a^2} + \frac{y^2}{b^2} - \frac{z^2}{c^2} = -1$
+    \item Elliptic Paraboloid: $\frac{x^2}{a^2} + \frac{y^2}{b^2} = \frac{z}{c}$
+    \item Hyperbolic Paraboloid: $\frac{x^2}{a^2} - \frac{y^2}{b^2} = \frac{z}{c}$
+    \item Ellipsoid: $\frac{x^2}{a^2} + \frac{y^2}{b^2} + \frac{z^2}{c^2} = 1$
+    \item Elliptic Cone: $\frac{x^2}{a^2} + \frac{y^2}{b^2} - \frac{z^2}{c^2} = 0$
+    \item Hyperboloid of 1 Sheet: $\frac{x^2}{a^2} + \frac{y^2}{b^2} - \frac{z^2}{c^2} = 1$
+    \item Hyperboloid of 2 Sheet: $\frac{x^2}{a^2} + \frac{y^2}{b^2} - \frac{z^2}{c^2} = -1$
 \end{itemize}
 
 
@@ -140,7 +145,7 @@ Below are a list of common quadric surfaces with their equations
 \section{Chapter 03 - Multivariable Functions}
 \subsection{Limit, Continuity \& Differentiability}
 \subsubsection{Limit for 2D Functions}
-Limit for two variable functions: For function $f$ with domain $D \subset \mathbb{R^2}$ that contains points arbitrarily close to $(a, b)$, then
+For function $f$ with domain $D \subset \mathbb{R^2}$ that contains points arbitrarily close to $(a, b)$, then
 \[
 \lim_{(x, y) \to (a, b)} f(x, y) = L
 \]
@@ -149,19 +154,19 @@ if for any number $\epsilon > 0$ there exists a number $\delta > 0$ such that $|
 The limit exists iff. the limit \textbf{exists and is the same for all continuous paths} to $(a, b)$.
 
 \subsubsection{Clairaut's Theorem}
-For function $f$ defined on $D \subset \mathbb{R}^2$ that contains $(a, b)$, if the functions $f_{xy}$ and $f_{yx}$ are both defined and continuous on $D$, then
+For function $f$ defined on $D \subset \mathbb{R}^2$ that contains $(a, b)$, if the functions $f_{xy}$ and $f_{yx}$ are both continuous on $D$, then
 \[
-f_{xy}(a,b) = f_{yx}(a, b)
+f_{xy}(a,b) = f_{yx}(a, b).
 \]
 
 \subsubsection{Differentiability for 2D Functions}
-If $f$ is a 2-var function differentiable at $(a,b)$ in the interior of its domain, then
+For function $f$ defined on $D \subset \mathbb{R}^2$ and differentiable at $(a, b)$ within the interior of $D$,
 \[
-\lim_{(h, k) -> (0,0)} \ \frac{f(a+h, b+k)-f(a,b) - L(h,k)}{\sqrt{h^2+k^2}} = 0
+\lim_{(h, k) -> (0,0)} \ \frac{f(a+h, b+k)-f(a,b) - L(h,k)}{\sqrt{h^2+k^2}} = 0,
 \]
-, where $L: \mathbb{R}^2 \to \mathbb{R}$ is a linear map, and it is equal to the total derivative of $f$ at $(a, b)$ \textbf{when $f$ is differentiable at $(a, b)$}. Then it can be defined as: 
+where $L: \mathbb{R}^2 \to \mathbb{R}$ is a linear map defined as the total derivative of $f$ at $(a, b)$:
 \[
-L(h, k) = D_{f(a, b)} (h, k) = f_x(a, b)h + f_y(a, b)k
+L(h, k) = D_{f(a, b)} (h, k) = f_x(a, b)h + f_y(a, b)k.
 \]
 
 \subsubsection{Notes about Differentiability}
@@ -169,7 +174,7 @@ Consider $f$ at a point $(a, b)$:
 \begin{itemize}
     \item $f_x$ and $f_y$ exist $\not \implies$ $f$ differentiable
     \item $f_x$ and $f_y$ exist \& continuous $\implies$ $f$ differentiable \emph{(Differentiability Theorem)}
-    \item  $f$ differentiable $\not{\implies}$ $f_x$ and $f_y$ continuous. (i.e. the converse does not hold.)
+    \item  $f$ differentiable $\not{\implies}$ $f_x$ and $f_y$ continuous
 \end{itemize}
 
 \subsubsection{Linear Approximation}
@@ -180,27 +185,24 @@ f(a+h, b+k) \approx f(a,b) + f_x(a, b)h + f_y(a, b)k
 
 \subsection{Gradient Vector}
 \subsubsection{Gradient Vector}
-The gradient vector of $f$ at $(a, b)$ in its domain is defined as:
+The gradient vector of $f$ defined on $D \subset \mathbb{R}^2$ at $(a, b) \in D$ is defined as:
 \[
 \nabla f(a,b) = \langle f_x(a, b), f_y(a, b) \rangle
 \]
-Therefore if $f$ is differentiable at $(a,b)$ then 
+
+\subsubsection{Directional Directive}
+The directional directive of $f$ defined on $D \subset \mathbb{R}^2$ in the direction of the unit vector $\vb*{u} = \langle \vb*{u}_1, \vb*{u}_2 \rangle$ is
 \[
-D_{f(a,b)}(\vb*{u}) = \nablaf(a,b) \cdot \vb*{u}
+D_{f(a,b)}(\vb*{u}) = \lim_{h \to 0} \frac{f(a + h\vb*{u}_1, b + h\vb*{u}_2) - f(a, b)}{h} = \nabla f(a,b) \cdot \vb*{u}.
 \]
 
 \subsubsection{Perpendicular Vector of Level Sets}
-\begin{itemize}
-    \item $\nabla f(a,b)$ is orthogonal to the $f(a,b)$-level curve of $f$ at $(a,b)$.
-    \item $\nabla f(a,b,c)$ is orthogonal to the $f(a,b,c)$-level surface of $f$ at $(a,b,c)$.
-\end{itemize}
-
-
+$\nabla f(a,b)$ is orthogonal to the $f(a,b)$-level curve of $f$ at $(a,b)$.
 
 \section{Chapter 04 - Calculus on Surfaces}
 \subsection{Implicit Differentiation}
 \subsubsection{Prop Ch04.1.4}
-For a 3-var function $F$ where $F(a,b,c)=k$ defines $z$ as a differentiable function of $x$ and $y$ near $(a,b,c)$, and $F_z(a,b,c) \neq 0$, then
+For $F$ defined on $D \subset \mathbb{R}^3$ where $F(a,b,c)=k$ defines $z$ as a differentiable function of $x$ and $y$ near $(a,b,c)$, and $F_z(a,b,c) \neq 0$,
 \[
 \frac{\partial z}{\partial x}(a,b,c) = - \frac{F_x(a,b,c)}{F_z(a,b,c)}, \ 
 \frac{\partial z}{\partial y}(a,b,c) = - \frac{F_y(a,b,c)}{F_z(a,b,c)}
@@ -208,10 +210,10 @@ For a 3-var function $F$ where $F(a,b,c)=k$ defines $z$ as a differentiable func
 
 \subsection{Extrema}
 \subsubsection{Extreme Value Theorem}
-If $f : D \to \mathbb{R}^2$ is continuous on a \textbf{closed and bounded} set $D \subset \mathbb{R}^2$, then $f$ has at least one global maximum and one global minimum.
+If $f : D \to \mathbb{R}$ is continuous on a \textbf{closed and bounded} set $D \subset \mathbb{R}^2$, then $f$ has at least one global maximum and one global minimum.
 
 \subsubsection{Steps for Finding Gloabl Extrema}
-For $f : D \to \mathbb{R}^2$ where $D$ is closed and bounded,
+For $f : D \to \mathbb{R}$ where $D$ is closed and bounded,
 \begin{enumerate}
     \item Find all critical points of $f$ and their corresponding $f$-values.
     \item Find the extreme values of $f$ on boundary of $D$.
@@ -219,13 +221,13 @@ For $f : D \to \mathbb{R}^2$ where $D$ is closed and bounded,
 \end{enumerate}
 
 
-\subsubsection{Lagrange Multiplier}
-To find the extrema of differentiable $f : D \to \mathbb{R}^2$ subject to curve $C: g(x,y)=k$ for some $k \in \mathbb{R}$,
+\subsubsection{Method of Lagrange Multiplier}
+To find the extrema of differentiable $f : D \to \mathbb{R}$ subject to curve $C: g(x,y)=k$ for some $k \in \mathbb{R}$,
 \begin{enumerate}
     \item Find all points $(a,b)$ and \textbf{non-zero} value $\lambda$ s.t.
     \[
-    \nabla f(a,b) = \lambda \nabla g(a,b), \ g(a,b) = k
-    \], and valuate $f$ at all these points.
+    \nabla f(a,b) = \lambda \nabla g(a,b), \ g(a,b) = k,
+    \] and evaluate $f$ at all these points.
     \item Find the extreme values of $f$ on the boundary of $C$.
     \item Compare.
 \end{enumerate}

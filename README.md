@@ -11,7 +11,8 @@ If you have noticed any typos or errors, please let me know. Thank you!
 - Exercise Question Summary: A compilation of Lemmas / statements left as proving questions in the Exercises of the textbook.
 
 ### MA2104
-- Cheatsheet: Summary and formula sheet for Midterm.
+- Cheatsheet: Summary and formula sheet for Midterm, worked together
+  withNg Wei Ng for the cheatsheet.
 
 
 ### ST2131
