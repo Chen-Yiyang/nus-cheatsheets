@@ -99,36 +99,11 @@ For all non-negative integers $m, n, k$ and $k \leq n$,
     \item $\sum_{k=1}^{n}{k {n \choose{k}}} = n2^{n-1}$ \ \emph{(AY20/21Sem2 Tut1Qn8)}
     \item ${{n+m}\choose{k}} = {{n}\choose{0}}{{m}\choose{k}} + {{n}\choose{1}}{{m}\choose{k-1}} + ... + {{n}\choose{r}}{{m}\choose{0}}$ \ \emph{(AY20/21Sem2 Tut1Qn9)}
     \item ${{2n}\choose{n}} = \sum_{k=0}^{n} {{n}\choose{k}}^2$ \ \emph{(AY20/21Sem2 Tut1Qn10)}
+    \item $\sum_{i=1}^{\infty} i r^{i-1} = \frac{1}{(1-r)^2}$, for $|r| < 1$
 \end{itemize}
 
-\section{Chapter 02 - Axioms of Probability}
-\subsection{Inclusion/Exclusion Principle (Prop. 2.6)}
-Let $E_1, E_2, ..., E_n$ be any $n$ events, then
-\[
-P(E_1 \cup E_2 \cup ... E_n) = \sum_{r=1}^{n} \Big( (-1)^{r+1} \sum_{1 \leq i_1 < ... < i_r \leq n} P(E_{i_1} \cap ... \cap E_{i_r}) \Big)
-\]
-
-\subsection{Tut2Qn16 - Generalised Bonferroni's Inequality}
-Let $E_1, E_2, ..., E_n$ be any $n$ events, then
-\[
-P(E_1E_2 \ ... \ E_n) \geq P(E_1) + ... + P(E_n) - (n-1)
-\]
-When $n=2$,
-\[
-P(E_1E_2) \geq P(E_1) + P(E_2) - 1
-\]
 
 \section{Chapter 03 - Conditional Probability}
-\subsection{Bayes' Formulae}
-Suppose events $A_1$, $A_2$, ..., $A_n$ partition the sample space, and $P(A_i) > 0$, for all $i = 1, 2, ..., n$. 
-\\
-Then for any event $B$, and any $1 \leq i \leq n$,
-\begin{align}
-P(B) &= \sum_{j=1}^{n} {P(B|A_j)P(A_j)}
-\\
-P(A_i|B) &= \frac{P(B|A_i)P(A_i)}{\sum_{j=1}^{n} {P(B|A_j)P(A_j)}}
-\end{align}
-
 \subsection{Some Identities Involving Conditional Probability}
 For any events $A$, $B$, $C$,
 \begin{align*}
@@ -240,7 +215,7 @@ X_A \sim Poisson(p\lambda), \ X_B \sim Poisson(q\lambda)
 \subsection{Markov's Inequality}
 For \textbf{non-negative} r.v. $X$ and any $a > 0$,
 \[
-P(X \geq a) \leq \frac{E{X}}{a}
+P(X \geq a) \leq \frac{E(X)}{a}
 \]
 
 \subsection{Chebyshev's Inequality}
@@ -259,7 +234,7 @@ P(X \geq a) \leq \frac{\sigma^2}{\sigma^2 + a^2}
 (Remember \textbf{Continuity Correction} when a CRV is used to approximate a DRV!!!)
 For a sequence of i.i.d. r.v.s $X_1, X_2, ... $, each with mean $\mu$ and variance $\sigma^2$, 
 \[
-\frac{X_1 + ... + X_n - n\mu}{\sigma \sqrt{\pi}} \to Z, \ \text{as } n \to \infty
+\frac{X_1 + ... + X_n - n\mu}{\sigma \sqrt{n}} \to Z, \ \text{as } n \to \infty
 \]
 
 \subsection{WLLN & SLLN}
@@ -487,10 +462,6 @@ $E(X)$ and $\text{var}(X)$ do not exist for Cauchy r.v.
 \subsection{Beta}
 $X \sim B(a, b)$. Specifically, $U(0, 1) = B(1,1)$ is a special case of Beta r.v.
 
-\midrule
-
-\section{Common Identities}
-$\sum_{i=1}^{\infty} i r^{i-1} = \frac{1}{(1-r)^2}$, for $|r| < 1$
 
 \end{multicols}
 \end{document}
