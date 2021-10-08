@@ -1,0 +1,255 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Original Source: Dave Richeson (divisbyzero.com), Dickinson College
+% Modified By: Chen Yiyang
+% 
+% A one-size-fits-all LaTeX cheat sheet. Kept to two pages, so it 
+% can be printed (double-sided) on one piece of paper
+% 
+% Feel free to distribute this example, but please keep the referral
+% to divisbyzero.com
+% 
+% Guidance on the use of the Overleaf logos can be found here:
+% https://www.overleaf.com/for/partners/logos 
+%
+% Credits: 
+% Jovyn Tan, https://github.com/jovyntls
+% for the nice navy blue colour for in-line and display Math.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt,landscape,letterpaper]{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+%\usepackage{fonts}
+\usepackage{multicol,multirow}
+\usepackage{spverbatim}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,urlcolor=olgreen]{hyperref}
+\usepackage{booktabs}
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX]{TeX Gyre Pagella}
+\setsansfont{Fira Sans}
+\setmonofont{Inconsolata}
+\usepackage{unicode-math}
+\setmathfont{TeX Gyre Pagella Math}
+\usepackage{microtype}
+
+\usepackage{empheq}
+
+% new:
+\def\MT@is@uni@comp#1\iffontchar#2\else#3\fi\relax{%
+  \ifx\\#2\\\else\edef\MT@char{\iffontchar#2\fi}\fi
+}
+\makeatother
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{margin=0.4in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\sffamily\large}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\sffamily\normalsize\itshape}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\itshape}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+% -----------------------------------------------------------------------
+
+\usepackage{academicons}
+
+\begin{document}
+
+\definecolor{myblue}{cmyk}{1,.72,0,.38}
+\everymath{\color{myblue}}
+\everydisplay{\color{myblue}}
+
+\footnotesize
+%\raggedright
+
+\begin{center}
+  {\huge\sffamily\bfseries ST2132 Cheatsheet} \huge\bfseries\\
+  by Wei En \& Yiyang, AY21/22
+\end{center}
+\setlength{\premulticols}{0pt}
+\setlength{\postmulticols}{0pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{1.8em}
+\begin{multicols}{3}
+
+\section{Chapter 02 - Random Variables}
+\subsection{More Disributions}
+\subsubsection{Beta Distribution & Beta Function}
+$X \sim B(a, b)$ where $a>0, b>0$ has support $[0, 1]$ and
+\[
+f(X) = \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} x^{a-1} (1-x)^{b-1}, 0 \le x \le 1
+\]
+
+Note that $\text{Unif}(0, 1) \sim B(1, 1)$ is a special case.
+\\
+\textbf{Beta function} $B(u, v)$ is an integral that
+\begin{align*}
+B(a, b) 
+&= \int_0^1 t^{a-1} (1-t)^{b-1} \ dt \\
+&= \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}
+\end{align*}
+
+\subsubsection{Chi-Square Distribution}
+If $X = Z^2$ where $Z \sim \mathcal{N}(0, 1)$, then
+\[
+f_X(x) = \frac{x^{-1/2}}{\sqrt{2\pi}} e^{-x/2}, \ x \ge 0
+\]
+In fact, $X$ follows $\chi^2$ distribution with df $1$, and $X \sim \text{Gamma}(\frac{1}{2}, \frac{1}{2})$.
+
+
+\subsection{Functions of a Random Variable}
+\subsubsection{Properties of CDF}
+\emph{(Ch 2.3 Prop. C)} Let $Z = F(X)$, then $Z \sim \text{Unif}(0, 1)$
+
+\emph{(Ch 2.3 Prop D)} Let $U \sim \text{Unif}(0, 1)$, and let $X = F^{-1}(U)$, then the CDF of $X$ is $F$.
+
+\subsubsection{Inverse CDF Method}
+For a r.v. $X$ with CDF $F$ to be generated, let $U = F(X)$ and write it as $X = F^{-1}(U)$, then generate with following steps:
+\begin{enumerate}
+    \item Generate $u$ from a $\text{Unif}(0, 1)$.
+    \item Deliver $x = F^{-1}(u)$.
+\end{enumerate}
+
+
+
+\section{Chapter 03 - Joint Distributions}
+
+\subsection{Joint Distributions}
+\subsubsection{Copula}
+A \textbf{copula}, $C(u, v)$, is a joint CDF where the marginal distributions are standard uniform. It has properties as shown below:
+\begin{itemize}
+    \item $C(u, v)$ is defined over $[0, 1] \times [0, 1]$ and is non-decreasing
+    \item $P(U \le u) = C(u, 1)$ and $P(V \le v) = C(1, v)$
+    \item joint density function $c(u, v) = \frac{\partial^2}{\partial u \partial v}C(u, v,) \ge 0$
+\end{itemize}
+Construct joint distributions from marginal distributions given using copula:
+For any two CRVs $X$ and $Y$ and a copula $C(u, v)$ given,
+\[
+F_{XY}(x, y) = C(F_X(x), F_Y(y))
+\]
+is a joint distribution that has marginal distributions $F_X(x)$ and $F_Y(y)$. Correspondingly, the joint density is 
+\[
+f_{XY}(x, y) = c(F_X(x), F_Y(y)) \ f_X(x) f_Y(y)
+\]
+
+\subsubsection{Farlie Morgenstern Family}
+For any two CRVs $X$ and $Y$ with their CDFs $F(x)$ and $G(y)$ given, it is shown that for any constant $|\alpha| \le 1$,
+\[
+H(x, y) = F(x) \ G(y) \ \Big[ 1 + \alpha(1-F(x))(1-G(y)  \Big]
+\]
+is a bivariate joint CDF of $X$ and $Y$, with its marginal CDFs equal to $F(x)$ and $G(y)$.
+
+Farlie Morgenstern copula: $C(u, v) = uv(1+\alpha(1-u)(1-v))$ is the copula used in the Farlie Morgenstern Family.
+
+
+\subsubsection{Bivariate Normal Distribution}
+If $X$ and $Y$ are jointly distributed with bivariate normal, 
+\[
+f(X, Y) = \frac{1}{2\pi \sigma_x \sigma_y \sqrt{1-\rho^2}} e^{ -\frac{1}{2(1-\rho^2)} \Big[ \frac{(x-\mu_x)^2}{\sigma_x^2} + \frac{(y-\mu_y)^2}{\sigma_y^2} - \frac{2\rho (x-\mu_x) (y - \mu_y) }{\sigma_x \sigma_y}  \Big] }
+\]
+where $-1 < \rho < 1$ is the correlation coefficient and the other 4 parameters are reflected in marginal distributions,
+\[
+X \sim \mathcal{N}(\mu_x, \sigma_x^2), \
+Y \sim \mathcal{N}(\mu_y, \sigma_y^2)
+\]
+For a joint distribution to be considered bivariate normal, it must satisfy both:
+\begin{enumerate}
+    \item Its two marginal distributions are normal
+    \item The contours for its joint density function are elliptical
+\end{enumerate}
+
+
+\subsection{Conditional Joint Distributions}
+\subsubsection{Rejection Method}
+For a r.v. $X$ with density function $f(x)$ to be generated, if $f(x) > 0$ for $a \le x \le b$, then
+\begin{enumerate}
+    \item Let $M = M(x)$ s.t. $M(x) \ge f(x)$ for $a \le x \le b$
+    \item Let $m = m(x) = \frac{M(x)}{\int_a^b M(t) dt}$ (i.e. $m$ is a pdf of support $[a, b]$)
+    \item Generate $T$ with density $m$.
+    \item Generate $U$ which follows $\text{Unif}(0, 1)$ independent of $T$.
+    \item If $M(T) \times U \leq f(T)$ then deliver $T$; otherwise, go base to Step 1 and repeat.
+\end{enumerate}
+
+
+\subsubsection{Bayesian Inference}
+Unknown parameter $\theta$ is treated as a distribution, not a value. \textbf{Prior distribution} $f_\Theta(\theta)$ represents our knowledge (assumption) about $\theta$ before observing data $X$. After observation, we have a better estimation using the \textbf{posterior distribution} $f_{\Theta | X}(\theta | x)$, where
+\[
+f_{\Theta | X} = \frac{f_{X\Theta}(x, \theta)}{f_X(x)} = \frac{f_{X|\Theta}(x|\theta)f_\Theta(\theta)}{ \int f_{X|\Theta}(x|t)f_\Theta(t) dt }
+\]
+In short, it means
+\[
+\text{Posterior density} \propto \text{likelihood} \times \text{prior density}
+\]
+
+\subsection{Functions of Joint Distributions}
+\emph{(Ch 3.6.2 Prop. A)} Suppose $X$ and $Y$ are jointly distributed and $u = g_1(x,y), \ v = g_2(x, y)$ can be inverted as $x = h_1(u,v), \ y = h_2(u, v)$ then
+\[
+f_{UV} (u, v) = f_{XY}(h_1(u,v), h_2(u,v)) \ |J^{-1}(h_1, h_2)|
+\]
+
+\subsection{Sum/Quotient of Random Variables}
+
+Suppose $X$ and $Y$ have JDF $f$. Then for $U = X + Y$, $$f_U(u) = \int_{-\infty}^\infty f(x, u - x) \,dx,$$ and for $V = X/Y$, $$f_V(v) = \int_{-\infty}^\infty |x|f(x, xv) \,dx.$$
+
+
+\subsection{Order Statistics}
+\emph{(Ch 3.7 Thm. A)} Density function of $X_{(k)}$, the k-th order statistics,
+\[
+f_k(x) = \frac{n!}{(k-1)! (n-k)!} f(x) F^{k-1}(x) [1-F(x)]^{n-k}
+\]
+
+\section{Chapter 04 - Expected Values}
+\subsection{Model for Measurement Error}
+Let $x_0$ denotes the true value of a quantity being measured. Then the measurement, $X$, can be modeled as:
+\[
+X = x_0 + \beta + \epsilon
+\]
+where $\beta$ is \textbf{bias}, a constant and $\epsilon$ is the random component of error. $E(\epsilon) = 0$ and $\text{var}(\epsilon) = \sigma^2$.
+
+\textbf{Mean Squared Error (MSE)} is a measure of the overall measurement error, 
+\begin{align*}
+    \text{MSE} 
+    &= E[(X-x_0)^2] \ \text{(Definition)} \\
+    &= \sigma^2 + \beta^2
+\end{align*}
+
+
+\subsection{Conditional Expectation \& Prediction}
+\subsubsection{Find Expectation \& Variance by Conditioning}
+\[
+E(Y) = E[ E(Y|X) ], \
+\text{var}(Y) = \text{var}[E(Y|X)] + E[\text{var}(Y|X)]
+\]
+
+\subsubsection{Random Sum}
+\[
+E(T) = E(N)E(X), \ \text{var}(T) = [E(X)]^2 \text{var} + E(N) \text{var}(X)
+\]
+
+\subsubsection{Predictions}
+Suppose $X$ and $Y$ are jointly distributed. If $X$ is observed, the predictor of $Y$ that minimises MSE would be
+\[
+h(Y) = E(Y|X)
+\]
+
+\end{multicols}
+\end{document}
