@@ -75,6 +75,9 @@
 \everymath{\color{mathBlue}}
 \everydisplay{\color{mathBlue}}
 
+% for vector notation in this module
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+
 \footnotesize
 %\raggedright
 
@@ -212,7 +215,7 @@ For $F$ defined on $D \subset \mathbb{R}^3$ where $F(a,b,c)=k$ defines $z$ as a 
 \subsubsection{Extreme Value Theorem}
 If $f : D \to \mathbb{R}$ is continuous on a \textbf{closed and bounded} set $D \subset \mathbb{R}^2$, then $f$ has at least one global maximum and one global minimum.
 
-\subsubsection{Steps for Finding Gloabl Extrema}
+\subsubsection{Steps for Finding Global Extrema}
 For $f : D \to \mathbb{R}$ where $D$ is closed and bounded,
 \begin{enumerate}
     \item Find all critical points of $f$ and their corresponding $f$-values.
@@ -224,7 +227,7 @@ For $f : D \to \mathbb{R}$ where $D$ is closed and bounded,
 \subsubsection{Method of Lagrange Multiplier}
 To find the extrema of differentiable $f : D \to \mathbb{R}$ subject to curve $C: g(x,y)=k$ for some $k \in \mathbb{R}$,
 \begin{enumerate}
-    \item Find all points $(a,b)$ and \textbf{non-zero} value $\lambda$ s.t.
+    \item Find all points $(a,b)$ for $\nabla g(a,b) \ne 0$ and values $\lambda$ s.t.
     \[
     \nabla f(a,b) = \lambda \nabla g(a,b), \ g(a,b) = k,
     \] and evaluate $f$ at all these points.
@@ -234,8 +237,254 @@ To find the extrema of differentiable $f : D \to \mathbb{R}$ subject to curve $C
 
 
 
-%\section{Chapter 05 - }
+\section{Chapter 05 \& 06 - Integration}
+\subsection{Fubini's Theorem}
+If $f$ is continuous on the rectangle $D = [a,b] \times [c,d]$, then,
+\[
+\iint_D f(x,y) dA = \int_{a}^{b} \int_{c}^{d} f(x,y) dy dx = \int_{c}^{d}\int_{a}^{b} f(x,y) dx dy 
+\]
 
+Its equivalence in $\mathbb{R}^3$ for triple integral also holds.
+
+\subsection{Change of Coordinates}
+\subsubsection{Double Integral in Polar Coordinates}
+Transform between $(x,y)$ and $(r, \theta)$:
+\begin{align*}
+&\left\{
+\begin{aligned}
+x &= r \cos\theta \\
+y &= r \sin\theta \\
+\end{aligned}\right.
+&
+\left\{\begin{aligned}
+r &= \sqrt{x^2 + y^2} \\
+\theta &= \tan^{-1}{(y/x)} \\
+\end{aligned}\right.
+\end{align*}
+In addition, $dA = dx dy = r dr d\theta$.
+
+\subsubsection{Triple Integral in Cylindrical Coordinates}
+Transform between $(x,y,z)$ and $(r, \theta, z)$:
+\begin{align*}
+&\left\{
+\begin{aligned}
+x &= r \cos\theta \\
+y &= r \sin\theta \\
+z &= z \\
+\end{aligned}\right.
+&
+\left\{\begin{aligned}
+r &= \sqrt{x^2 + y^2} \\
+\theta &= \tan^{-1}{(y/x)} \\
+z &= z \\
+\end{aligned}\right.
+\end{align*}
+In addition, $dV = dx dy dz = r dr d\theta dz$.
+
+\subsubsection{Triple Integral in Spherical Coordinates}
+Transform between $(x,y,z)$ and $(\rho, \theta, \phi)$:
+\begin{align*}
+&\left\{
+\begin{aligned}
+x &= \rho \cos\theta \sin\phi \\
+y &= \rho \sin\theta \sin\phi \\
+z &= \rho \cos\phi
+\end{aligned}\right.
+&
+\left\{\begin{aligned}
+\rho &= \sqrt{x^2 + y^2 + z^2} \\
+\theta &= \tan^{-1}{(y/x)} \\
+\phi &= \cos^{-1}(z/\rho) \le \pi \\
+\end{aligned}\right.
+\end{align*}
+In addition, $dV = dx dy dz = \rho^2 \sin\phi d\rho d\theta d\phi$.
+
+
+\subsection{Application of integration}
+For a given region $D$ in $\mathbb{R}^2$, the area of the region can be calculated as $\text{Area}(D) = \iint_D 1 dA$.
+\\
+For a given solid $E$ in $\mathbb{R}^3$, the volume of the solid can be calculated as $\text{Volume}(E) = \iiint_E 1 dV$.
+
+
+\section{Chapter 07 - Change of Coordinates}
+\subsection{Planar Transformation}
+A map $T: S \to R$ is a planar transformation if it is a differentiable map whose inverse is differentiable.
+
+Therefore, to show $T: S \to R$ is a planar transformation, it must satisfy:
+\begin{enumerate}
+    \item $T$ is differentiable
+    \item The inverse $T^{-1}$ exists
+    \item The inverse $T^{-1}$ is differentiable
+\end{enumerate}
+
+\subsection{Change of Coordinates}
+\subsubsection{2D Jacobian Determinant}
+The \emph{Jacobian} of the transformation $T(u, v) = (x(u,v), y(u,v))$ is defined
+\[
+\frac{\partial (x,y)}{\partial (u,v)} 
+    = \begin{vmatrix} x_u & x_v \\ y_u & y_v\end{vmatrix}
+    = \frac{\partial x}{\partial u} \frac{\partial y}{\partial v}
+        - \frac{\partial x}{\partial v} \frac{\partial y}{\partial u}
+\]
+
+\subsubsection{Change of Variable in Double Integral}
+Let $T : S \to R$ be a planar transformation, where $S$ lies in the $uv$-plane and $R$ lies in the $xy$-plane. Let $A$ and $A'$ denote the area in the $xy$- and $uv$-plane respectively. For a two-var. function from $xy$-plane to $\mathbb{R}$,
+\[
+\iint_{R} f(x,y) dA = \iint_{R} f \circ T(u, v) \left| \frac{\partial (x,y)}{\partial (u,v)}  \right|  dA'
+\]
+Equivalently,
+\[
+\iint_{R} f(x,y)dx dy = \iint_S f(x(u,v), y(u,v)) \left| \frac{\partial (x,y)}{\partial (u,v)}  \right|  du dv
+\]
+
+The 3D Jacobian has similar expressions and properties.
+
+\subsection{Inverse Function Theorem}
+
+\section{Chapter 08 - Line Integrals}
+\subsection{Line Integral}
+\subsubsection{Line Integral of Functions}
+For curve $C$ parameterised by $R(t) = (x(t), y(t), z(t), \ a \le t \le b$, and a 3-var function $f(x,y, z)$, the line integral
+\[
+\int_C f(x, y, z) ds = \int_{a}^{b} f(x(t), y(t), z(t)) \norm{R'(t)} dt
+\]
+
+\subsubsection{Line Integral of Vector Fields}
+Let $\vb{C} = (C, o)$ be a smooth oriented curve in $\mathbb{R}^3$ parameterised by $R(t) = (x(t), y(t), z(t)), \ a \le t \le b$, and let $\vb{F} = \vb{F}(x, y, z)$ be a continuous vector field along $C$. Then, the line integral of $\vb{F}$ along $\vb{C}$
+\[
+\int_{\vb{C}} \vb{F} \cdot d\vb{r} = \int_{a}^{b} \vb{F}(x(t), y(t), z(t)) \cdot R'(t) dt
+\]
+For $\vb{F} = \langle X,Y,Z \rangle$ in its component form,
+\[
+\int_{\vb{C}} \vb{F} \cdot d\vb{r} = \int_{\vb{C}} Xdx + Ydy + Zdz
+\]
+
+In addition, if $-\vb{C}$ is the curve $\vb{C}$ with opposite orientation,
+\[
+\int_{\vb{C}} \vb{F} \cdot d\vb{r} = - \int_{-\vb{C}} \vb{F} \cdot d\vb{r}
+\]
+
+
+\subsection{Conservative Vector Fields}
+Whenever a vector field $\vb{F}$ on some open domain stratifies $\vb{F} = \nabla f$ for some differentiable function $f$, then we call $\vb{F}$ a \emph{conservative vector field} and $f$ the \emph{potential function} of $\vb{F}$.
+
+\subsubsection{Tests for Conservativity}
+\begin{itemize}
+    \item To show conservative: find a $f$ s.t. $\nabla f = \vb{F}$ (by definition).
+    \item To show conservative: if $\vb{F}(x, y) = \langle X,Y \rangle$ is defined over an \textbf{open and simply-connected} region $D \subset \mathbb{R}^2$, then need to show
+    \[
+    \frac{\partial X}{\partial y} = \frac{\partial Y}{\partial x}
+    \]
+    \item To show non-conservative: find two oriented curves, $\vb{C_1}$ and $\vb{C_2}$, with same starting and ending points, s.t.
+    \[
+    \int_{\vb{C_1}} \vb{F} \cdot d\vb{r} \ne \int_{\vb{C_2}} \vb{F} \cdot d\vb{r}
+    \]
+\end{itemize}
+
+\subsubsection{Gradient Theorem}
+For a 3-var function $f$ whose gradient vector $\nabla f$ is continuous along $\vb{C} = (C, 0)$ parameterised by $R(t) = (x(t), y(t), z(t)), \ a \le t \le b$,
+\[
+\int_{\vb{C}} \nabla f \cdot d\vb{r} = f(R(b)) - f(R(a))
+\]
+
+\subsubsection{Green's Theorem, Version I}
+Let $\vb{C} = (C, o)$ be a \textbf{positively oriented}, piecewise differentiable loop in $\mathbb{R}^2$, and let $D$ be the region bounded by $C$. Then for vector field $\vb{F} = \langle X, Y \rangle$,
+\[
+\int_{\vb{C}} \vb{F} \cdot d\vb{r} = \iint_{D} \left( \frac{\partial Y}{\partial x} - \frac{\partial X}{\partial y} \right) \,dA
+\]
+
+\subsubsection{Green's Theorem, Version II}
+Let $\vb{C} = (C, o)$ be a \textbf{positively oriented}, piecewise differentiable loop in $\mathbb{R}^2$, and let $D$ be the region bounded by $C$. Then for vector field $\vb{F}$, let $\vb{n}(x, y)$ denote the \textbf{outward pointing} unit normal vector to $S$,
+\[
+\int_{\vb{C}} \vb{F} \cdot \vb{n} \,ds = \iint_{D} \text{div } \vb{F} \,dA
+\]
+Algebraically, the outward pointing unit normal vector is
+\[
+\vb{n}(t) = \frac{\langle y'(t), -x'(t) \rangle}{\norm{R'(t)}}
+= \frac{\langle y'(t), -x'(t) \rangle}{\sqrt{x'(t)^2 + y'(t)^2}}
+\]
+Note, the integral is called the outward flux of $\vb{F}$ across $C$.
+
+
+\section{Chapter 09 - Surface Integrals}
+\subsection{Surface Integral}
+\subsubsection{Surface Integral of Functions}
+Let $R: D \to S$ be a (differentiable) parameterisation of surface $S$, then
+\[
+\iint_{S} f(x,y,z) dS = \iint_{D} f(x(u,v), y(u,v), z(u,v)) \norm{R_{u} \times R_{v}} \,dA
+\]
+\textbf{Special case:} when $S$ is the graph of a 2-var function $g(x,y)$ for $(x,y) \in D$ for some domain $D$,
+\[
+\iint_{S} f(x,y,z) dS = \iint_{D} f(x,y,g(x,y)) \Big( \sqrt{g_{x}^2 + g_{y}^2 + 1}  \Big) \,dA
+\]
+
+\subsubsection{Orientation on Surface}
+A (differentiable) surface $S \in \mathbb{R}^3$ is \emph{orientable} if it is possible to define for every $(x,y,z) \in S$, a unit normal vector $\vb{n}(x,y,z)$ to $S$ with initial point $(x,y,z)$ such that $\vb{n}$ varies continuously.   
+\\
+An orientable surface has two orientations:
+\[
+\vb{n} = \pm \frac{R_u \times R_v}{\norm{R_u \times R_v}}
+\]
+
+\subsubsection{Surface Integral of Vector Fields}
+Let $\vb{S} = (S, \vb{n})$ be an oriented surface where $R: D \to S$ is the parameterisation for $S$, and let $\vb{F}$ be a vector field along the surface,
+\[
+\iint_{\vb{S}} \vb{F} \cdot d\vb{S} 
+= \iint_{\vb{S}} \vb{F} \cdot \vb{n} \,dS 
+= \iint_D \vb{F} \cdot (R_u \times R_v) \,dA
+\]
+\textbf{Special case:} when $S$ is the graph of a 2-var function $g(x,y)$, let $\vb{S}$ denote $S$ with \textbf{upward orientation}, and let $\vb{F} = \langle X, Y, Z \rangle$,
+\[
+\iint_{\vb{S}} \vb{F} \cdot d\vb{S} 
+= \iint_D \Big( -\vb{X}\frac{\partial g}{\partial x} -\vb{Y}\frac{\partial g}{\partial Y} + \vb{Z} \Big) \,dA
+\]
+
+\subsection{Gauss' Theorem}
+\subsubsection{Divergence}
+For a vector field $\vb{F} = \langle X, Y, Z \rangle$, the \emph{divergence} of $\vb{F}$ is defined as
+\[
+\text{div } \vb{F} = \nabla \cdot \vb{F}
+= \frac{\partial X}{\partial x}(x,y,z) + \frac{\partial Y}{\partial y}(x,y,z) + \frac{\partial Z}{\partial z}(x,y,z)
+\]
+
+\subsubsection{Gauss' Theorem}
+Let $E$ be a solid region where the boundary surface $S$ is piece-wise smooth, and let $\vb{S}$ denote $S$ with \textbf{outward orientation}. Then for a vector field $\vb{F}$ defined over $S$,
+\[
+\iint_{\vb{S}} \vb{F} \cdot d\vb{S} = \iiint_E \text{div } \vb{F} \,dV
+\]
+
+
+\subsection{Stokes' Theorem}
+\subsubsection{Curl}
+For a vector field $\vb{F} = \langle X,Y,Z \rangle$, the \emph{curl} of $\vb{F}$ is defined as
+\[
+\text{curl } \vb{F} = \nabla \times \vb{F} = \left\langle 
+        \frac{\partial Z}{\partial y} - \frac{\partial Y}{\partial z},
+        \frac{\partial X}{\partial z} - \frac{\partial Z}{\partial x},
+        \frac{\partial Y}{\partial x} - \frac{\partial X}{\partial y}
+        \right\rangle
+\]
+
+\subsubsection{Induced Orientation}
+For oriented surface $\vb{S} = (S, \vb{n})$ with boundary $C$ being a simple loop, the \emph{induced orientation}, $\vb{o}$ of $\vb{n}$ is one such that if you want along $C$ in the orientation $\vb{o}$ with your head pointing in the direction of $\vb{n}$, then $S$ will always be on your left.
+
+\subsubsection{Stokes' Theorem}
+For oriented surface $\vb{S} = (S, \vb{n})$ bounded by a simple curve $C$, and let $\vb{C} = (C, \vb{o})$ be the oriented loop with induced orientation, then for a vector field $\vb{F}$,
+\[
+\iint_{\vb{S}} \text{curl } \vb{F} \cdot d\vb{S} = \int_{\vb{C}} \vb{F} \cdot d\vb{r}
+\]
+
+\subsection{Properties of Gradient, Divergence \& Curl}
+For any function $f = f(x,y,z)$,
+\[
+\nabla \times (\nabla f) = \text{curl }( \nabla f ) = \vb{0}
+\]
+
+For any vector fields $\vb{F} = \vb{F}(x,y,z)$,
+\[
+\nabla \cdot (\nabla \times \vb{F} )
+= \text{div } ( \text{curl } \vb{F} )= 0
+\]
 
 
 \end{multicols}

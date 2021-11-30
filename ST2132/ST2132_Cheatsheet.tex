@@ -91,36 +91,164 @@
 \setlength{\columnsep}{1.8em}
 \begin{multicols}{3}
 
-\section{Chapter 02 - Random Variables}
-\subsection{More Disributions}
-\subsubsection{Beta Distribution & Beta Function}
-$X \sim B(a, b)$ where $a>0, b>0$ has support $[0, 1]$ and
+
+% Things to include
+% func of Joint distribution Formula
+% More abt MGF
+% results / lemmas from tut.
+
+\section{ST2131 Topics}
+% Things to include
+% Functions of (joint) RVs (if later parts not covered)
+%
+\subsection{Theorems \& Identities}
+\subsubsection{Tail Sum Formula}
+For DRV. $X$ with \emph{non-negative integer-valued} support, $E(X) = \sum_{k=1}^{\infty} P(X \geq k) = \sum_{k=0}^{\infty} P(X > k)$. \\
+For CRV. $X$ with positive support, $E(X)= \int_{0}^{\infty} P(X>x) \,dx = \int_{0}^{\infty} P(X \geq x) \,dx$
+
+
+\subsubsection{Markov's Inequality}
+For \textbf{non-negative} r.v. $X$, $P(X \geq a) \leq \frac{E(X)}{a}$ for any $a > 0$.
+
+\subsubsection{Chebyshev's Inequality}
+Let $X$ be a r.v. with mean $\mu$, $P(|X-\mu| \geq a) \leq \frac{\text{var}(X)}{a^2}$ for any $a > 0$.
+
+\subsubsection{One-sided Chebyshev's Inequality}
+Let $X$ be a r.v. with \textbf{zero mean} and variance $\sigma^2$, $P(X \geq a) \leq \frac{\sigma^2}{\sigma^2 + a^2}$ for any $a > 0$.
+
+
+\subsubsection{Jensen's Inequality}
+For r.v. $X$ and convex function $g(X)$, $E[g(X)] \geq g(E[X])$, provided the expectations exist and are finite.
+
+
+\subsection{Definitions}
+Covariance, $Cov(X,Y) = E[(X - \mu_X)(Y - \mu_Y)] = E(XY) - E(X)E(Y)$ \\
+Coefficient of Correlation, $\rho(X, Y) = \frac{\text{Cov}(X, Y)}{\sqrt{\text{var}(X)\text{var}(Y)}}$\\
+Moment Generating Function, $M_X(t) = E[e^{tX}]$
+
+
+\subsection{DRV}
+\subsubsection{Bernoulli}
+$X \sim Be(p)$, indicate whether an event is successful.
+\[
+P(X = k) = p^k (1-p)^{(1-k)}, \, k = 0 \text{ or } 1
+\]
+Statistics: $E(X) = p, \ \text{var}(X) = pq = p(1-p)$ \\
+MGF: $M_X(t) = 1 - p + pe^t$
+
+
+\subsubsection{Binomial}
+$X \sim Bin(n, p)$, total number of successes in $n$ i.i.d. $Be(p)$ trials.
+\[
+P(X=k) = {n \choose k} p^x q^{n-x}, \, k = 0, 1, \ldots, n
+\]
+Statistics: $E(X) = np, \ \text{var}(X) = npq = np(1-p)$ \\
+MGF: $M_X(t) = (1 - p + pe^t)^n$
+
+
+\subsubsection{Geometric}
+$X \sim Geom(p)$, where $X = 1, 2, ...$. Memoryless Property.
+\[
+P(X=k) = pq^{k-1}, \ k = 1, 2, ... 
+\]
+Statistics: $E(X) = \frac{1}{p}, \ \text{var}(X) = \frac{1-p}{p^2}$ \\ 
+MGF: $M_X(t) = \frac{pe^t}{1-qe^t}$
+
+
+\subsubsection{Negative Binomial}
+$X \sim NB(r, p)$, where $X = r, r+1, ...$
+\[
+P(X=k) = {{k-1} \choose {r-1}} \ p^r q ^ {x-r}, \ k = r, r+1, ...
+\]
+Statistics: $E(X) = \frac{r}{p}, \ \text{var}(X) = \frac{r(1-p)}{p^2}$
+
+
+\subsubsection{Poisson}
+$X \sim Poisson(\lambda)$
+\[
+P(X = k) = e^{-\lambda} \frac{\lambda^k}{k!}, \ k = 0, 1, ...
+\]
+Statistics: $E(X) = \text{var}(X) = \lambda$ \\
+MGF: $M_X(t) = e^{\lambda(e^t-1)}$ \\
+Properties: $Poisson(\alpha) + Poisson(\beta) = Poisson(\alpha+\beta)$
+
+
+\subsubsection{Hypergeometric}
+Suppose there are $N$ identical balls, $m$ of them are red and $N-m$ are blue.
+$X \sim H(n, N, m)$ is \#red balls in $n$ draws without replacement.
+\[
+P(X = k) = \frac{{m \choose k}{{N-m} \choose {n-k}}}{{N \choose n}}, \ k = 0, 1, ..., n 
+\]
+\\
+Statistics: $E(X) = \frac{nm}{N}, \ \text{var}(X) = \frac{nm}{N} \big[ \frac{(n-1)(m-1)}{N-1} + 1 - \frac{nm}{N}  \big]$
+
+
+\subsection{CRV}
+
+\subsubsection{Uniform}
+$X \sim U(a, b)$
+\[
+f(x) = \frac{1}{b-a}, \quad a < x < b
+\]
+Statistics: $E(X) = \frac{a+b}{2}, \ \text{var}(X) = \frac{(b-a)^2}{12}$ \\
+MGF: $M_X(t) = \frac{e^{\beta t} - e^{\alpha t}}{(\beta - \alpha t)^t},\ t \neq 0$
+
+
+\subsubsection{Exponential}
+$X \sim Exp(\lambda)$ for $\lambda > 0$. Memoryless Property
+\begin{align*}
+    f(x) &= \lambda e^{-\lambda x}, x \geq 0 \\
+    F(x) &= 1 - e^{-\lambda x}, x \geq 0
+\end{align*}
+Statistics: $E(X) = \frac{1}{\lambda}, \ \text{var}(X) = \frac{1}{\lambda^2}$ \\
+MGF: $M_X(t) = \frac{\lambda}{\lambda - t}, \text{for } t < \lambda$
+
+
+\subsubsection{Normal}
+$X \sim N(\mu, \sigma^2)$. Special case : $Z \sim N(0, 1)$
+\[
+    f_X(x) = \frac{1}{\sqrt{2 \pi} \sigma} e^{-(x-\mu)^2/(2\sigma^2)}, \ x \in \mathbb{R}
+\]
+\\
+Statistics: $E(X) = \mu, \ \text{var}(X) = \sigma^2$ \\
+MGF: $M_X(t) = e^{\mu t + \sigma^2 t^2 / 2}$
+
+
+\subsubsection{Gamma}
+$X \sim Gamma(\alpha, \lambda)$ for shape $\alpha$, and rate $\lambda > 0$. ($1/\lambda$ is scale parameter)
+\[
+f(x) = \frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\lambda x}, \quad x \geq 0
+\]
+Statistics: $E(X) = \frac{\alpha}{\lambda}, \ \text{var}(X) = \frac{\alpha}{\lambda^2}$ \\
+MGF: $M_X(t) = \left(1 - \frac{t}{\lambda}\right)^{-\alpha},\quad t < \beta$ \\
+Special case: $Exp(\lambda) = Gamma(1, \lambda)$, $\chi^2_n = Gamma(\frac{n}{2}, \frac{1}{2})$ \\
+Properties: $Gamma(a, \lambda) + Gamma(b, \lambda) = Gamma(a+b, \lambda)$, and $cX \sim Gamma(\alpha, \frac{\lambda}{c})$
+\\
+\textbf{Gamma function} $\Gamma(\alpha) = \int_0^{\infty} e^{-y}y^{\alpha-1} \, dy$ \\
+$\Gamma(1) = 1, \ \Gamma\left(\frac{1}{2}\right) = \sqrt{\pi}$ and $\Gamma(n) = (n-1)!, \ n \in \mathbb{Z}^{+}$
+
+
+\subsubsection{Beta}
+$X \sim B(a, b)$ where $a>0, b>0$ has support $[0, 1]$
 \[
 f(X) = \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} x^{a-1} (1-x)^{b-1}, 0 \le x \le 1
 \]
+Statistics: $E(X) = \frac{1}{1 + \beta / \alpha}, \ \text{var}(X) = \frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$
+Special case: $\text{Unif}(0, 1) = B(1, 1)$
 
-Note that $\text{Unif}(0, 1) \sim B(1, 1)$ is a special case.
-\\
-\textbf{Beta function} $B(u, v)$ is an integral that
-\begin{align*}
-B(a, b) 
-&= \int_0^1 t^{a-1} (1-t)^{b-1} \ dt \\
-&= \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}
-\end{align*}
-
-\subsubsection{Chi-Square Distribution}
-If $X = Z^2$ where $Z \sim \mathcal{N}(0, 1)$, then
-\[
-f_X(x) = \frac{x^{-1/2}}{\sqrt{2\pi}} e^{-x/2}, \ x \ge 0
-\]
-In fact, $X$ follows $\chi^2$ distribution with df $1$, and $X \sim \text{Gamma}(\frac{1}{2}, \frac{1}{2})$.
+\textbf{Beta function} $B(a, b) = \int_0^1 t^{a-1} (1-t)^{b-1} \ dt = \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$
 
 
+\hline
+
+
+
+\section{Chapter 02 - Random Variables}
 \subsection{Functions of a Random Variable}
 \subsubsection{Properties of CDF}
 \emph{(Ch 2.3 Prop. C)} Let $Z = F(X)$, then $Z \sim \text{Unif}(0, 1)$
 
-\emph{(Ch 2.3 Prop D)} Let $U \sim \text{Unif}(0, 1)$, and let $X = F^{-1}(U)$, then the CDF of $X$ is $F$.
+\emph{(Ch 2.3 Prop. D)} Let $U \sim \text{Unif}(0, 1)$, and let $X = F^{-1}(U)$, then the CDF of $X$ is $F$.
 
 \subsubsection{Inverse CDF Method}
 For a r.v. $X$ with CDF $F$ to be generated, let $U = F(X)$ and write it as $X = F^{-1}(U)$, then generate with following steps:
@@ -128,6 +256,12 @@ For a r.v. $X$ with CDF $F$ to be generated, let $U = F(X)$ and write it as $X =
     \item Generate $u$ from a $\text{Unif}(0, 1)$.
     \item Deliver $x = F^{-1}(u)$.
 \end{enumerate}
+
+\subsubsection{Distribution of a Function of R.V.}
+For r.v. $X$ with pdf. $f_X(x)$, assume $g(x)$ is a function of $X$ that is \textbf{strictly monotonic} and \textbf{differentiable}. Then the pdf. of $Y=g(X)$,
+\[
+f_Y(y) = f_X(g^{-1}(y)) \left| \frac{d}{dy} g^{-1}(y)  \right|, \ y=g(x) \text{ for some $x$}
+\]
 
 
 
@@ -139,7 +273,7 @@ A \textbf{copula}, $C(u, v)$, is a joint CDF where the marginal distributions ar
 \begin{itemize}
     \item $C(u, v)$ is defined over $[0, 1] \times [0, 1]$ and is non-decreasing
     \item $P(U \le u) = C(u, 1)$ and $P(V \le v) = C(1, v)$
-    \item joint density function $c(u, v) = \frac{\partial^2}{\partial u \partial v}C(u, v,) \ge 0$
+    \item joint density function $c(u, v) = \frac{\partial^2}{\partial u \partial v}C(u, v) \ge 0$
 \end{itemize}
 Construct joint distributions from marginal distributions given using copula:
 For any two CRVs $X$ and $Y$ and a copula $C(u, v)$ given,
@@ -190,25 +324,15 @@ For a r.v. $X$ with density function $f(x)$ to be generated, if $f(x) > 0$ for $
 \end{enumerate}
 
 
-\subsubsection{Bayesian Inference}
-Unknown parameter $\theta$ is treated as a distribution, not a value. \textbf{Prior distribution} $f_\Theta(\theta)$ represents our knowledge (assumption) about $\theta$ before observing data $X$. After observation, we have a better estimation using the \textbf{posterior distribution} $f_{\Theta | X}(\theta | x)$, where
-\[
-f_{\Theta | X} = \frac{f_{X\Theta}(x, \theta)}{f_X(x)} = \frac{f_{X|\Theta}(x|\theta)f_\Theta(\theta)}{ \int f_{X|\Theta}(x|t)f_\Theta(t) dt }
-\]
-In short, it means
-\[
-\text{Posterior density} \propto \text{likelihood} \times \text{prior density}
-\]
-
 \subsection{Functions of Joint Distributions}
 \emph{(Ch 3.6.2 Prop. A)} Suppose $X$ and $Y$ are jointly distributed and $u = g_1(x,y), \ v = g_2(x, y)$ can be inverted as $x = h_1(u,v), \ y = h_2(u, v)$ then
 \[
-f_{UV} (u, v) = f_{XY}(h_1(u,v), h_2(u,v)) \ |J^{-1}(h_1, h_2)|
+f_{UV} (u, v) = f_{XY}(h_1(u,v), h_2(u,v)) \ \left|J^{-1}(h_1, h_2)\right|
 \]
 
 \subsection{Sum/Quotient of Random Variables}
 
-Suppose $X$ and $Y$ have JDF $f$. Then for $U = X + Y$, $$f_U(u) = \int_{-\infty}^\infty f(x, u - x) \,dx,$$ and for $V = X/Y$, $$f_V(v) = \int_{-\infty}^\infty |x|f(x, xv) \,dx.$$
+Suppose $X$ and $Y$ are independent and have JDF $f$. Then for $U = X + Y$, $$f_U(u) = \int_{-\infty}^\infty f(x, u - x) \,dx,$$ and for $V = X/Y$, $$f_V(v) = \int_{-\infty}^\infty |x|f(x, xv) \,dx.$$
 
 
 \subsection{Order Statistics}
@@ -216,6 +340,10 @@ Suppose $X$ and $Y$ have JDF $f$. Then for $U = X + Y$, $$f_U(u) = \int_{-\infty
 \[
 f_k(x) = \frac{n!}{(k-1)! (n-k)!} f(x) F^{k-1}(x) [1-F(x)]^{n-k}
 \]
+
+
+
+
 
 \section{Chapter 04 - Expected Values}
 \subsection{Model for Measurement Error}
@@ -231,7 +359,6 @@ where $\beta$ is \textbf{bias}, a constant and $\epsilon$ is the random componen
     &= E[(X-x_0)^2] \ \text{(Definition)} \\
     &= \sigma^2 + \beta^2
 \end{align*}
-
 
 \subsection{Conditional Expectation \& Prediction}
 \subsubsection{Find Expectation \& Variance by Conditioning}
@@ -250,6 +377,258 @@ Suppose $X$ and $Y$ are jointly distributed. If $X$ is observed, the predictor o
 \[
 h(Y) = E(Y|X)
 \]
+
+
+
+
+% Post Midterm Topics
+
+\subsection{Delta Method}
+Consider $Y = g(X)$ where the PDF of $X$ is unknown but $\mu_X$ and $\sigma_X^2$ is known. Then \[
+E(Y) \approx g(\mu_X) + \frac{1}{2}\sigma_X^2g''(\mu_x),\quad
+\text{var}(Y) \approx \sigma_X^2[g'(\mu_X)]^2.
+\]
+
+
+\section{Chapter 05 - Limit Theorems}
+The RV $X$ \textbf{converges in probability} to $\mu$ if for any $\epsilon > 0$, \[
+P(|X - \mu| > \epsilon) \to 0.
+\]
+
+The RVs $X_1, X_2, \ldots$ with CDFs $F_1, F_2, \ldots$ \textbf{converge in distribution} to $X$ with CDF $F$ if \[
+\lim_{n \to \infty} F_n(x) = F(X)
+\] at every point which $F$ is continuous.
+
+\subsubsection{Weak Law of Large Numbers}
+Let $X_1, X_2, \ldots$ be a sequence of independent RVs. Then $\overline{X_n} = n^{-1}\sum_{i=1}^n X_i$ converges to $\mu$ in probability as $n \to \infty$.
+
+\subsubsection{Strong Law of Large Numbers}
+\[
+P(\lim_{n \to \infty} \overline{X_n} = \mu) = 1.
+\]
+
+\subsubsection{Continuity Theorem}
+Let $F_n$ be a sequence of CDFs with corresponding MGFs $M_n$. If $M_n(t) \to M(t)$ for all $t$ in an open interval containing zero, then $F_n(x) \to F(x)$ at all continuity points of $F$.
+
+\subsubsection{Central Limit Theorem}
+Let $X_1, X_2, \ldots$ be a sequence of independent RVs with mean $\mu$ and variance $\sigma^2$, and CDF $F$ and MGF $M$ defined in a neighbourhood of zero. Let $S_n = \sum_{i=1}^n (X_i - \mu)$. Then \[
+\lim_{n \to \infty} P\left(\frac{S_n}{\sigma\sqrt{n}} \leq x\right) = \Phi(x),\quad -\infty < x < \infty.
+\]
+
+\subsubsection{Common Convergences in Distribution}
+\emph{(Tut.5 Qn3)} $Bin(n, p) \overset{d}{\to} Poission(np)$ as $n \to \infty, \ p \to 0$.\\
+\emph{(Tut.5 Qn4)} For $X$ standardised $Gamma(\alpha, \lambda)$, $X \overset{d}{\to} Z$ as $\alpha \to \infty$.
+
+\subsubsection{Miscellaneous}
+\emph{(Tut.5 Qn13)} For sequence $a_n \to a$, $(1 + \frac{a_n}{n})^n \to e^a$.
+
+
+
+\section{Chapter 06 - Distributions Derived from the Normal Distribution}
+\subsection{Common Distributions}
+\subsubsection{Chi-Square Distribution}
+For independent $Z_1, \ldots, Z_n \sim N(0, 1)$, \[
+V = \sum_{i=1}^n Z_i^2 \sim \chi_n^2.
+\] $M_V(t) = (1 - 2t)^{-n/2}$.
+
+\subsubsection{t-distribution}
+If $Z \sim N(0, 1)$ and $U \sim \chi_n^2$ are independent, then \[
+T = \frac{Z}{\sqrt{U/n}} \sim t_n.
+\]
+
+\subsubsection{F-distribution}
+For independent $U \sim \chi_m^2$ and $V \sim \chi_n^2$, \[
+W = \frac{U/m}{V/n} \sim F_{m,n}.
+\]
+
+\subsection{Related Identities}
+\emph{(Tut.6 Qn2)} For $X \sim F_{n,m}$, $X^{-1} \sim F_{m,n}$. \\
+\emph{(Tut.6 Qn3)} For $X \sim t_n$, $X^2 \sim F_{1,n}$.
+
+\subsection{Sample Mean \& Variance}
+\[
+\overline{X} = \frac{1}{n}\sum_{i=1}^n X_i,\quad
+S^2 = \frac{1}{n - 1}\sum_{i=1}^n (X_i - \overline{X})^2 \sim \chi_{n-1}^2.
+\]
+
+\subsubsection{Related Identities}
+For i.i.d $X_1, ..., X_n$ from $N(\mu, \sigma^2)$, \\
+\emph{(Ch 6.2 Thm.A)} $\bar{X}$ and the vector $\langle X_1 - \bar{X}, ..., X_n - \bar{X} \rangle$ are independent. \\
+\emph{(Ch 6.2 Thm.B)} $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$. \\
+\emph{(Ch 6.2 Coro.B)} $\frac{\bar{X} - \mu}{S/\sqrt{n}} \sim t_{n-1}$.
+
+
+
+
+\section{Chapter 08 - Estimation of Parameters and Fitting of Probability Distributions}
+
+Let $\hat{\theta}_n$ be an estimate of a parameter $\theta$ based on a sample of size $n$. Then $\hat{\theta}_n$ is \textbf{consistent in probability} if it converges in probability to $\theta$ as $n \to \infty$.
+
+\subsection{Method of Moments}
+\begin{enumerate}
+    \item Calculate low order moments in terms of their parameters.
+    \item Find expressions for the parameters in terms of the moments.
+    \item Insert sample moments into the expressions.
+\end{enumerate}
+
+\subsection{Method of Maximum Likelihood}
+Consider RVs $X_1, \ldots, X_n$ with joint PDF $f(x_1, \ldots, x_n \mid \theta)$. The \textbf{likelihood} of $\theta$ is \[
+    \operatorname{lik}(\theta) = f(x_1, \ldots, x_n \mid \theta).
+\] If $X_1, \ldots, X_n$ are independent, then the \textbf{log likelihood} can be expressed as \[
+    l(\theta) = \sum_{i=1}^n \log[f(x_i \mid \theta)].
+\]
+
+\subsubsection{Invariance Property}
+Let $\hat{\theta} = (\hat{\theta}_1, \ldots, \hat{\theta}_k)$ be a mle of $\theta = (\theta_1, \ldots, \theta_k)$ in the density $f(x \mid \theta_1, \ldots, \theta_k)$. If $\tau(\theta) = (\tau_1(\theta), \ldots, \tau_r(\theta))$, $1 \leq r \leq k$ is a transformation of the parameter space $\Theta$, then a mle of $\tau(\theta)$ is $\tau(\hat{\theta}) = (\tau_1(\hat{\theta}), \ldots, \tau_r(\hat{\theta}))$.
+
+\subsubsection{Fisher Information}
+\[
+I(\theta) = E\left\{\left[\frac{\partial}{\partial\theta} \log f(X \mid \theta)\right]^2\right\}.
+\]
+
+\subsubsection{Large Sample Theory}
+Under (varying) smoothness conditions on $f$, \begin{enumerate}
+    \item The mle from i.i.d. sample is consistent.
+    \item \[
+    I(\theta) = -E\left[\frac{\partial^2}{\partial\theta^2} \log f(X \mid \theta)\right].
+    \]
+    \item The distribution of $\hat{\theta}$ tends towards \[
+    N\left(\theta_0, \frac{I}{nI(\theta_0)}\right).
+    \]
+    \item An approximate $100(1 - \alpha)\%$ confidence interval for $\theta_0$ is \[
+    \hat{\theta} \pm z_{\alpha/2}\frac{1}{\sqrt{nI(\hat{\theta})}}.
+    \]
+\end{enumerate}
+
+\subsection{Bayesian Inference}
+Unknown parameter $\theta$ is treated as a distribution, not a value. \textbf{Prior distribution} $f_\Theta(\theta)$ represents our knowledge (assumption) about $\theta$ before observing data $X$. After observation, we have a better estimation using the \textbf{posterior distribution} $f_{\Theta | X}(\theta | x)$, where
+\[
+f_{\Theta | X} = \frac{f_{X\Theta}(x, \theta)}{f_X(x)} = \frac{f_{X|\Theta}(x|\theta)f_\Theta(\theta)}{ \int f_{X|\Theta}(x|t)f_\Theta(t) dt }
+\]
+In short, it means
+\[
+\text{Posterior density} \propto \text{likelihood} \times \text{prior density}
+\]
+
+\subsubsection{Large Sample Theory for Bayesian}
+As $n \to \infty$, 
+\[
+\Theta | X \sim N(\hat{\theta}, -[l''(\hat{\theta})]^{-1})
+\]
+where $\hat{\theta}$ is the mle of $\theta_0$.
+
+\subsection{Bootstrapping Method}
+\subsubsection{For Estimating Sampling Distribution}
+\begin{enumerate}
+    \item Assume some distribution provides a good fit to the data.
+    \item Simulate $N$ random samples of size $n$ from the distribution using the estimated parameter $\hat{\theta}$.
+    \item For each random sample, calculate estimates of the distribution parameters using either Method of Moments or Maximum Likelihood, $\theta^{*}_{j}$ for $j=1, ..., N$.
+    \item Use the $N$ values of estimates $\theta^{*}_{j}$ to approximate the sampling distributions of the parameters.
+\end{enumerate}
+\subsubsection{For Estimating Confidence Interval}
+\begin{enumerate}
+    \item Approximate the distribution of $\hat{\theta} - \theta_0$ with that of $\theta^{*} - \hat{\theta}$.
+    \item Obtain the lower and upper bounds $\underline{\delta}$ and $\overline{\delta}$
+    \[
+    P(\theta^* - \hat{\theta} < \underline{\delta}) 
+    = P(\theta^* - \hat{\theta} > \overline{\delta}) = \frac{\alpha}{2}
+    \]
+    \item The CI for $\theta_0$ can then be constructed:
+    \[
+    P(\hat{\theta} - \overline{\delta} \le \theta_0 \le \hat{\theta} - \underline{\delta}) = 1 - \alpha 
+    \]
+\end{enumerate}
+
+\subsection{Estimator Properties}
+An estimator $\hat{\theta}$ of $\theta_0$ is \textbf{consistent} if $\hat{\theta} \overset{p}{\to} \theta_0$ as $n \to \infty$.
+\\
+
+The \textbf{efficiency} of $\hat{\theta}$ relative to $\tilde{\theta}$ is \[
+\operatorname{eff}(\hat{\theta}, \tilde{\theta}) = \frac{\text{var}(\tilde{\theta})}{\text{var}(\hat{\theta})}.
+\]
+
+A statistic $T(X_1, \ldots, X_N)$ is \textbf{sufficient} for $\theta$ if the conditional distribution of $X_1, \ldots, X_n$ given $T = t$ does not depend on $\theta$ for any value of $t$.
+
+\subsubsection{MSE}
+$\text{MSE } = \text{var}(\hat{\theta}) + (E(\hat{\theta}) - \theta_0)^2$. \\
+If $\hat{\theta}$ is an unbiased estimator of $\theta_0$, $\text{MSE } = \text{var}(\hat{\theta})$.
+
+\subsubsection{Cramer-Rao Inequality}
+Let $T = t(X_1, \ldots, X_n)$ be an unbiased estimator of $\theta$. Then, under smoothness assumptions on $f(x \mid \theta)$, $\text{var}(T) \geq 1/nI(\theta)$.
+
+\subsubsection{Factorisation Theorem for Sufficiency}
+$T(X_1, \ldots, X_n)$ is sufficient for a parameter of $\theta$ iff the joint pdf factors in the form \[
+f(x_1, \ldots, x_n \mid \theta) = g[T(x_1, \ldots, x_n), \theta]h(x_1, \ldots, x_n).
+\]
+
+\subsubsection{Rao-Blackwell Theorem}
+Let $\hat{\theta}$ be an estimator of $\theta$ with $E(\hat{\theta}^2) < \infty$ for all $\theta$. Suppose that $T$ is sufficient for $\theta$ and let $\tilde{\theta} = E(\hat{\theta} \mid T)$. Then for all $\theta$, \[
+E[(\tilde{\theta} - \theta)^2] \leq E[(\hat{\theta} - \theta)^2].
+\]
+
+\section{Testing Hypotheses and Assessing Goodness of Fit}
+\subsection{Testing Hypotheses}
+The \textbf{likelihood ratio} is defined as \[
+\frac{P(x \mid H_0)}{P(x \mid H_1)} = \frac{P(H_1)}{P(H_0)}\frac{P(H_0 \mid x)}{P(H_1 \mid x)}
+\] with $H_0$ rejected if the likelihood ratio is less than $c = \frac{P(H_1)}{P(H_0)}$.
+
+
+\subsubsection{Uniformly Most Powerful}
+If $H_0$ is simple and $H_1$ is composite, a test that is most powerful for every simple alternative in $H_1$ is said to be \textbf{uniformly most powerful}. \\
+\textbf{Conditions}: 1) $H_1$ must be one-sided. 2) The threshold for rejection region must be independent of $\mu_1$ of $H_1$.
+
+
+\subsubsection{Neyman-Pearson Lemma}
+Suppose that $H_0$ and $H_1$ are simple hypotheses and that the test that rejects $H_0$ whenever the likelihood ratio is less than $c$ has significance level $\alpha$. Then any other test for which the significance level is at most $\alpha$ has power at most that of the likelihood ratio test.
+
+\subsection{Generalised Likelihood Ratio}
+The test statistic corresponding to the \textbf{generalised likelihood ratio} is \[
+\Lambda = \frac{\max_{\theta \in \omega_0}[\operatorname{lik}(\theta)]}{\max_{\theta \in \Omega}[\operatorname{lik}(\theta)]}
+\] where $\omega_0$ is the set of all possible values of $\theta$ specified by $H_0$ and similarly for $\omega_1$, with $\Omega = \omega_0 \cup \omega_1$. The threshold $\lambda_0$ is chosen such that $P(\Lambda \leq \lambda_0 \mid H_0) = \alpha$, the desired significance level.
+
+Under large sample theory, \[
+-2\log\Lambda \dot\sim \chi_\nu^2
+\] where $\nu = \dim\Omega - \dim\omega_0$.
+
+\subsubsection{Multinomial Case}
+Let $O_i = n \hat{p_i}$ and $E_i = np_i(\hat{\theta})$ denotes the observed and estimated cases, 
+\[
+-2\log\Lambda = 2 \sum_{i=1}^{m} O_i \log\left(\frac{O_i}{E_i}\right)
+\]
+
+\subsubsection{Pearson's Chi-square Statistic}
+\[
+X^2 = \sum_{i=1}^m \frac{[x_i - np_i(\hat{\theta})]^2}{np_i(\hat{\theta})} \sim \chi_\nu^2,
+\] where $\nu$ is the number of degrees of freedom. In practice, $np_i(\hat{\theta}) \geq 5$ is required for the approximation to be good.
+
+\subsubsection{Poisson Dispersion Test}
+Given $x_1, \ldots, x_n$ and testing $H_0$ that the counts are Poisson with a common parameter $\lambda$ versus $H_1$ that they are Poisson but with different rates, the likelihood ratio test statistic is \[
+-2\log\Lambda = 2\sum_{i=1}^n x_i\log\left(\frac{x_i}{\bar{x}}\right) \approx \frac{1}{\bar{x}}\sum_{i=1}^n (x_i - \bar{x})^2.
+\]
+
+\subsection{Goodness of Fit}
+\subsubsection{Hanging Diagrams}
+\begin{itemize}
+    \item ~ historgram: Plot of $n_j - \hat{n_j}$
+    \item ~ rootogram: Plot of $\sqrt{n_j} - \sqrt{\hat{n_j}}$, var-stabilised
+    \item ~ chi-gram: Plot of $\frac{n_j - \hat{n_j}}{\sqrt{\hat{n_j}}}$, var-stabilised
+\end{itemize}
+\textbf{Variance-stabilising transform}: a transformation $Y = g(X)$ that makes $\text{var}(Y)$ (approximately) constant using Delta Method.
+
+\subsubsection{Probability Plots}
+\begin{itemize}
+    \item P-P Plot: Plot $F(X_{(k)})$ against $\frac{k}{n+1}$
+    \item Q-Q Plot: Plot $X_{(k)}$ against $F^{-1}(\frac{k}{n+1})$
+\end{itemize}
+
+\subsubsection{Tests for Normality}
+The \textbf{coefficient of skewness} is defined as \[
+b_1 = \frac{\frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^3}{s^3},
+\] where the test rejects for large values of $|b_1|$.
+
+The \textbf{coefficient of kurtosis} is defined as \[
+b_2 = \frac{\frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^4}{s^4}
+\] where the test rejects for large values of $|b_2|$.
 
 \end{multicols}
 \end{document}
