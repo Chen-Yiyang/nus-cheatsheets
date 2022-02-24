@@ -7,6 +7,14 @@ If you have noticed any typos or errors, please let me know. Thank you!
 
 -----
 ## Overview
+### CS2040S
+- Midterm Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2 till Midterm.
+- Final Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2.
+
+### CS3243
+- Cheatsheet: A 2-page summary sheet for Midterm.
+
+
 ### MA1101R
 - Exercise Question Summary: A compilation of Lemmas / statements left as proving questions in the Exercises of the textbook.
 
@@ -23,15 +31,11 @@ If you have noticed any typos or errors, please let me know. Thank you!
 
 
 ### ST2132
-- Cheatsheet: A 2-page summary sheet for Final,  worked together with [Ng Wei En](https://github.com/weien2912) for the cheatsheet.
+- Cheatsheet: A 2-page summary sheet for Final, worked together with [Ng Wei En](https://github.com/weien2912) for the cheatsheet.
 
 
 ### ST3236
 
-
-### CS2040S
-- Midterm Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2 till Midterm.
-- Final Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2.
 
 -----
 ## Todos

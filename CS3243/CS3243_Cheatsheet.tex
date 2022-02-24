@@ -1,0 +1,357 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Original Source: Dave Richeson (divisbyzero.com), Dickinson College
+% Modified By: Chen Yiyang
+% 
+% A one-size-fits-all LaTeX cheat sheet. Kept to two pages, so it 
+% can be printed (double-sided) on one piece of paper
+% 
+% Feel free to distribute this example, but please keep the referral
+% to divisbyzero.com
+% 
+% Guidance on the use of the Overleaf logos can be found here:
+% https://www.overleaf.com/for/partners/logos 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt,landscape,letterpaper]{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{physics} % for vectors
+%\usepackage{fonts}
+\usepackage{multicol,multirow}
+\usepackage{spverbatim}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{listings} % for code block
+\usepackage[colorlinks=true,urlcolor=olgreen]{hyperref}
+\usepackage{booktabs}
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX]{TeX Gyre Pagella}
+\setsansfont{Fira Sans}
+\setmonofont{Inconsolata}
+\usepackage{unicode-math}
+\setmathfont{TeX Gyre Pagella Math}
+\usepackage{microtype}
+
+\usepackage{empheq}
+
+% new:
+\def\MT@is@uni@comp#1\iffontchar#2\else#3\fi\relax{%
+  \ifx\\#2\\\else\edef\MT@char{\iffontchar#2\fi}\fi
+}
+\makeatother
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{margin=0.4in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\sffamily\large}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\sffamily\normalsize\itshape}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\itshape}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+% -----------------------------------------------------------------------
+
+\usepackage{academicons}
+
+\begin{document}
+
+\definecolor{mathBlue}{cmyk}{1,.72,0,.38}
+\definecolor{defOrange}{cmyk}{0, 0.5, 1, 0.3}
+\definecolor{codeInlineRed}{cmyk}{0, 0.9, 0.9, 0.45}
+\everymath{\color{mathBlue}}
+\everydisplay{\color{mathBlue}}
+
+
+% Based on:
+% https://stackoverflow.com/questions/3175105/inserting-code-in-this-latex-document-with-indentation
+\definecolor{codedkgreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codemauve}{rgb}{0.58,0,0.82}
+\definecolor{light-gray}{gray}{0.95}
+
+\lstset{frame=tb,
+  language=Java,
+  backgroundcolor=\color{light-gray},
+  basicstyle={\footnotesize\ttfamily},
+  tabsize=3
+}
+
+
+% for vector notation in this module
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\deff}[1]{\textcolor{defOrange}{\textbf{#1}}}
+\newcommand{\codein}[1]{\textcolor{codeInlineRed}{\texttt{#1}}}
+\newcommand{\citeqn}[1]{\underline{\textit{#1}}}
+
+\footnotesize
+%\raggedright
+
+\graphicspath{ {./img/} }
+
+
+\begin{center}
+  {\huge\sffamily\bfseries CS3243 Cheatsheet (Midterm)} \huge\bfseries\\
+  by Yiyang, AY21/22
+\end{center}
+\setlength{\premulticols}{0pt}
+\setlength{\postmulticols}{0pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{1.8em}
+\begin{multicols}{3}
+
+
+
+
+% -----------------------------------------------------------------------
+
+\section{Introduction}
+
+\subsection{Intelligent Agent}
+An intelligent agent consists of: (1) \deff{Sensors}, for capturing data (known as \deff{Percepts}, $p_i$ of \deff{Percept History}, $P=\{p_1, ..., p_n, ... \}$) from the environment; (2) \deff{Agent Functions}, $f$, for making decisions based on percepts, and \textbf{Actuators}, for performing actions, $a_1, ..., a_m \in A$, based on agent functions.
+
+In short, an agent is a function $f: P \to A$.
+
+\subsection{Types of Agents and Environments}
+\subsubsection{Agents}
+\begin{itemize}
+    \item \deff{Reflex Agent} - Agents that use IF-ELSE rules to make decisions.
+    \item \deff{Model-based Reflex Agent} - Agents that use an internalised model to make decisions. (e.g. state graph models for search AI)
+    \item \deff{Goal-/Utility-based Agent} - Agents that determine sequences of actions to reach goals / maximise utility.
+    \item \deff{Learning Agent} - Agents that learn to optimise. (not covered)
+\end{itemize}
+
+\subsubsection{Properties of the Problem Environments}
+\begin{itemize}
+    \item \deff{Fully} / \deff{Partially Observable} ~ whether agents can access all information of the environment.
+    \item \deff{Deterministic} / \deff{Stochastic} ~ whether transition of states is certain.
+    \item \deff{Episodic} / \deff{Sequential} - whether actions impact only current states or all future decisions.
+    \item \deff{Discrete} / \deff{Continuous} ~ of state info., time, percepts and/or actions.
+    \item \deff{Single} / \deff{Multi-agent}
+    \item \deff{Known} / \deff{Unknown} ~ of knowledge of the agent.
+    \item \deff{Static} / \deff{Dynamic} - whether the environment changes while the agent is deciding actions.
+\end{itemize}
+The real world is partially observable, stochastic, sequential, dynamic, continuous, multi-agent.
+
+
+\section{Uninformed Search}
+\subsection{General Search}
+\subsubsection{Search Problem Definitions}
+A Search problem consists of 1) \deff{State representation}, $s_i$, for each environment instance, 2) \deff{Goal test}, $\text{isGoal } : s_{i} \to \{ 0, 1\}$, that determines if a state is a goal, 3) \deff{Action Function}, $\text{action } : s_{i} \to A$, that returns possible actions for every state, 4) \deff{Action Cost}, $\text{cost } : (s_{i}, a_{j}, s^{'}_{i}) \to V$, that returns cost $v$ of taking action $a_{i}$ of state $s_{i}$ to reach $s^{'}_{i}$, and 5) \deff{Transition Model}, $T : (s_{i}, a_{j}) \to s^{'}_{i}$ representing the state transition.
+\smallskip
+
+A transition model describes the problem in a dynamic and efficient way, as it does not list all states' actions.
+\smallskip
+
+\deff{Uninformed Search} are search algorithms without domain knowledge beyond the search problem formulation.
+
+
+\subsubsection{Generic Algorithm}
+The only difference is how each algorithm implements the \codein{frontier} for searching. 
+
+\begin{lstlisting}
+frontier = {initial state}
+while frontier not empty:
+    current = frontier.pop()
+	// checking
+	if isGoal(current) 
+		return path found
+	// exploration
+	for a in actions(current):
+		frontier.push(T(current, a)) 
+return failure
+\end{lstlisting}
+
+For \textbf{correctness} of search algorithms, we need to ensure 1) \deff{Completeness} - whether an algorithm will find a solution when one exists \textbf{and} correct report failure if not exists, and 2) \deff{Optimality} - whether an algorithm finds a solution with lowest path cost among all solutions.
+Note: An optimal solution must be complete.
+\smallskip
+
+Implementation wise, there are 1) \deff{Tree-Search} that allows revisiting of nodes, and 2) \deff{Graph-Search} that do not allow revisit to states unless the new cost is smaller than current one (by maintaining a \codein{reached} hash table upon adding nodes to \codein{frontier}. 
+
+
+\subsection{Search Algorithms}
+\deff{Breadth-First Search} (BFS) : Use \codein{Queue<>} for \codein{frontier}. Possible improvement is to perform \textbf{Goal checking on pushing to frontier} to reduce storage.
+
+\smallskip
+
+\deff{Depth-First Search} (DFS) : Use \codein{Stack<>} for \codein{frontier}.
+\smallskip
+
+\deff{Uniform-Cost Search} (UCS) : Use \codein{PriorityQueue<>} for \codein{frontier}. Essentially Dijkstra's Algorithm that always explores the node with shortest path cost in the frontier.
+\\
+Note: Need to ensure all costs are larger than some constant $\epsilon > 0$. Therefore, it cannot be used for negative / zero costs (just like Dijkstra).
+\smallskip
+
+\deff{Depth-Limited Search} (DLS) : DFS but with a limit on the maximum depth, $l$, which may be determined using domain knowledge.
+\smallskip
+
+\deff{Iterative Deepening Search} (IDS) : Perform DLS repeated with $l = 1, 2, ...$. Intuitive, the algorithm compromises running time for better memory usage.
+
+
+
+\section{Informed Search}
+\subsection{Heuristics}
+\deff{Heuristic Function}, $h = h(n)$, approximates the shortest distance from a state to the nearest goal.\\
+$h(n)$ tries to approximate the actual distance function $h^*(n)$.
+\smallskip
+
+A heuristic is \deff{admissible} if for any state $n$,
+\[
+h(n) \leq h^{*}(n)
+\]
+, which means the heuristic might under-estimate but never over-estimates.
+\smallskip
+
+A heuristic is \deff{consistent} if for all states $n$ and its successor $n'$,
+\[
+h(n) \leq \text{cost}(n, a, n') + h(n')
+\]
+, which means priority $f$ in A* is non-decreasing along a path if a consistent heuristic is chosen.
+\\
+Consistent heuristics are always admissible.
+\smallskip
+
+For two heuristics, $h_1$ \deff{dominates} $h_2$ iff. $h_1(n) \geq h_2(n)$ for all states $n$. \\
+Note: dominance is defined for all heuristics. However, for two admissible heuristics, the dominating one is preferred.
+
+
+
+
+\subsection{Informed Search Algorithms}
+The two Informed Search algorithms are based on UCS, but incorporate domain knowledge via $h$.
+\newline
+
+\deff{Greedy Best-First Search} : Use \deff{Evaluation Function}, $f(n) = h(n)$ as priority. Intuitively, it picks the state "seemingly" closest to the goal.
+
+\begin{itemize}
+    \item \textbf{Incomplete} under Tree-Implementation, and \textbf{Complete} under Graph-Implementation.
+    \item \textbf{Not optimal} under both implementations
+\end{itemize}
+
+
+\deff{A* Search} : Use \deff{Evaluation Function}, $f(n) = g(n) + h(n)$ as priority where $g(n)$ is the current path cost.
+\\
+\deff{Limited-Graph Search} (LGS) : A modified Graph-Implementation version of A* that adds nodes to \codein{reached} table on pop instead of pushing.
+\begin{itemize}
+    \item Tree-Implementation of A* is \textbf{Optimal} for admissible $h$.
+    \item LGS is \textbf{Optimal} for consistent $h$.
+\end{itemize}
+
+
+
+
+\section{Local Search}
+\deff{Local Search} only concerns with goal state(s) but not how it is found or its cost. 
+\smallskip
+
+Local Search is \textbf{Incomplete}, but it uses less space ($O(b)$ for branching factor $b$) and is applicable to larger and finite search space.
+\smallskip
+
+\deff{Complete-State Formulation} - Every state has all components of a solution. Each state is a potential solution.
+
+\subsection{Local Search Algorithm}
+\deff{Hill Climbing} (aka. \deff{Steepest Ascent - Greedy Strategy}) - It stores only current state. In each iteration, find a successor that improves - 1) use actions and transitions to determine successors, and 2) use "heuristic-liked" values (e.g. $f(n) = -h(n)$) to evaluate each state. The algorithm terminates with a state when the value $f$ cannot be improved.
+\\
+Note: The algorithm may fail as it can terminate at a local maximum / plateau.
+
+\subsubsection{Hill Climbing Variations}
+\begin{itemize}
+    \item \deff{Slideways Move} - Replace $<$ with $\leq$, to allow continuation with neighbours of same value and to traverse plateaus.
+    \item \deff{Stochastic ~} - Choose randomly a state with better value (not the best value) to explore. This takes longer time to find a solution but gives more flexibility and randomness. Relieve "local maximum" issue.
+    \item \deff{First-Choice ~} - Generate successors until one with better value than current is found.
+    \item \deff{Random-Restart ~} - Use a loop to randomly pick a new starting state. Keep running until a solution is found.
+\end{itemize}
+
+\subsubsection{Local Beam Search}
+\deff{Local Beam Search} - Similar to Hill Climbing but start with $k$ random starting states. Each iteration generates successors of all $k$ states and choose new $k$ ones to explore. Stochastic elements can also be incorporated into this algorithm.
+\\
+Note: It is not equivalent to $k$-parallel Hill Climbing.
+\\
+Note: Local Beam requires problems with different possible starting states, otherwise it cannot be run.
+
+
+
+\section{Constraint Satisfication Problem (CSP)}
+\subsection{CSP Formulation}
+\begin{itemize}
+    \item \deff{State Representation}, for variables $X = \{ x_1, ..., x_n \}$ and set of domains $D = \{ d_1, ..., d_n \}$, so that $x_i$ has domain $d_i$.
+    \item \deff{State}, where the initial / intermediate / goal state(s) have variables unassigned / partially assigned / all assigned.
+    \item \deff{Goal Test}, with constrains $C = \{c_1, ..., c_m \}$ to satisfy
+    \item \deff{Actions} and \deff{Transitions}
+\end{itemize}
+Costs are not utilised in CSP.
+
+\subsubsection{Constraint Graph}
+Depending on the \deff{Scope}, number of variables involved, of constraints, they can be categorised into 1) \deff{Unary}, \deff{Binary}, and \deff{Global} which involves $1$, $2$, and $\geq 3$ variables respectively.
+\smallskip
+
+A \deff{Constraint Graph} is a representation for constraints where each variable is a vertex, each binary constraint is an edge between two variables, and each global constraint is expressed as multiple binary constraints using linking a vertex.
+
+
+
+\section{Results from Tutorials}
+\citeqn{(Quiz1Qn9)} Testing goal upon pushing (than poppig) to frontier can save at most $(b^{d+1} - b)$ nodes in BFS.
+\\
+\citeqn{(Quiz2Qn12)} For Uninformed Search problems with the goal node near the root, the branching factor finite, and all action costs equal, \textbf{BFS} is preferred.
+\\
+\citeqn{(Quiz2Qn13} For Uninformed Search problems with all nodes at a certain depth being goal nodes and all action costs equal, \textbf{DFS} is preferred.
+\\
+Note the difference between pushing order and popping order in DFS.
+
+
+
+\section{Summary}
+
+\subsection{Uninformed Search Algorithms}
+For Tree-Search implementation:
+\begin{center}
+\begin{tabular}{||c || c | c | c | c | c||} 
+ \hline 
+ Criterion  & BFS           & UCS           & DFS           & DLS       & IDS           \\
+ \hline \hline
+ Complete?  & Yes$^{[1]}$   & Yes$^{[1][2]}$& No            & No        & Yes$^{[1]}$   \\
+ \hline
+ Optimal?   & Yes$^{[1]}$   & Yes           & No            & No        & Yes$^{[3]}$   \\
+ \hline
+ Time       & $O(b^d)$  & $O(b^{1+[C^*/\epsilon]})$ & $O(b^m)$  & $O(b^l)$  & $O(b^d)$  \\
+ \hline
+ Space      & $O(b^d)$  & $O(b^{1+[C^*/\epsilon]})$ & $O(bm)$   & $O(bl)$   & $O(bd)$   \\
+ \hline
+\end{tabular}
+\end{center}
+
+For Graph-Search implementation, \textbf{all have time and space complexity $O(V+E)$}.
+\begin{center}
+\begin{tabular}{||c || c | c | c | c | c||} 
+ \hline 
+ Criterion  & BFS           & UCS           & DFS           & DLS       & IDS           \\
+ \hline \hline
+ Complete?  & Yes$^{[1]}$   & Yes$^{[1][2]}$& Yes$^{[1]}$   & No        & Yes$^{[1]}$  \\
+ \hline
+ Optimal?   & Yes$^{[1]}$   & Yes           & No            & No        & Yes$^{[3]}$   \\
+ \hline
+\end{tabular}
+\end{center}
+$[1]$ If $b$ finite \textbf{AND} (state space finite \textbf{OR} has a solution) \\
+$[2]$ If the $\epsilon$ assumption is satisfied for all costs \\
+$[3]$ If all costs are identical
+
+
+\end{multicols}
+\end{document}
