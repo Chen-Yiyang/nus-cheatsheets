@@ -72,11 +72,17 @@
 \begin{document}
 
 \definecolor{mathBlue}{cmyk}{1,.72,0,.38}
+\definecolor{defOrange}{cmyk}{0, 0.5, 1, 0.3}
+\definecolor{codeInlineRed}{cmyk}{0, 0.9, 0.9, 0.45}
+
 \everymath{\color{mathBlue}}
 \everydisplay{\color{mathBlue}}
 
 % for vector notation in this module
 \newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\deff}[1]{\textcolor{defOrange}{\textbf{#1}}}
+\newcommand{\codein}[1]{\textcolor{codeInlineRed}{\texttt{#1}}}
+\newcommand{\citeqn}[1]{\underline{\textit{#1}}}
 
 \footnotesize
 %\raggedright
@@ -92,14 +98,88 @@
 \begin{multicols}{3}
 
 
-
-
 % -----------------------------------------------------------------------
 
 \section{Probability Theory, Review}
+\subsection{Boole's Inequality}
+For any events $A_1, A_2, ...$,
+\[
+\mathbb{P} \Big( \bigcup_{n \geq 1} A_n \Big) \leq \sum_{n \geq 1} \mathbb{P} (A_n)
+\]
+
+\subsection{Conditional Expectation, Properties}
+\begin{itemize}
+    \item Linearity: $\mathbb{E} (aX_1 + bX_2 | Y) = a \mathbb{E} (X_1 | Y) + b \mathbb{E} (X_2 | Y)$
+    \item Law of Iterated Expectation: $\mathbb{E} ( \mathbb{E} (X|Y) ) = \mathbb{E} (X)$
+    \item Tower Property: $\mathbb{E} ( \mathbb{E} (X|Y,Z)|Y ) = \mathbb{E} (X|Y)$
+    \item Independence: $\mathbb{E} (X|Y) = \mathbb{E} (X)$, for $X$ and $Y$ independent.
+\end{itemize}
 
 
 
+
+\section{Markov Chain (MC) Basics}
+A (discrete-time) \deff{Markov Chain} (MC) is a stochastic process $ \{ X_n \}_{n=0}^{\infty}$ that satisfies,
+\begin{align*}
+& \mathbb{P} (X_{n+1} = t_{n+1} | X_n = t_n, X_{n-1} = t_{n-1}, ..., X_1 = t_1) \\
+= & \mathbb{P} (X_{n+1} = t_{n+1} | X_n = t_n) 
+\end{align*}
+,whenever $\mathbb{P} (X_n = t_n, X_{n-1} = t_{n-1}, ..., X_1 = t_1) > 0$. This property is also called the \deff{Markovian Property}.
+\smallskip
+
+A \deff{Time-homogeneous} Markov Chain is one where the conditional probability $\mathbb{P} (X_{n+1} = j | X_n = i)$ does not depend on $n$. Equivalently, it means for all $n \geq 0$ and $i, j \in S$,
+\[
+\mathbb{P} (X_{n+1} = j | X_n = i) = \mathbb{P} (X_1 = j | X_0 = i)
+\]
+For time-homogeneous MCs, $p_{ij} = \mathbb{P} (X_1 = j | X_0 = i)$ is the \deff{1-step transition probability}, and $P = ((p_{ij}))_{i,j \in S}$ is the \deff{transition matrix}. Similarly, $p_{ij}^{(k)} = \mathbb{P} (X_k = j | X_0 = i)$ is the \deff{k-Step Transition Probability}.
+
+\subsection{Chapman-Komogorov Equation}
+\[
+p_{ij}^{(k)} = \sum_{i_1, ..., i_{k-1} \in S} p_{ii_1}p_{i_1i_2}...p_{i_{k-1}j}
+\]
+Equivalently, it means $P^{(k)} = P^k$.
+
+
+
+
+\section{Accessing States, MC}
+\subsection{Accessible States}
+For states $i$, $j$ of a MC, $j$ is \deff{accesible} from $i$, $i \to j$, if there exists $k \geq 0$ such that,
+\[
+p_{ij} = \mathbb{P} (X_k = j | X_0 = i) > 0
+\]
+\\
+States $i$ and $j$ \deff{communicate}, i.e. $i \leftrightarrow j$ iff. $i \to j \land j \to i$.
+\medskip
+
+$\leftrightarrow$ is a \textbf{Equivalence Relation}. The equivalent classes of $S$ partitioned by it are called \deff{Communicating classes}.
+\medskip
+
+Notes:
+\begin{itemize}
+    \item $i \leftrightarrow i$ as $p_{ii}^{(0)} = 0$ for all $i \in S$
+    \item For $i \in S_i$ and $j \in S_j$, it is possible that $i \to j$.
+    \item For $i \in S_i$ and $j \in S_j$, $i \to j \implies j \not\to i$.
+\end{itemize}
+
+A MC is \deff{irreducible} if there is only one communicating class for the state space. Otherwise, the MC is \deff{reducible}.
+
+
+\subsection{Essential States}
+A state $i$ is \deff{essential} if for every state $j$ it satisfies
+\[
+i \to j \implies j \to i
+\]
+A state that is not essential is called \deff{inessential}.
+\medskip
+
+Properties of Essential States
+\begin{itemize}
+    \item If $i$ essential and $i \to j$ then $j$ is essential.
+    \item All states in one communicating class are either all essential or all inessential.
+    \item A \textbf{finite state} MC must have at least one essential state.
+    \item An absorbing state is essential.
+\end{itemize}
 
 
 \end{multicols}
