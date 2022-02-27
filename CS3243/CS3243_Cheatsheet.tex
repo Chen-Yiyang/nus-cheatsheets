@@ -139,12 +139,12 @@ In short, an agent is a function $f: P \to A$.
 
 \subsubsection{Properties of the Problem Environments}
 \begin{itemize}
-    \item \deff{Fully} / \deff{Partially Observable} ~ whether agents can access all information of the environment.
-    \item \deff{Deterministic} / \deff{Stochastic} ~ whether transition of states is certain.
+    \item \deff{Fully} / \deff{Partially Observable} - whether agents can access all information of the environment.
+    \item \deff{Deterministic} / \deff{Stochastic} \textasciitilde \ whether transition of states is certain.
     \item \deff{Episodic} / \deff{Sequential} - whether actions impact only current states or all future decisions.
-    \item \deff{Discrete} / \deff{Continuous} ~ of state info., time, percepts and/or actions.
+    \item \deff{Discrete} / \deff{Continuous} \textasciitilde \ of state info., time, percepts and/or actions.
     \item \deff{Single} / \deff{Multi-agent}
-    \item \deff{Known} / \deff{Unknown} ~ of knowledge of the agent.
+    \item \deff{Known} / \deff{Unknown} \textasciitilde \ of knowledge of the agent.
     \item \deff{Static} / \deff{Dynamic} - whether the environment changes while the agent is deciding actions.
 \end{itemize}
 The real world is partially observable, stochastic, sequential, dynamic, continuous, multi-agent.
@@ -273,9 +273,9 @@ Note: The algorithm may fail as it can terminate at a local maximum / plateau.
 \subsubsection{Hill Climbing Variations}
 \begin{itemize}
     \item \deff{Slideways Move} - Replace $<$ with $\leq$, to allow continuation with neighbours of same value and to traverse plateaus.
-    \item \deff{Stochastic ~} - Choose randomly a state with better value (not the best value) to explore. This takes longer time to find a solution but gives more flexibility and randomness. Relieve "local maximum" issue.
-    \item \deff{First-Choice ~} - Generate successors until one with better value than current is found.
-    \item \deff{Random-Restart ~} - Use a loop to randomly pick a new starting state. Keep running until a solution is found.
+    \item \deff{Stochastic \textasciitilde} - Choose randomly a state with better value (not the best value) to explore. This takes longer time to find a solution but gives more flexibility and randomness. Relieve "local maximum" issue.
+    \item \deff{First-Choice \textasciitilde} - Generate successors until one with better value than current is found.
+    \item \deff{Random-Restart \textasciitilde} - Use a loop to randomly pick a new starting state. Keep running until a solution is found.
 \end{itemize}
 
 \subsubsection{Local Beam Search}
@@ -305,14 +305,27 @@ A \deff{Constraint Graph} is a representation for constraints where each variabl
 
 
 
-\section{Results from Tutorials}
-\citeqn{(Quiz1Qn9)} Testing goal upon pushing (than poppig) to frontier can save at most $(b^{d+1} - b)$ nodes in BFS.
+\section{Intermediate Results / Lemmas}
+\subsection{From Tutorials}
+\citeqn{(Quiz1 Qn9)} Testing goal upon pushing (than poppig) to frontier can save at most $(b^{d+1} - b)$ nodes in BFS.
 \\
-\citeqn{(Quiz2Qn12)} For Uninformed Search problems with the goal node near the root, the branching factor finite, and all action costs equal, \textbf{BFS} is preferred.
+\citeqn{(Quiz2 Qn12)} For Uninformed Search problems with the goal node near the root, the branching factor finite, and all action costs equal, \textbf{BFS} is preferred.
 \\
-\citeqn{(Quiz2Qn13} For Uninformed Search problems with all nodes at a certain depth being goal nodes and all action costs equal, \textbf{DFS} is preferred.
+\citeqn{(Quiz2 Qn13)} For Uninformed Search problems with all nodes at a certain depth being goal nodes and all action costs equal, \textbf{DFS} is preferred.
 \\
 Note the difference between pushing order and popping order in DFS.
+
+
+\subsection{From Past Questions}
+\citeqn{(AY19/20Sem1 Midterm Qn1)} A* Graph Search with consistent heuristic is guaranteed to visit no more nodes than UCS.
+\\
+\citeqn{(AY19/20Sem2 Midterm Qn1)} In a A* Graph Search problem, leaving a consistent heuristic $h(n)$ unchanged:
+\begin{itemize}
+    \item After adding edges to the transition graph, $h$ might not be still consistent.
+    \item After removing edges from the transition graph, $h$ is still consistent.
+\end{itemize}
+
+
 
 
 
