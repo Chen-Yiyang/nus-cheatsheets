@@ -11,6 +11,9 @@ If you have noticed any typos or errors, please let me know. Thank you!
 - Midterm Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2 till Midterm.
 - Final Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2.
 
+### CS3230
+- Cheatsheet: A short summary sheet for Midterm.
+
 ### CS3243
 - Cheatsheet: A 2-page summary sheet for Midterm.
 

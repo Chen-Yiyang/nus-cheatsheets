@@ -1,0 +1,184 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Original Source: Dave Richeson (divisbyzero.com), Dickinson College
+% Modified By: Chen Yiyang
+% 
+% A one-size-fits-all LaTeX cheat sheet. Kept to two pages, so it 
+% can be printed (double-sided) on one piece of paper
+% 
+% Feel free to distribute this example, but please keep the referral
+% to divisbyzero.com
+% 
+% Guidance on the use of the Overleaf logos can be found here:
+% https://www.overleaf.com/for/partners/logos 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt,landscape,letterpaper]{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{physics} % for vectors
+%\usepackage{fonts}
+\usepackage{multicol,multirow}
+\usepackage{spverbatim}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{listings} % for code block
+\usepackage[colorlinks=true,urlcolor=olgreen]{hyperref}
+\usepackage{booktabs}
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX]{TeX Gyre Pagella}
+\setsansfont{Fira Sans}
+\setmonofont{Inconsolata}
+\usepackage{unicode-math}
+\setmathfont{TeX Gyre Pagella Math}
+\usepackage{microtype}
+
+\usepackage{empheq}
+
+% new:
+\def\MT@is@uni@comp#1\iffontchar#2\else#3\fi\relax{%
+  \ifx\\#2\\\else\edef\MT@char{\iffontchar#2\fi}\fi
+}
+\makeatother
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{margin=0.4in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\sffamily\large}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\sffamily\normalsize\itshape}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\itshape}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+% -----------------------------------------------------------------------
+
+\usepackage{academicons}
+
+\begin{document}
+
+\definecolor{mathBlue}{cmyk}{1,.72,0,.38}
+\definecolor{defOrange}{cmyk}{0, 0.5, 1, 0.3}
+\definecolor{codeInlineRed}{cmyk}{0, 0.9, 0.9, 0.45}
+\everymath{\color{mathBlue}}
+\everydisplay{\color{mathBlue}}
+
+
+% Based on:
+% https://stackoverflow.com/questions/3175105/inserting-code-in-this-latex-document-with-indentation
+\definecolor{codedkgreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codemauve}{rgb}{0.58,0,0.82}
+\definecolor{light-gray}{gray}{0.95}
+
+\lstset{frame=tb,
+  language=Java,
+  backgroundcolor=\color{light-gray},
+  basicstyle={\footnotesize\ttfamily},
+  tabsize=3
+}
+
+
+% for vector notation in this module
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\deff}[1]{\textcolor{defOrange}{\textbf{#1}}}
+\newcommand{\codein}[1]{\textcolor{codeInlineRed}{\texttt{#1}}}
+\newcommand{\citeqn}[1]{\underline{\textit{#1}}}
+
+\footnotesize
+%\raggedright
+
+\graphicspath{ {./img/} }
+
+
+\begin{center}
+  {\huge\sffamily\bfseries CS3230 Cheatsheet (Midterm)} \huge\bfseries\\
+  by Yiyang, AY21/22
+\end{center}
+\setlength{\premulticols}{0pt}
+\setlength{\postmulticols}{0pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{1.8em}
+\begin{multicols}{3}
+
+
+% -----------------------------------------------------------------------
+\section{Asymptotic Analysis}
+\subsection{Asymptotic Notations}
+\deff{Big-O}: $f(n) = O(g(n))$ if there exists $c > 0$ and $n_0 > 0$, s.t., for all $n \geq n_0$
+\[
+0 \leq f(n) \leq cg(n)
+\]
+Similar definition for \deff{Big-Omega}, $\Omega()$.
+\\
+\deff{Small-o}: $f(n) = o(g(n))$ if there exists $c > 0$ and $n_0 > 0$, s.t., for all $n \geq n_0$x
+\[
+0 \leq f(n) < cg(n)
+\]
+Similar definition for \deff{Small-omega}, $\omega()$.
+\\
+Lastly, $f(n) = \Theta (g(n))$ iff. $f(n) = O(g(n)) \land f(n) = \Omega(g(n))$.
+
+\section{Solve Recurrence Relations}
+\subsection{Master Theorem}
+For recurrence in the form of
+\[
+T(n) = aT(n/b) + f(n)
+\]
+there are three cases to be considered
+\begin{itemize}
+    \item If $f(n) = O(n^{\log_b a - \epsilon})$ for some $\epsilon > 0$, then $T(n) = \Theta( n^{\log_b a})$
+    \item If $f(n) = \Theta( n^{\log_b a} \lg^k n  )$ for some $k > 0$, then $T(n) = \Theta( n^{\log_b a} \lg^{k+1} n)$
+    \item If $f(n) = \Omega( n^{\log_b a + \epsilon} )$ for some $\epsilon > 0$ and it satisfies the \deff{regularity condition} that $af(n/b) \leq cf(n)$ for some $0 < c < 1$, then $T(n) = \Theta(f(n))$
+\end{itemize}
+\textbf{Notes}: The three cases mean whether $f(n)$ grows \textbf{polynomially} slower, around the same rate, or faster than $n^{\log _b a}$.
+\\
+\textbf{Notes}: The regularity condition ensures the sum of sub-problems is less than $f(n)$.
+
+\subsection{Stirling's Approximation}
+$n! \approx \sqrt{2\pi n} \big( \frac{n}{e} \big)^n$, or asymptotically, $\lg(n!) = \theta(n \lg n)$.
+
+\subsection{Harmonic Sequence}
+$H_n = \sum_{i=1}^{n} \frac{1}{i} = \ln n + O(1)$
+
+\subsection{Other Important Asymptotic Statements}
+$\lg n = O(n^\alpha)$ for any $\alpha > 0$.
+\\
+$x^\alpha = O(e^x)$ for any $\alpha > 0$.
+
+\subsection{Common Recurrence Relations}
+\citeqn{(AY18/19Sem2 Midterm Qn2a)} $T(n) = 2T(n/2) + n \lg \lg n = \Theta( n \lg n \lg \lg n)$
+\\
+\citeqn{(AY19/20Sem2 Midterm Qn2d)} $T(n) = 4T(n/4) + n \lg \lg \lg n = \Theta( n \lg n \lg \lg \lg n)$
+\\
+\citeqn{(AY20/21Sem2 Midterm Qn2b)} $T(n) = 27T(n/3) + n^3 / \lg^2 n = \Theta( n^3)$
+
+
+
+
+%---
+
+
+
+
+
+\section{Hashing \& Fingerprint}
+
+
+\end{multicols}
+\end{document}
