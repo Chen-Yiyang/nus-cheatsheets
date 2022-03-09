@@ -11,6 +11,9 @@ If you have noticed any typos or errors, please let me know. Thank you!
 - Midterm Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2 till Midterm.
 - Final Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2.
 
+### CS2106
+- Cheatsheet: A detailed summary sheet for Midterm.
+
 ### CS3230
 - Cheatsheet: A short summary sheet for Midterm.
 
@@ -42,5 +45,9 @@ If you have noticed any typos or errors, please let me know. Thank you!
 
 -----
 ## Todos
+### CS2106
+- [ ] Include POSIX Syscalls from Lecture and Lab worksheets.
+
 ### MA2104
 - [ ] Include 3d plots for visualisation.
+
