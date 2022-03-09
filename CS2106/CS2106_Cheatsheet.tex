@@ -146,7 +146,9 @@ Context for a \textbf{Context Switch} includes: 1) Registers (GPR \& Special), 2
 The Generic 5 States are: \deff{New}, 2) \deff{Ready}, 3) \deff{Terminated}, 4) \deff{Running}, and 5) \deff{Blocked}.
 \\
 \underline{Note:} Some systems (including Unix) do not have New - whenever a process is created, it is in Ready.
-\\
+
+\medskip
+
 In addition, in Unix, there are \deff{Orphan Process}, which is a child process with parent terminated before it, so the orphan is "adopted" by \codein{init} and waited properly when done, and 2) \deff{Zombie Process}, which is a child that has exited but the parent is executing but does not call wait on the child.
 
 \subsection{Memory Regions}
@@ -176,7 +178,7 @@ In \deff{Frame Teardown}, \underline{Callee:} 1) Place return result on stack (i
 \subsection{System Calls}
 \deff{System Call} (aka. \deff{Syscall}) \textasciitilde \ API to OS, and it changes from User Mode to Kernel Mode. There are 3 ways of using Syscalls.
 \begin{enumerate}
-    \item Use the library version of the syscall. The library version serves as a \textbf{function wrapper} and typically has the same name. Applicable to most syscalls in modern langauges.
+    \item Use the library version of the syscall. The library version serves as a \textbf{function wrapper} and typically has the same name. Applicable to most syscalls in modern languages.
     \item Use the user-friendly library version of the syscall. This version has related handles and serves as a \textbf{function adapter}. Few syscalls have such.
     \item Use the language's syscall method directly. E.g. in C, \codein{long syscall(long number, ...)}.
 \end{enumerate}
@@ -406,7 +408,7 @@ High-level Language (HLL) Implementations for Synchronisation are those using on
 
 \textbf{Attempt 4 - Want Variable}: Use a shared boolean array, \codein{want[]}, where each element \codein{want[i]} indicates if Process $P_i$ wants to enter. (In case of 2 processes,) enter if the other process does not want to enter, otherwise wait.
 \\
-\underline{Analysis:} \textbf{NOT WORK} as it can have a deadlock when \codein{want[0] == 1 \&\& want[1] == 1}, thereby violating \#2 Progress.
+\underline{Analysis:} \textbf{NOT WORK} as it can have a deadlock when \codein{want[0] == 1} and \codein{want[1] == 1}, thereby violating \#2 Progress.
 
 
 \subsubsection{Synchronisation Algorithms}
@@ -452,17 +454,84 @@ A \deff{General Semaphore} serves as a General Synchronisation Tool (not CS in t
 
 
 
+\section{Summary}
+
+
+
+\newpage
+
+
+
+
 \section{Unix System Calls}
 \subsection{Common Process Management Syscalls}
-\subsubsection{\codein{fork()}}
+\subsubsection{\codein{fork()} Syscall}
 \codein{int fork()} creates a duplicate of current process as a child process. It clones everything except PID and PPID. It returns the PID of child process forked in parent process and \codein{0} in child.
+\\
+Need header \codein{<unistd.h>}.
+
+
+\subsubsection{\codein{exec*()} Family}
+The family of syscalls, \codein{int exec*(...)}, replaces current executing process with a new one. It takes in path to the executable and arguments. It will not return when executing successfully and return \codein{-1} when fails.
+\\
+There are many variants, such as \codein{execv}, \codein{execl}, \codein{execle}, \codein{execlv}, or \codein{execv}, each with a slight difference in parameter specifications and behaviours.
+\\
+The typical usage is to create a new child process using \codein{fork()} then run the program using \codein{exec()} in the child.
+\\
+Need header \codein{<unistd.h>}.
+
+
+\subsubsection{\codein{exit()} Syscall}
+\codein{void exit(int status)} terminates the current process and the value of \codein{status} will return to the parent. The convention is \codein{0} for normal termination and non-zero for error.
+\\
+\codein{exit()} is the friendly wrapper of \codein{\_exit()} as the former does some necessary clean-up before invoking the syscall.
+\\
+Need header \codein{<unistd.h>}
+
+\subsubsection{\codein{wait()} Family}
+\codein{int wait(int *status)} makes the process block and wait for any one child process to terminate, and the exit status value is stored in the parent's variable referrenced by \codein{*status}. It cleans up remainder of terminated child's system resources.
+\\
+There are other variants such as \codein{waitpid()} that waits for a specific child.
+\\
+Need header \codein{<sys/types.h>} and \codein{<sys/wait.h>}.
+
+\subsubsection{\codein{getpid()} Family}
+\codein{int getpid()} returns the PID of the current process.
+\\
+There are similar syscalls such as \codein{getppid()}.
+\\
+Need header \codein{<unistd.h>}.
+
+
 
 \subsection{IPC-Related Syscalls}
+\subsubsection{\codein{pipe()} Syscall}
+\codein{int pipe(int fd[2])} creates a unidirectional pipe channel with file descriptors \codein{fd[0]} for reading end and \codein{fd[1]} for writing end. It returns \codein{0} for successful creation and non-zero values for error.
+\\
+Need header \codein{<unistd.h>}.
 
-\subsection{Others}
+\subsubsection{\codein{dup2()} Syscall}
+\codein{int dup2(int oldfd, int newfd)} replaces the file descriptor of \codein{newfd} with the one specified by \codein{oldfd}.
+\\
+The syscall is typically used to redirect standard channels of a process to a pipe or file.
+\\
+Need header \codein{<unistd.h>}.
 
 
-\section{Summary}
+
+\subsubsection{Shared Memory Syscalls}
+\codein{shmget()}, \codein{shmat()}, \codein{shmdt()}, and \codein{shmctl()} are syscalls to 1) create a shared memory region, 2) attach the shared memory to the current process, 3) detach the shared memory from the current process, and 4) destroy the shared memory region respective.
+\\
+Need header \codein{<sys/shm.h>}.
+
+
+\subsection{Semaphore-Related Syscalls}
+\codein{sem\_t} is the type for Semaphore. \codein{sem\_init()}, \codein{sem\_destroy()}, \codein{sem\_wait()}, and \codein{sem\_post()} are syscalls to 1) initialise a semaphore, 2) destroy the semaphore, 3) perform wait on the semaphore, and 4) perform signal on the semaphore respectively.
+\\
+Need header \codein{<semaphore>} and compile with option \codein{-lpthread}.
+
+
+
 
 
 
