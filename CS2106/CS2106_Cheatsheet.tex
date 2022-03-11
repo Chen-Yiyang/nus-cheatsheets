@@ -87,6 +87,8 @@
 \footnotesize
 %\raggedright
 
+\graphicspath{ {./img/} }
+
 \begin{center}
   {\huge\sffamily\bfseries CS2106 Cheatsheet (Midterm)} \huge\bfseries\\
   by Yiyang, AY21/22
@@ -176,11 +178,12 @@ In \deff{Frame Teardown}, \underline{Callee:} 1) Place return result on stack (i
 
 
 \subsection{System Calls}
-\deff{System Call} (aka. \deff{Syscall}) \textasciitilde \ API to OS, and it changes from User Mode to Kernel Mode. There are 3 ways of using Syscalls.
+\deff{System Call} (aka. \deff{Syscall}) \textasciitilde \ API to OS, and it changes from User Mode to Kernel Mode (and changes back to User Mode after the syscall has completed). There are 3 ways of using Syscalls.
 \begin{enumerate}
     \item Use the library version of the syscall. The library version serves as a \textbf{function wrapper} and typically has the same name. Applicable to most syscalls in modern languages.
     \item Use the user-friendly library version of the syscall. This version has related handles and serves as a \textbf{function adapter}. Few syscalls have such.
     \item Use the language's syscall method directly. E.g. in C, \codein{long syscall(long number, ...)}.
+    
 \end{enumerate}
 
 
@@ -218,7 +221,7 @@ Depending on whether a process spends majority of time on CPU computation or I/O
 \end{itemize}
 
 \subsubsection{Scheduling Criteria}
-All scheduling policies consider 1) fairness, whether all processes can run without \deff{Starvation}, 2) Balanced utilisation of system resources, 3) \deff{Throughout}, number of tasks finished per unit time, 4) \deff{Turnaround Time}, total clock time taken (which is related to total/average waiting time), and 5) \deff{CPU Utilisation}, \% of time when CPU is working.
+All scheduling policies consider 1a) Fairness, whether it is biases against / towards any process, 1b) whether all processes can run without \deff{Starvation}, 2) Balanced utilisation of system resources, 3) \deff{Throughout}, number of tasks finished per unit time, 4) \deff{Turnaround Time}, total clock time taken (which is related to total/average waiting time), and 5) \deff{CPU Utilisation}, \% of time when CPU is working.
 \\
 In addition, Interactive System scheduling policies consider: 1) \deff{Response Time}, time between request and response by system, and 2) \deff{Predictability}, as it aims for less variance in response time.
 
@@ -260,7 +263,7 @@ Maintain a Priority Queue and assign a priority value to every task to be schedu
 \subsubsection{Multi-Level Feedback Queue(MLFQ)}
 Maintain multiple FIFO Queues of different priorities. Always pick from Queues of higher priority first, and run RR within each Queue. When a new task comes, put it in the highest priority Queue. Every time the tasks fully utilises its time slice, reduce its priority, otherwise retain its priority.
 \\
-\underline{Analysis:} Adaptive, seeking to minimise both response and turnaround time. High priority Queues tend to have shorter time slices. Yet, possible to exploit the policy.
+\underline{Analysis:} Adaptive, seeking to minimise both response and turnaround time. Starvation possible. High priority Queues tend to have shorter time slices. Yet, possible to exploit the policy.
 
 
 \subsubsection{Lottery Scheduling}
@@ -430,8 +433,8 @@ High-level Language (HLL) Implementations for Synchronisation are those using on
 \subsubsection{Implementation}
 \begin{itemize}
     \item An integer \codein{S} \textasciitilde \ number of "net wake-ups". Can be initialised to any non-negative integer.
-    \item \codein{wait(S)} - decrement \codein{S}, and if $S \leq 0$, (process calling the semaphore) blocks.
-    \item \codein{signal(S)} - increment \codein{S}, and wait up one sleeping process if any.
+    \item \codein{wait(S)} - decrement \codein{S}, and if $S \leq 0$, (process calling the semaphore) blocks. Aka. \codein{P()} or \codein{down()}.
+    \item \codein{signal(S)} - increment \codein{S}, and wait up one sleeping process if any. Aka. \codein{V()} or \codein{up()}.
 \end{itemize}
 \underline{Note:} Assume no negative value for semaphore in this module.
 
@@ -454,7 +457,33 @@ A \deff{General Semaphore} serves as a General Synchronisation Tool (not CS in t
 
 
 
-\section{Summary}
+\section{Intermediate Results \& Summary}
+\subsection{From Tutorials}
+\citeqn{(Tut1 Qn7)} In \codein{int *a = (int *) malloc(sizeof(int));}, the data, \codein{*a}, is created in the Heap while the pointer to this data, \codein{a}, can be in Stack or Data.
+
+\subsection{From Past Questions}
+\citeqn{(AY15/16Sem1 Qn1)} Library calls are language dependent, while syscalls depend only on the OS.
+
+\medskip
+
+\citeqn{(AY17/18Sem1 Qn8)} In scheduling, \textbf{Short Response Time} is not the same as \textbf{Bounded Waiting Time}. RR ensures latter but not former.
+
+
+
+\subsection{Diagrams}
+Onion Model of an Operating System:
+\\
+\includegraphics[width=8cm]{img/01_onion_model.png}
+
+Generic 5 States of a Process:
+\\
+\includegraphics[width=8cm]{img/02_process_5_state.png}
+
+Pseudocode for Peterson's Algorithm (note the order of updating variables before busy-wait):
+\\
+\includegraphics[width=8cm]{img/06_peterson.png}
+
+
 
 
 
@@ -485,6 +514,8 @@ Need header \codein{<unistd.h>}.
 \codein{void exit(int status)} terminates the current process and the value of \codein{status} will return to the parent. The convention is \codein{0} for normal termination and non-zero for error.
 \\
 \codein{exit()} is the friendly wrapper of \codein{\_exit()} as the former does some necessary clean-up before invoking the syscall.
+\\
+When a child calls \codein{exit()}, it sends \codein{SIGCHLD} signal to the parent.
 \\
 Need header \codein{<unistd.h>}
 
@@ -521,6 +552,8 @@ Need header \codein{<unistd.h>}.
 
 \subsubsection{Shared Memory Syscalls}
 \codein{shmget()}, \codein{shmat()}, \codein{shmdt()}, and \codein{shmctl()} are syscalls to 1) create a shared memory region, 2) attach the shared memory to the current process, 3) detach the shared memory from the current process, and 4) destroy the shared memory region respective.
+\\
+\underline{Note:} \codein{shmget()} returns the ID of the shared memory created, and the ID is the identifier for the shared memory. A memory address is generated only when you attach a process to the shared memory using \codein{shmat()}. 
 \\
 Need header \codein{<sys/shm.h>}.
 

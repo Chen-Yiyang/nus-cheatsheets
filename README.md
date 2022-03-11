@@ -46,7 +46,7 @@ If you have noticed any typos or errors, please let me know. Thank you!
 -----
 ## Todos
 ### CS2106
-- [ ] Include POSIX Syscalls from Lecture and Lab worksheets.
+- [x] Include POSIX Syscalls from Lecture and Lab worksheets.
 
 ### MA2104
 - [ ] Include 3d plots for visualisation.
