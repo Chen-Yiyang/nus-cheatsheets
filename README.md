@@ -41,6 +41,7 @@ If you have noticed any typos or errors, please let me know. Thank you!
 
 
 ### ST3236
+- Cheatsheet: A 2-page cheatsheet for Final
 
 
 -----

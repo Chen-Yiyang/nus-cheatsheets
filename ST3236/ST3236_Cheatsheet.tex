@@ -118,6 +118,11 @@ For any events $A_1, A_2, ...$,
 
 
 
+\noindent\rule{8cm}{0.4pt}
+
+
+
+
 \section{Markov Chain (MC) Basics}
 A (discrete-time) \deff{Markov Chain} (MC) is a stochastic process $ \{ X_n \}_{n=0}^{\infty}$ that satisfies,
 \begin{align*}
@@ -131,7 +136,7 @@ A \deff{Time-homogeneous} Markov Chain is one where the conditional probability 
 \[
 \mathbb{P} (X_{n+1} = j | X_n = i) = \mathbb{P} (X_1 = j | X_0 = i)
 \]
-For time-homogeneous MCs, $p_{ij} = \mathbb{P} (X_1 = j | X_0 = i)$ is the \deff{1-step transition probability}, and $P = ((p_{ij}))_{i,j \in S}$ is the \deff{transition matrix}. Similarly, $p_{ij}^{(k)} = \mathbb{P} (X_k = j | X_0 = i)$ is the \deff{k-Step Transition Probability}.
+For time-homogeneous MCs, $p_{ij} = \mathbb{P} (X_1 = j | X_0 = i)$ is the \deff{1-step transition probability}, and $P = ((p_{ij}))_{i,j \in S}$ is the \deff{Transition matrix}. Similarly, $p_{ij}^{(k)} = \mathbb{P} (X_k = j | X_0 = i)$ is the \deff{k-Step Transition Probability}.
 
 \subsection{Chapman-Komogorov Equation}
 \[
@@ -144,12 +149,12 @@ Equivalently, it means $P^{(k)} = P^k$.
 
 \section{Accessing States, MC}
 \subsection{Accessible States}
-For states $i$, $j$ of a MC, $j$ is \deff{accesible} from $i$, $i \to j$, if there exists $k \geq 0$ such that,
+For states $i$, $j$ of a MC, $j$ is \deff{Accesible} from $i$, $i \to j$, if there exists $k \geq 0$ such that,
 \[
 p_{ij} = \mathbb{P} (X_k = j | X_0 = i) > 0
 \]
 \\
-States $i$ and $j$ \deff{communicate}, i.e. $i \leftrightarrow j$ iff. $i \to j \land j \to i$.
+States $i$ and $j$ \deff{Communicate}, i.e. $i \leftrightarrow j$ iff. $i \to j \land j \to i$.
 \medskip
 
 $\leftrightarrow$ is a \textbf{Equivalence Relation}. The equivalent classes of $S$ partitioned by it are called \deff{Communicating classes}.
@@ -162,15 +167,15 @@ Notes:
     \item For $i \in S_i$ and $j \in S_j$, $i \to j \implies j \not\to i$.
 \end{itemize}
 
-A MC is \deff{irreducible} if there is only one communicating class for the state space. Otherwise, the MC is \deff{reducible}.
+A MC is \deff{Irreducible} if there is only one communicating class for the state space. Otherwise, the MC is \deff{Reducible}.
 
 
 \subsection{Essential States}
-A state $i$ is \deff{essential} if for every state $j$ it satisfies
+A state $i$ is \deff{Essential} if for every state $j$ it satisfies
 \[
 i \to j \implies j \to i
 \]
-A state that is not essential is called \deff{inessential}.
+A state that is not essential is called \deff{Inessential}.
 \medskip
 
 Properties of Essential States
@@ -180,6 +185,217 @@ Properties of Essential States
     \item A \textbf{finite state} MC must have at least one essential state.
     \item An absorbing state is essential.
 \end{itemize}
+
+
+
+
+\section{Recurrence Theory}
+\subsection{Definition}
+A state $i$ of a Markov Chain is \deff{Recurrent} if
+\[
+P(X_n = i \text{ for some } n \ge 1 | X_0 = i) = 1
+\]
+Otherwise, the state $i$ is \deff{Transient}.
+
+\medskip
+
+Let $T_i = \min \{ n \ge 1: X_n = i \}$ firt time the chain visits state $i$, and let $\mu_i = \mathbb{E}[T_i | X_0 = i]$ expected return time to state $i$, then for a recurrent state $i$,
+\begin{itemize}
+    \item State $i$ is \deff{Positive Recurrent}, if $\mu_i < \infty$
+    \item State $i$ is \deff{Null Recurrent}, if $\mu _i = \infty$
+\end{itemize}
+
+Overall, a state is either 1) transient, 2) null recurrent, or 3) positive recurrent.
+
+\medskip
+Equivalently, for a state $i$,
+\begin{itemize}
+    \item If $i$ is recurrent, $P(X_n = i \text{ infinitely often} | X_0 = i) = 1$
+    \item If $i$ is transient, $P(X_n = i \text{ infinitely often} | X_0 = i) = 0$
+\end{itemize}
+
+\subsection{Criteria for Determining Recurrence}
+\subsubsection{Number of Visits}
+Define $f_i = P(X_n = i \text{ for some } n \ge 1 | X_0 = i)$ and $N_i = \sum_{n=1}^{\infty} \mathbb{1}_{\{X_n = i\}}$ as number of visits of state $i$. 
+\\
+\underline{Analysis}: Consider the probability of the chain "escaping" from returning to state $i$, $(N_i + 1) | X_0 = i \sim Geom(1 - f)i)$.
+
+\medskip
+
+A state $i$ is recurrent, if $P(N_i = \infty | X_0 = i) = 1$. The negation applies for transient state $i$.
+
+\medskip
+
+A state $i$ is recurrent, if $\mathbb{E}[N_i | X_0 = i] = \infty$. The negation applies for transient state $i$.
+
+
+
+\subsection{Properties of Recurrence States}
+Recurrence is a class property. If $i$ is recurrent and $j$ is in the same communicating class as $i$, $j$ is recurrent. (\underline{Proof Idea}: Chapman-Kolmogorov Equation.) \textbf{So are Positive and Null Recurrence.}
+
+\medskip
+
+There always exists a recurrent state in a finite space Markov Chain. (\underline{Proof Idea}: By contradiction)
+
+
+
+
+\section{First Time Passage}
+\deff{First Passage probability} from state $i$ to state $j$ in exactly $k$ steps is defined $f_{i,j}^{(k)} = P(X_k = j, X_{k-1} \neq j, ..., X_1 \neq j | X_0 = i)$.
+
+\subsection{Related Expressions}
+\subsubsection{Renewal Theorem}
+For $i \neq j$ and $n \ge 1$, we have
+\[
+p^{(n)}_{i,j} = \sum_{k=1}^{n} f_{i,j}^{(k)} p_{j,j}^{(n-k)}
+\]
+
+\medskip
+
+\underline{Note}: Algorithm to compute First Passage Times: To compute $f_{i,j}^{(n)}$, obtain the first $n$ powers of $P$, then write and solve a linear system involving first $n$ basic renewal equations to get $f_{i,j}^{(1)}, ..., f_{i,j}^{(n)}$.
+
+\subsubsection{Recursive Relation}
+Consider first passage times with steps $n \ge 2$, by Markovian Property,
+\[
+f_{i,j}^{(n)} = \sum_{k \neq j} p_{i,k} f_{k,j}^{(n-1)}
+\]
+
+\medskip
+
+\underline{Note}: The recursive relation can also be used to calculate First Passage Times. 
+
+
+\subsection{Relations to Recurrence}
+Define $f_{i,j}$ as the probability of chain ever visiting state $j$ starting from state $i$ for $i \neq j$,
+\[
+f_{i,j} = P(X_n = j \text{ for some } n \ge 1 | X_0 = i) = \sum_{n=1}^{\infty} f_{i,j}^{(n)}
+\]
+
+\subsubsection{An interesting Identity}
+For any state $i \neq j$, by using the previous recursive relation,
+\[
+f_{i,j} = p_{i,j} + \sum_{k \neq j} p_{i,k}f_{k,j}
+\]
+
+\subsubsection{Recurrent State Visiting Another}
+If $i$ is recurrent and $i \to j$, then $f_{i,j} = 1$ and $f_i = f_{i,i} = 1$.
+
+\medskip
+
+For any state $i$ and a recurrent state $j$,
+\[
+f_{i,j} = \sum_{k \in S} p_{i,k}f_{k,j} 
+\]
+It is valid for both cases of $i \neq j$ and $i = j$.
+
+
+
+
+\section{Stationary Distribution}
+\subsection{Overview}
+A \deff{Stationary Distribution}, $\vect{\pi}$, of a Markov Chain is one such that $\vect{\pi}^{T}P = \vect{\pi}^{T}$.
+
+\subsection{Number of Visits Analysis}
+Define $\phi_{i}(j)$ as the expected number of timers the Markov Chain visits $j$ when starting from $i$ before returning to $i$ for $i \neq j$,
+\[
+\phi_{i}(j) = \mathbb{E} \big[ \sum_{n=0}^{T_{i}-1} \mathbb{1}_{\{ X_n = j\}} | X_0=i \big]
+\]
+, then by definition, $\sum_{j\in S} \phi_i(j) = \mathbb{E}(T_i|X_0=i)=\mu_i$.
+
+\subsubsection{Of Positive Recurrent States}
+For a \textbf{Positive Recurrent} state $i$, the vector $\pi_i{j}$ forms a stationary distribution for all states $j \in S$,
+\[
+\pi_{i}(j) = \frac{\phi_i(j)}{\sum_k \phi_i(k)}
+\]
+Then if state $i$ is in an irreducible chain, $\pi = \pi_i$ is the unique stationary distribution.
+
+\subsubsection{Of Transient \& Null Recurrent States}
+Suppose a stationary distribution $\vect{pi}$ exists for a general Markov Chain, then $\pi(i) = 0$ for all transient or null recurrent states $i$. \underline{Proof Idea}: Consider $\phi_i(j)$ of such states.
+
+
+\subsection{Of Irreducible Markov Chains}
+% Include Finite state MC as well (as a special case)
+\subsubsection{Properties}
+For an irreducible Markov Chain, below are equivalent:
+\begin{enumerate}
+    \item At least one state is positive recurrent
+    \item A stationary distribution exists
+    \item A stationary distribution exists and is unique
+    \item All states are positive recurrent
+\end{enumerate}
+\underline{Note:} The four statements above are just equivalent. They may not always be true for an irreducible chain!
+
+\subsubsection{Related Expressions}
+For an \textbf{irreducible} Markov Chain with a stationary distribution $\vect{\pi}$, and for all states $i \in S$,
+\[
+\pi(i) = \frac{1}{\mu_i} = \frac{1}{\mathbb{E}[T_i | X_0 = i]}
+\]
+
+\subsubsection{Special Cases}
+Any finite state space Markov Chain always have a stationary distribution.
+
+
+
+\subsection{Of General Markov Chains}
+\subsubsection{Algorithm for Constructing a Stationary Distribution}
+For any Markov Chain, procedures for constructing a stationary distribution if there exists one:
+\begin{enumerate}
+    \item For each positive recurrent class $C_j \subset S$, let $\pi^*_j$ denotes the unique stationary distribution of the Markov Chain with transition matrix reduced from $P$ to $P_{C_j \times C_j}$.
+    \item Let $\bar{\pi_j^*}$ denotes the vector of size equal to $|S|$ by appending $0$ to $\pi^*_j$ for all states $i \in S \setminus C_j$.
+    \item Then probability vector $\pi = \sum_{j: C_j \text{ +ve recurrent}} \alpha_j \bar{\pi_j^*}$ forms a stationary distribution for all non-negative constants $a_1, ..., $ that sum to $1$.
+\end{enumerate}
+
+\subsubsection{Significance of the Algorithm}
+A Markov Chain has a stationary distribution as long as it has \textbf{a positive recurrent class}.
+\medskip
+A finite state Markov Chain always has a stationary distribution. \underline{Proof idea}: as it cannot have all of its finite number of states transient or null recurrent.
+
+
+\section{Long-Term Behaviours}
+\subsection{Periodicity}
+For a \textbf{recurrent} state $i$ of a Markov Chain, its \deff{Period} is defined as the maximum integer such that the chain returns from that sate to itself only in step sizes which are multiples of the integer.
+
+\medskip
+
+Mathematically, for a recurrent state $i$, we define $Z_i = \{ n \ge 1: p^{(n)}_{ii} > 0 \}$, then the period of $i$ is defined as $d_i = \gcd{Z_i}$, where $\gcd$ is the greatest common divisor.
+
+\medskip
+
+A state $i$ is \deff{Aperiodic} if $d_i = 1$.
+
+\subsection{Properties of Periodicity}
+Periodicity is a Class Property. For two recurrent states $i$ and $j$ in the same communicating class, $d_i = d_j$.
+\\
+Therefore, a class is \textbf{aperiodic} iff. any of its states is \textbf{aperiodic}.
+
+\medskip
+
+An aperiodic state can lead to itself in steps of all sizes large enough.
+\\
+Mathematically, it means if $d_i = 1$ then there exists $K \in \mathbb{Z}^{+}$ such that $p^{(k)}_{ii} > 0$ for all $k \ge K$.
+% TODO: put under intermediate results?
+
+\subsection{The Convergence Theorem}
+For an \textbf{irreducible}, \textbf{aperiodic} and \textbf{positive recurrent} chain, let $\pi$ be its unique stationary distribution, then as $n \to \infty$, we have
+
+\[
+p^{(n)}_{i,j} \to \pi(j)
+\]
+, for all states $i, j$.
+\\
+It means that for such a chain, the stationary distribution is its limiting distribution.
+
+
+
+
+\noindent\rule{8cm}{0.4pt}
+
+
+
+
+\section{Intermediate Results \& Lemmas}
+\citeqn{Homework5 Qn1} In a finite state space Markov Chain, essentiality is equivalent to recurrence.
+
 
 
 \end{multicols}
