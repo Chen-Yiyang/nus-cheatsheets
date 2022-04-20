@@ -18,8 +18,8 @@ If you have noticed any typos or errors, please let me know. Thank you!
 - Cheatsheet: A short summary sheet for Midterm.
 
 ### CS3243
-- Cheatsheet: A 2-page summary sheet for Midterm.
-
+- Midterm: A 2-page summary sheet for Midterm.
+- Cheatsheet: A detailed summary sheet for Final.
 
 ### MA1101R
 - Exercise Question Summary: A compilation of Lemmas / statements left as proving questions in the Exercises of the textbook.
@@ -41,7 +41,7 @@ If you have noticed any typos or errors, please let me know. Thank you!
 
 
 ### ST3236
-- Cheatsheet: A 2-page cheatsheet for Final
+- Cheatsheet: A short summary sheet for Final.
 
 
 -----
