@@ -130,23 +130,23 @@ In short, an agent is a function $f: P \to A$.
 
 \subsection{Types of Agents and Environments}
 \subsubsection{Agents}
-\begin{itemize}
-    \item \deff{Reflex Agent} - Agents that use IF-ELSE rules to make decisions.
-    \item \deff{Model-based Reflex Agent} - Agents that use an internalised model to make decisions. (e.g. state graph models for search AI)
-    \item \deff{Goal-/Utility-based Agent} - Agents that determine sequences of actions to reach goals / maximise utility.
-    \item \deff{Learning Agent} - Agents that learn to optimise. (not covered)
-\end{itemize}
+\deff{Reflex Agent} - Agents that use IF-ELSE rules to make decisions. \\
+\deff{Model-based Reflex Agent} - Agents that use an internalised model to make decisions. (e.g. state graph models for search AI) \\
+\deff{Goal-/Utility-based Agent} - Agents that determine sequences of actions to reach goals / maximise utility. \\
+\deff{Learning Agent} - Agents that learn to optimise. (not covered)
+
 
 \subsubsection{Properties of the Problem Environments}
-\begin{itemize}
-    \item \deff{Fully} / \deff{Partially Observable} - whether agents can access all information of the environment.
-    \item \deff{Deterministic} / \deff{Stochastic} \textasciitilde \ whether transition of states is certain.
-    \item \deff{Episodic} / \deff{Sequential} - whether actions impact only current states or all future decisions.
-    \item \deff{Discrete} / \deff{Continuous} \textasciitilde \ of state info., time, percepts and/or actions.
-    \item \deff{Single} / \deff{Multi-agent}
-    \item \deff{Known} / \deff{Unknown} \textasciitilde \ of knowledge of the agent.
-    \item \deff{Static} / \deff{Dynamic} - whether the environment changes while the agent is deciding actions.
-\end{itemize}
+\deff{Fully} / \deff{Partially Observable} - whether agents can access all information of the environment. \\
+\deff{Deterministic} / \deff{Stochastic} \textasciitilde \ whether transition of states is certain. \\
+\deff{Episodic} / \deff{Sequential} - whether actions impact only current states or all future decisions. \\
+\deff{Discrete} / \deff{Continuous} \textasciitilde \ of state info., time, percepts and/or actions. \\
+\deff{Single} / \deff{Multi-agent} \\
+\deff{Known} / \deff{Unknown} \textasciitilde \ of knowledge of the agent. \\
+\deff{Static} / \deff{Dynamic} - whether the environment changes while the agent is deciding actions.
+
+\smallskip
+
 The real world is partially observable, stochastic, sequential, dynamic, continuous, multi-agent.
 
 
@@ -162,46 +162,28 @@ A transition model describes the problem in a dynamic and efficient way, as it d
 \deff{Uninformed Search} are search algorithms without domain knowledge beyond the search problem formulation.
 
 
-\subsubsection{Generic Algorithm}
+\subsubsection{Generic Search Algorithm}
 The only difference is how each algorithm implements the \codein{frontier} for searching. 
 
-\begin{lstlisting}
-frontier = {initial state}
-while frontier not empty:
-    current = frontier.pop()
-	// checking
-	if isGoal(current) 
-		return path found
-	// exploration
-	for a in actions(current):
-		frontier.push(T(current, a)) 
-return failure
-\end{lstlisting}
+\smallskip
 
-For \textbf{correctness} of search algorithms, we need to ensure 1) \deff{Completeness} - whether an algorithm will find a solution when one exists \textbf{and} correct report failure if not exists, and 2) \deff{Optimality} - whether an algorithm finds a solution with lowest path cost among all solutions.
+\textbf{Correctness:}: 1) \deff{Completeness} - whether an algorithm will find a solution when one exists \textbf{AND} correctly report failure if not exists, and 2) \deff{Optimality} - whether an algorithm finds a solution with lowest path cost among all solutions.
 Note: An optimal solution must be complete.
 \smallskip
 
 Implementation wise, there are 1) \deff{Tree-Search} that allows revisiting of nodes, and 2) \deff{Graph-Search} that do not allow revisit to states unless the new cost is smaller than current one (by maintaining a \codein{reached} hash table upon adding nodes to \codein{frontier}. 
 
-
 \subsection{Search Algorithms}
 \deff{Breadth-First Search} (BFS) : Use \codein{Queue<>} for \codein{frontier}. Possible improvement is to perform \textbf{Goal checking on pushing to frontier} to reduce storage.
-
-\smallskip
-
-\deff{Depth-First Search} (DFS) : Use \codein{Stack<>} for \codein{frontier}.
-\smallskip
-
-\deff{Uniform-Cost Search} (UCS) : Use \codein{PriorityQueue<>} for \codein{frontier}. Essentially Dijkstra's Algorithm that always explores the node with shortest path cost in the frontier.
 \\
-Note: Need to ensure all costs are larger than some constant $\epsilon > 0$. Therefore, it cannot be used for negative / zero costs (just like Dijkstra).
-\smallskip
-
+\deff{Depth-First Search} (DFS) : Use \codein{Stack<>} for \codein{frontier}.
+\\
+\deff{Uniform-Cost Search} (UCS) : Use \codein{PriorityQueue<>} for \codein{frontier}. Essentially Dijkstra's Algorithm that always explores the node with shortest path cost in the frontier. \underline{Note}: Need to ensure all costs are larger than some constant $\epsilon > 0$. Therefore, it cannot be used for negative / zero costs (just like Dijkstra).
+\\
 \deff{Depth-Limited Search} (DLS) : DFS but with a limit on the maximum depth, $l$, which may be determined using domain knowledge.
-\smallskip
-
+\\
 \deff{Iterative Deepening Search} (IDS) : Perform DLS repeated with $l = 1, 2, ...$. Intuitive, the algorithm compromises running time for better memory usage.
+
 
 
 
@@ -211,20 +193,11 @@ Note: Need to ensure all costs are larger than some constant $\epsilon > 0$. The
 $h(n)$ tries to approximate the actual distance function $h^*(n)$.
 \smallskip
 
-A heuristic is \deff{admissible} if for any state $n$,
-\[
-h(n) \leq h^{*}(n)
-\]
-, which means the heuristic might under-estimate but never over-estimates.
+A heuristic is \deff{admissible} if for any state $n$, $ h(n) \leq h^{*}(n) $ , which means the heuristic might under-estimate but never over-estimates.
 \smallskip
 
-A heuristic is \deff{consistent} if for all states $n$ and its successor $n'$,
-\[
-h(n) \leq \text{cost}(n, a, n') + h(n')
-\]
-, which means priority $f$ in A* is non-decreasing along a path if a consistent heuristic is chosen.
-\\
-Consistent heuristics are always admissible.
+A heuristic is \deff{consistent} if for all states $n$ and its successor $n'$, $h(n) \leq \text{cost}(n, a, n') + h(n')$ , which means priority $f$ in A* is non-decreasing along a path if a consistent heuristic is chosen. \underline{Note}:Consistent heuristics are always admissible.
+
 \smallskip
 
 For two heuristics, $h_1$ \deff{dominates} $h_2$ iff. $h_1(n) \geq h_2(n)$ for all states $n$. \\
@@ -234,24 +207,21 @@ Note: dominance is defined for all heuristics. However, for two admissible heuri
 
 
 \subsection{Informed Search Algorithms}
-The two Informed Search algorithms are based on UCS, but incorporate domain knowledge via $h$.
-\newline
+Based on UCS, but incorporate domain knowledge via $h$.
 
-\deff{Greedy Best-First Search} : Use \deff{Evaluation Function}, $f(n) = h(n)$ as priority. Intuitively, it picks the state "seemingly" closest to the goal.
+\smallskip
 
-\begin{itemize}
-    \item \textbf{Incomplete} under Tree-Implementation, and \textbf{Complete} under Graph-Implementation.
-    \item \textbf{Not optimal} under both implementations
-\end{itemize}
+\deff{Greedy Best-First Search} : Use \deff{Evaluation Function}, $f(n) = h(n)$ as priority. Intuitively, it picks state "seemingly" closest to goal.
+\\
+\underline{Analysis}: \textbf{Incomplete} under Tree-Implementation, and \textbf{Complete} under Graph-Implementation. \textbf{Not optimal} under both implementations.
 
+\smallskip
 
 \deff{A* Search} : Use \deff{Evaluation Function}, $f(n) = g(n) + h(n)$ as priority where $g(n)$ is the current path cost.
 \\
 \deff{Limited-Graph Search} (LGS) : A modified Graph-Implementation version of A* that adds nodes to \codein{reached} table on pop instead of pushing.
-\begin{itemize}
-    \item Tree-Implementation of A* is \textbf{Optimal} for admissible $h$.
-    \item LGS is \textbf{Optimal} for consistent $h$.
-\end{itemize}
+\\
+\underline{Analysis}: Tree-Implementation of A* is \textbf{Optimal} for admissible $h$. LGS is \textbf{Optimal} for consistent $h$.
 
 
 
@@ -271,12 +241,11 @@ Local Search is \textbf{Incomplete}, but it uses less space ($O(b)$ for branchin
 Note: The algorithm may fail as it can terminate at a local maximum / plateau.
 
 \subsubsection{Hill Climbing Variations}
-\begin{itemize}
-    \item \deff{Slideways Move} - Replace $<$ with $\leq$, to allow continuation with neighbours of same value and to traverse plateaus.
-    \item \deff{Stochastic \textasciitilde} - Choose randomly a state with better value (not the best value) to explore. This takes longer time to find a solution but gives more flexibility and randomness. Relieve "local maximum" issue.
-    \item \deff{First-Choice \textasciitilde} - Generate successors until one with better value than current is found.
-    \item \deff{Random-Restart \textasciitilde} - Use a loop to randomly pick a new starting state. Keep running until a solution is found.
-\end{itemize}
+\deff{Slideways Move} - Replace $<$ with $\leq$, to allow continuation with neighbours of same value and to traverse plateaus. \\
+\deff{Stochastic \textasciitilde} - Choose randomly a state with better value (not the best value) to explore. This takes longer time to find a solution but gives more flexibility and randomness. Relieve "local maximum" issue. \\
+\deff{First-Choice \textasciitilde} - Generate successors until one with better value than current is found. \\
+\deff{Random-Restart \textasciitilde} - Use a loop to randomly pick a new starting state. Keep running until a solution is found.
+
 
 \subsubsection{Local Beam Search}
 \deff{Local Beam Search} - Similar to Hill Climbing but start with $k$ random starting states. Each iteration generates successors of all $k$ states and choose new $k$ ones to explore. Stochastic elements can also be incorporated into this algorithm.
@@ -289,15 +258,10 @@ Note: Local Beam requires problems with different possible starting states, othe
 
 \section{Constraint Satisfication Problem (CSP)}
 \subsection{CSP Formulation}
-\begin{itemize}
-    \item \deff{State Representation}, for variables $X = \{ x_1, ..., x_n \}$ and set of domains $D = \{ d_1, ..., d_n \}$, so that $x_i$ has domain $d_i$.
-    \item \deff{State}, where the initial / intermediate / goal state(s) have variables unassigned / partially assigned / all assigned.
-    \item \deff{Goal Test}, with constrains $C = \{c_1, ..., c_m \}$ to satisfy
-    \item \deff{Actions} and \deff{Transitions}
-\end{itemize}
-Costs are not utilised in CSP.
+A CSP consists of 1) \deff{State Representation}, for variables $X = \{ x_1, ..., x_n \}$ and set of domains $D = \{ d_1, ..., d_n \}$, so that $x_i$ has domain $d_i$, 2) \deff{State}, where the initial / intermediate / goal state(s) have variables unassigned / partially assigned / all assigned, 3) \deff{Goal Test}, with constrains $C = \{c_1, ..., c_m \}$ to satisfy, and 4) \deff{Actions} and \deff{Transitions}. \underline{Note}: Costs are not utilised in CSP.
 
-\subsubsection{Constraint Graph}
+\smallskip
+
 Depending on the \deff{Scope}, number of variables involved, of constraints, they can be categorised into 1) \deff{Unary}, \deff{Binary}, and \deff{Global} which involves $1$, $2$, and $\geq 3$ variables respectively.
 \smallskip
 
@@ -312,26 +276,21 @@ A \deff{Constraint Graph} is a representation for constraints where each variabl
 \deff{Degree Heuristic} - Choose the variable with fewest number of constraints with other non-determined variables (smallest \deff{degree}) to be assigned. Typically used as a tie-breaker after MRV Heuristic.
 
 \subsubsection{Value-Order Heuristic}
-\deff{Least-Constraining-Value Heuristic} (LCV) - Choose the value that rules out fewest choices (in terms of domain sizes of "neighbour variables") to be assigned. \underline{Intuitively}, it avoids failure at every stage.
+\deff{Least-Constraining-Value Heuristic} (LCV) - Choose value that rules out fewest choices (in terms of domain sizes of "neighbour variables") to be assigned. \underline{Intuitively}, it avoids failure.
 
 \subsection{CSP Algorithms}
-\subsubsection{General CSP Algorithm}
 \deff{Backtracing Algorithm} uses DFS to examine value assignments of one variable at a time (one level), and backtrack when no possible legal assignments with current assignment of the variable. Heuristics for value / variable choices and pruning techniques can be used.
 
 \subsubsection{Constraint Propagation Algorithms}
-Such are pruning algorithms that check for early termination. 
-
-\smallskip
-
 \deff{Forward Checking} tracks remaining legal values (reduces domain) of each unassigned variable after current variable's assignment. It makes search terminate when any variable has no legal values (in its domain).
 
 \smallskip
 
-\deff{AC3 Algorithm} updates all arcs corresponding to binary constrains of that variable with others, whenever the domain of the variable is updated. It ensures \deff{Arc-Consistency} between variables $X_i$ and $X_j$ that is for every $x \in D_i$ there exists some value $y \in D_j$ that satisfies the binary constraint(s) on arc $(X_i, X_j)$. 
-\\
-\underline{Note}: Arcs are \textbf{directed}.
+\deff{AC3 Algorithm} updates all arcs corresponding to binary constrains of that variable with others, whenever the domain of the variable is updated. It ensures \deff{Arc-Consistency} between variables $X_i$ and $X_j$ that is for every $x \in D_i$ there exists some value $y \in D_j$ that satisfies the binary constraint(s) on arc $(X_i, X_j)$. \underline{Note}: Arcs are \textbf{directed}.
 \\
 \underline{Analysis}: Time $O(n^2 d^3)$ for number of states $n$ and domain size $d$. Preprocessing to reduce domain size is therefore important.
+
+
 
 
 \section{Adversarial Search}
@@ -364,7 +323,6 @@ Implementation wise, it checks from leaves to root - for every node of MAX / MIN
 
 
 \section{Knowledge-Based Agents}
-\subsection{Knowledge-Based Agent}
 A \deff{Knowledge-Based Agent} is an agent that makes inferences on existing information to infer new information. It consists of an \deff{Inference Engine} and a \deff{Knowledge Base}, which is a set of sentences (logical formulae).
 
 %KB Agent & Algo.
@@ -386,11 +344,9 @@ For two sentences $\alpha$ and $\beta$, $\alpha$ \deff{Entails} $\beta$ iff.
 \subsubsection{Properties}
 Let $KB \vdash_{\mathcal{A}} \alpha$ means "Sentence $\alpha$ is derived from Knowledge Base, $KB$, using inference algorithm $\mathcal{A}$".
 \\
-We define two properties of inference algorithm $\mathcal{A}$,
-\begin{itemize}
-    \item \deff{Soundness} - $KB \vdash_{\mathcal{A}} \alpha \implies KB \models \alpha$, which means $\mathcal{A}$ will not infer incorrect sentences.
-    \item \deff{Completeness} - $KB \models \alpha \implies KB \vdash_{\mathcal{A}} \alpha$, which means $\mathcal{A}$ will arrive at all possible conclusions.
-\end{itemize}
+\deff{Soundness} - $KB \vdash_{\mathcal{A}} \alpha \implies KB \models \alpha$, i.e. $\mathcal{A}$ will not infer incorrect sentences.
+\\
+\deff{Completeness} - $KB \models \alpha \implies KB \vdash_{\mathcal{A}} \alpha$, i.e. $\mathcal{A}$ will arrive at all possible conclusions.
 
 \subsubsection{Truth Table Enumeration Algorithm}
 An algorithm that lists all $2^n$ truth assignments to verify KB entails $\alpha$, by using DFS.
@@ -406,21 +362,16 @@ A sentence $\alpha$ is \deff{Valid} if it is true for \textbf{all} possible trut
 \big( KB \models \alpha \big) \equiv \big((KB \implies \alpha) \text{ is valid }\big)
 \]
 
-\smallskip
-
 A sentence $\alpha$ is \deff{Satisfiable} if it is true for \textbf{some} truth value assignments. It is related to entailment:
 \[
 \big( KB \models \alpha \big) \equiv \big( (KB \land \neg \alpha) \text{ is unsatisfiable } \big)
 \]
 
-\smallskip
-
-\underline{Note}: a valid sentence is a tautology while Proof by contradiction uses the idea that something is true is equivalent to no assignment satisfying the negation.
+A valid sentence is a tautology. Proof by contradiction uses the idea that something is true == its negation is unsatisfiable.
 
 % TODO: if need inference algo.
 
 \subsection{Resolution}
-\subsubsection{Definitions}
 \deff{Conjunctive Normal Form} - Conjunctions of Disjunctive. i.e. clauses joined by AND, where each clause uses only OR to join literals. KB is a CNF where each clause is a sentence in KB.
 
 \smallskip
@@ -435,7 +386,9 @@ A sentence $\alpha$ is \deff{Satisfiable} if it is true for \textbf{some} truth 
 
 
 
+
 \section{Bayesian Inference}
+% TODO: remove?
 \subsection{Handling Uncertainty}
 Sources of Uncertainty include: 1) Partial observability, 2) Noisy Sensors, 3) Uncertainty in action outcomes, or 4) Complexity in modelling and predicting the problem.
 
@@ -444,7 +397,6 @@ Sources of Uncertainty include: 1) Partial observability, 2) Noisy Sensors, 3) U
 In handling uncertainty, a general logical agent will 1) Risk Falsehood, and/or 2) Reach weaker conclusions.
 
 \subsection{Probability Basics}
-Consider 3 events $A$, $B$ and $C$,
 \deff{Independent Events} - $P(ABC) = P(A)P(B)P(C)$.
 \\
 \deff{Causal Chain} - $P(ABC) = P(C|B)P(B|A)P(A)$, where $C$ depends on $B$ and $B$ depends on $A$.
@@ -463,14 +415,116 @@ Consider 3 events $A$, $B$ and $C$,
 
 \section{Standard Algorithm Pseudocode}
 % uninformed search
-% backtrack (CSP)
-% FC (CSP)
+\subsection{Generic Search}
+\begin{lstlisting}
+frontier = {initial state}
+while frontier not empty:
+    current = frontier.pop()
+	// checking
+	if isGoal(current):
+		return path found
+	// exploration
+	for a in actions(current):
+		frontier.push(T(current, a)) 
+return failure
+\end{lstlisting}
+
+\subsection{CSP Backtracking}
+\begin{lstlisting}
+def BT-SEARCH(csp) -> solution
+    return BT(csp, {})
+
+def BT(csp, assign) -> solution
+    if assign complete:
+        return assign
+    var = select-unassigned-var(csp, assign)
+    for val in order-dom-val(csp, var, assign):
+        if val is consistent:
+            assign.add((var, val))
+            inf = inference(csp, var, assign)
+            if inf != NULL:
+                csp.add(inf)
+                result = BT(csp, assign)
+                if result != NULL:
+                    return result
+                csp.remove(inf)
+            assign.remove((var, val))
+    return NULL
+\end{lstlisting}
+
 % AC3 (CSP)
+\subsection{AC3}
+\begin{lstlisting}
+def AC3(csp): // true for consistent
+    queue = csp.get_all_arcs()
+    while queue not empty:
+        (i, j) = queue.pop()
+        if REVISE(csp, i, j):
+            if len(D[i]) == 0:
+                return FALSE
+            for k in (i.neighbours() - j):
+                queue.add(i,j)
+    return TRUE
+// true if domain revised/modified
+def REVISE(csp, i, j): 
+    revised = FALSE
+    for x in D[i]:
+        if no y in D[j] that (x,y) satisfy (i,j):
+            D[i].remove(x)
+            revised = TRUE
+    return revised
+\end{lstlisting}
 
-% Generic Logical agent algo.
+\subsection{KB Agent Function}
+\begin{lstlisting}
+global: KB, t = 0 // t for time
+def KB-Agent(percept) -> action:
+    TELL(KB, to_sentence(percept, t))
+    action = ASK(KB, make-action-query(t))
+    TELL(KN, to_sentence(action, t))
+    t = t + 1
+    return action
+\end{lstlisting}
+
+\subsection{Truth Table Enumeration}
+\begin{lstlisting}
+def TT-ENTAILS(KB, a):
+    symbol = list of prop. symbols in KB & a
+    return TT-CHECK-ALL(KB, a, symbols, {})
+
+def TT-CHECK-ALL(KB, a, symbols, model):
+    if symbol is empty:
+        if PL-TRUE?(KB, model):
+            return PL-TRUE?(a, model)
+        else:
+            return TRUE
+    // i.e. non-emtpy
+    p, rest = symbols.first(), symbol.rest()
+    return 
+        (TT-CHECK-ALL(KB,a,rest,model+{P=TRUE})
+        and 
+        (TT-CHECK-ALL(KB,a,rest,model+{P=FALSE})
+\end{lstlisting}
+
 % Resolution algo.
+\subsection{Resolution}
+\begin{lstlisting}
+def PL-RESOLUTION(KB, a) -> bool:
+    clauses = get_CNF(KB+(!a))
+    new = {}
+    while TRUE:
+        for (i, j) in clause:
+            res = PL-RESOLVE(i, j)
+            if res is empty:
+                return TRUE
+            new = union(new, res)
+        if new subset of clauses: 
+            // cannot further resolve
+            return FALSE
+        clauses = union(clauses, new)
+\end{lstlisting}
 
-% Algorithm to Construct BN
+
 
 
 \section{Intermediate Results / Lemmas}
