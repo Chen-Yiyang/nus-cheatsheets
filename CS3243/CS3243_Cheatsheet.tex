@@ -275,11 +275,13 @@ A \deff{Constraint Graph} is a representation for constraints where each variabl
 
 \deff{Degree Heuristic} - Choose the variable with fewest number of constraints with other non-determined variables (smallest \deff{degree}) to be assigned. Typically used as a tie-breaker after MRV Heuristic.
 
-\subsubsection{Value-Order Heuristic}
+\subsubsection{Value Order Heuristic}
 \deff{Least-Constraining-Value Heuristic} (LCV) - Choose value that rules out fewest choices (in terms of domain sizes of "neighbour variables") to be assigned. \underline{Intuitively}, it avoids failure.
 
 \subsection{CSP Algorithms}
-\deff{Backtracing Algorithm} uses DFS to examine value assignments of one variable at a time (one level), and backtrack when no possible legal assignments with current assignment of the variable. Heuristics for value / variable choices and pruning techniques can be used.
+\deff{Backtracing Algorithm} uses DFS to examine value assignments of one variable at a time, and backtrack when no possible legal assignments with current assignment of the variable.
+\\
+Heuristics can be used for \codein{SELECT-UNASSIGNED-VARIABLE()} and \codein{ORDER-DOMAIN-VALUES}. Constraint propagation algorithms are used for \codein{INFERENCE()}.
 
 \subsubsection{Constraint Propagation Algorithms}
 \deff{Forward Checking} tracks remaining legal values (reduces domain) of each unassigned variable after current variable's assignment. It makes search terminate when any variable has no legal values (in its domain).
@@ -306,6 +308,10 @@ Implementation wise, it checks from leaves to root - for every node of MAX / MIN
 \\
 \underline{Analysis}: It is \textbf{Complete} if game tree finite; \textbf{Optimal}, assuming both players play optimally; time $O(b^m)$ and space $O(bm)$.
 
+\smallskip
+
+\deff{Nash Equilibrium} - a condition where whether one player knows the strategy the other player has does not affect the game outcome.
+
 
 \subsection{Pruning Techniques}
 \deff{Alpha-Beta Pruning} defines $\alpha(n)$ and $\beta(n)$ as highest and lowest observed value found on path from $n$ respectively. ($\alpha_0 = -\infty$ and $\beta_0 = \infty$ Initially.) The pruning follows:
@@ -323,7 +329,7 @@ Implementation wise, it checks from leaves to root - for every node of MAX / MIN
 
 
 \section{Knowledge-Based Agents}
-A \deff{Knowledge-Based Agent} is an agent that makes inferences on existing information to infer new information. It consists of an \deff{Inference Engine} and a \deff{Knowledge Base}, which is a set of sentences (logical formulae).
+\deff{Knowledge-Based Agent} - agent making inferences on existing info to infer new ones. It consists of an \deff{Inference Engine} (domain-independent algorithms) and a \deff{Knowledge Base} (domain-specific content), which is a set of sentences (logical formulae).
 
 %KB Agent & Algo.
 
@@ -528,14 +534,14 @@ def PL-RESOLUTION(KB, a) -> bool:
 
 
 \section{Intermediate Results / Lemmas}
-\subsection{From Tutorials}
+\subsection{From Tutorials \& Quizzes}
 \citeqn{(Quiz1 Qn9)} Testing goal upon pushing (than poppig) to frontier can save at most $(b^{d+1} - b)$ nodes in BFS.
 \\
 \citeqn{(Quiz2 Qn12)} For Uninformed Search problems with the goal node near the root, the branching factor finite, and all action costs equal, \textbf{BFS} is preferred.
 \\
-\citeqn{(Quiz2 Qn13)} For Uninformed Search problems with all nodes at a certain depth being goal nodes and all action costs equal, \textbf{DFS} is preferred.
+\citeqn{(Quiz2 Qn13)} For Uninformed Search problems with all nodes at a certain depth being goal nodes and all action costs equal, \textbf{DFS} is preferred. \underline{Note}: Distinguish between pushing order and popping order in DFS.
 \\
-Note the difference between pushing order and popping order in DFS.
+\citeqn{(Quiz6 Qn8)} In AC3, each arc is inserted at most $d$ times for domain size $d$.
 
 
 \subsection{From Past Questions}
