@@ -126,10 +126,11 @@ For any events $A_1, A_2, ...$,
 \section{Markov Chain (MC) Basics}
 A (discrete-time) \deff{Markov Chain} (MC) is a stochastic process $ \{ X_n \}_{n=0}^{\infty}$ that satisfies,
 \begin{align*}
-& \mathbb{P} (X_{n+1} = t_{n+1} | X_n = t_n, X_{n-1} = t_{n-1}, ..., X_1 = t_1) \\
-= & \mathbb{P} (X_{n+1} = t_{n+1} | X_n = t_n) 
+&\mathbb{P} (X_{n+1} = t_{n+1} | X_n = t_n, X_{n-1} = t_{n-1}, ..., X_1 = t_1) \\
+= &\mathbb{P} (X_{n+1} = t_{n+1} | X_n = t_n) 
 \end{align*}
-,whenever $\mathbb{P} (X_n = t_n, X_{n-1} = t_{n-1}, ..., X_1 = t_1) > 0$. This property is also called the \deff{Markovian Property}.
+, whenever $\mathbb{P} (X_n = t_n, X_{n-1} = t_{n-1}, ..., X_1 = t_1) > 0$. This property is also called the \deff{Markovian Property}.
+
 \smallskip
 
 A \deff{Time-homogeneous} Markov Chain is one where the conditional probability $\mathbb{P} (X_{n+1} = j | X_n = i)$ does not depend on $n$. Equivalently, it means for all $n \geq 0$ and $i, j \in S$,
@@ -157,7 +158,7 @@ p_{ij} = \mathbb{P} (X_k = j | X_0 = i) > 0
 States $i$ and $j$ \deff{Communicate}, i.e. $i \leftrightarrow j$ iff. $i \to j \land j \to i$.
 \medskip
 
-$\leftrightarrow$ is a \textbf{Equivalence Relation}. The equivalent classes of $S$ partitioned by it are called \deff{Communicating classes}.
+$\leftrightarrow$ is an \textbf{Equivalence Relation}. The equivalent classes of $S$ partitioned by it are called \deff{Communicating classes}.
 \medskip
 
 Notes:
@@ -351,6 +352,8 @@ A Markov Chain has a stationary distribution as long as it has \textbf{a positiv
 A finite state Markov Chain always has a stationary distribution. \underline{Proof idea}: as it cannot have all of its finite number of states transient or null recurrent.
 
 
+
+
 \section{Long-Term Behaviours}
 \subsection{Periodicity}
 For a \textbf{recurrent} state $i$ of a Markov Chain, its \deff{Period} is defined as the maximum integer such that the chain returns from that sate to itself only in step sizes which are multiples of the integer.
@@ -372,8 +375,7 @@ Therefore, a class is \textbf{aperiodic} iff. any of its states is \textbf{aperi
 
 An aperiodic state can lead to itself in steps of all sizes large enough.
 \\
-Mathematically, it means if $d_i = 1$ then there exists $K \in \mathbb{Z}^{+}$ such that $p^{(k)}_{ii} > 0$ for all $k \ge K$.
-% TODO: put under intermediate results?
+Mathematically, it means if $d_i = 1$ then there exists $K \in \mathbb{Z}^{+}$ such that $p^{(k)}_{ii} > 0$ for all $k \ge K$. (Also in \citeqn{Homework8 Qn1})
 
 \subsection{The Convergence Theorem}
 For an \textbf{irreducible}, \textbf{aperiodic} and \textbf{positive recurrent} chain, let $\pi$ be its unique stationary distribution, then as $n \to \infty$, we have
@@ -394,9 +396,18 @@ It means that for such a chain, the stationary distribution is its limiting dist
 
 
 \section{Intermediate Results \& Lemmas}
-\citeqn{Homework5 Qn1} In a finite state space Markov Chain, essentiality is equivalent to recurrence.
+\citeqn{(Homework5 Qn1)} In a finite state space Markov Chain, essentiality is equivalent to recurrence. In other words, there are no essential and transient states in a finite state space Markov Chain.
 
+\smallskip
 
+\citeqn{(Homework7 Qn2)} There are no null recurrent states in a finite state space Markov Chain.
+
+\smallskip
+
+\citeqn{(Homework7 Qn3)} For an \textbf{irreducible and positive recurrent} Markov Chain $\{ X_n \}_{n=0}^{\infty}$, for any states $i \neq j$,
+\[
+\phi_{i}(j) = \frac{\mu_i}{\mu_j}
+\]
 
 \end{multicols}
 \end{document}
