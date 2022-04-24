@@ -180,5 +180,91 @@ $x^\alpha = O(e^x)$ for any $\alpha > 0$.
 \section{Hashing \& Fingerprint}
 
 
+
+
+\section{Amortised Analysis}
+There are 3 methods in Amortised Analysis.
+
+\smallskip
+
+\deff{Aggregate Method}
+
+\smallskip
+
+\deff{Accounting Method} \textasciitilde The amortised cost provides an upper bound for the true total cost all the time. \underline{Note}: The "credit saved" is associated with each of the elements operated, not overall.
+
+\smallskip
+
+\deff{Potential Method} - Define potential function $\phi(i)$ potential after $i$-th operation. Then it follows:
+\begin{itemize}
+    \item $\phi(0) = 0$ and $\phi(i) \ge 0$ for all $i$
+    \item $\triangle \phi(i)$ amortised cost of $i$-th operation
+\end{itemize}
+
+
+
+
+\section{Reduction \& Intractability}
+
+
+
+
+\noindent\rule{8cm}{0.4pt}
+
+\section{Summary}
+\subsection{Proving Techniques}
+\subsubsection{Working for Accounting Method}
+First claim the (amortised cost) we charge each operation with. Secondly, for each operation, we compare the charge and actual cost of the operation, and claim if there is any credit left or it uses credit from other operations and how.
+
+\subsubsection{Prove Correctness of DP Solutions}
+A typical \textbf{state transition equation} is a composition equation for different cases, prove each case separately.
+\\
+Use \deff{Cut-and-Paste} arguments: If current solution $S$ is not optimal but another $S'$ is, then modify $S'$ using ideas from current solution expression to create an "even better" one, thus contradicting optimality of $S'$.
+
+\subsubsection{Prove Greedy Optional Substructure}
+To prove that $S$ with element $i$ is an optimal solution
+\begin{enumerate}
+    \item Claim: $S - \{i\}$ is optimal for sub-problem with $i$ removed
+    \item Use \textbf{Cut-and-Paste}: If $T$ not $S - \{i\}$ optimal for sub-problem, then $T \cap \{i\}$ better than $S$ for original problem.
+\end{enumerate}
+
+\subsubsection{Prove NP-Hardness}
+To show a problem $X$ is \textbf{NP-Hard}, choose a NP-Hard problem $A$, then show there is a poly-time reduction \textbf{from $A$ to $X$}, which is
+\begin{enumerate}
+    \item Any problem instance of $A$ given can be converted to an instance of $X$ in poly-time
+    \item A YES-instance to $A$ is a YES-instance to $X$
+    \item A YES-instance to $X$ is a YES-instance to $A$
+\end{enumerate}
+
+\subsubsection{Prove NP-Completeness}
+To show a problem $X$ is \textbf{NP-Complete}, show 1) $X$ is \textbf{NP}, i.e. it can be represented using a poly-time certifier and verified in poly-time, and then 2) $X$ is \textbf{NP-Hard}.
+
+\subsection{Common NP-Complete Problems}
+\underline{Note}: Unless otherwise stated, the descriptions below are for the decision problem version of each of the problems.
+
+\subsubsection{INDEPENDENT-SET}
+Given a graph $G = (V, E)$ and an integer $k$, is there a subset of $k$ or more \textbf{vertices} such that no two are adjacent?
+
+\subsubsection{VERTEX-COVER}
+Given a graph $G = (V, E)$ and an integer $k$, is there a subset, $S$, of $k$ or more \textbf{vertices} such that each edge is incident to at least one vertex in $S$?
+
+\subsubsection{SET-COVER}
+Given integers $k$ and $n$, and a collection $\mathcal{S}$ of subsets of $\{1, 2, ..., n \}$, are there $k$ or less of these subsets whose union equals $\{1, 2, ..., n \}$?
+
+\subsubsection{3-SAT}
+Given a CNF (Conjunctive Normal Form) formula $\Phi$ where each clause contains exactly 3 literals (not necessarily distinct), does $\Phi$ have a satisfying truth assignment?
+
+\subsubsection{PARTITION}
+Given a collection $\mathcal{S}$ of non-negative integers $x_1, ..., x_n$, is it possible to partition $\mathcal{S}$ into 2 parts with equal sum?
+
+\subsubsection{KNAPSACK}
+Given $n$ items described by non-negative integer pairs $(w_1, v_1), ..., (w_n, v_n)$, capacity $W$ and value threshold $V$, is there a subset of items with total weight at most $W$ and total value at least $V$?
+
+\subsubsection{LONG-SIMPLE-PATH}
+Given an unweighted directed graph $G = (V, E)$, a positive integer $l$ and two vertices $v, u \in V$, is there a simple path (a path with no repeated vertices) in $G$ from $u$ to $v$ of length at least $l$?
+
+\subsubsection{LONG-SIMPLE-CYCLE}
+Given an unweighted directed graph $G = (V, E)$ and a positive integer $l$, is there a simple cycle (a cycle with no repeated vertices) in $G$ on at least $l$ vertices?
+
 \end{multicols}
 \end{document}
