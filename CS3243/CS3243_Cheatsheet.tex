@@ -191,16 +191,12 @@ Implementation wise, there are 1) \deff{Tree-Search} that allows revisiting of n
 \subsection{Heuristics}
 \deff{Heuristic Function}, $h = h(n)$, approximates the shortest distance from a state to the nearest goal.\\
 $h(n)$ tries to approximate the actual distance function $h^*(n)$.
-\smallskip
-
+\\
 A heuristic is \deff{admissible} if for any state $n$, $ h(n) \leq h^{*}(n) $ , which means the heuristic might under-estimate but never over-estimates.
-\smallskip
-
+\\
 A heuristic is \deff{consistent} if for all states $n$ and its successor $n'$, $h(n) \leq \text{cost}(n, a, n') + h(n')$ , which means priority $f$ in A* is non-decreasing along a path if a consistent heuristic is chosen. \underline{Note}:Consistent heuristics are always admissible.
-
-\smallskip
-
-For two heuristics, $h_1$ \deff{dominates} $h_2$ iff. $h_1(n) \geq h_2(n)$ for all states $n$. \\
+\\
+Two heuristics, $h_1$ \deff{dominates} $h_2$ iff. $h_1(n) \geq h_2(n)$ for all states $n$. \\
 Note: dominance is defined for all heuristics. However, for two admissible heuristics, the dominating one is preferred.
 
 
@@ -219,7 +215,7 @@ Based on UCS, but incorporate domain knowledge via $h$.
 
 \deff{A* Search} : Use \deff{Evaluation Function}, $f(n) = g(n) + h(n)$ as priority where $g(n)$ is the current path cost.
 \\
-\deff{Limited-Graph Search} (LGS) : A modified Graph-Implementation version of A* that adds nodes to \codein{reached} table on pop instead of pushing.
+\deff{Limited-Graph Search} (LGS) : A modified Graph-Implementation of A* that adds nodes to \codein{reached} table on pop instead of pushing.
 \\
 \underline{Analysis}: Tree-Implementation of A* is \textbf{Optimal} for admissible $h$. LGS is \textbf{Optimal} for consistent $h$.
 
@@ -228,17 +224,13 @@ Based on UCS, but incorporate domain knowledge via $h$.
 
 \section{Local Search}
 \deff{Local Search} only concerns with goal state(s) but not how it is found or its cost. 
-\smallskip
-
+\\
 Local Search is \textbf{Incomplete}, but it uses less space ($O(b)$ for branching factor $b$) and is applicable to larger and finite search space.
-\smallskip
-
+\\
 \deff{Complete-State Formulation} - Every state has all components of a solution. Each state is a potential solution.
 
 \subsection{Local Search Algorithm}
-\deff{Hill Climbing} (aka. \deff{Steepest Ascent - Greedy Strategy}) - It stores only current state. In each iteration, find a successor that improves - 1) use actions and transitions to determine successors, and 2) use "heuristic-liked" values (e.g. $f(n) = -h(n)$) to evaluate each state. The algorithm terminates with a state when the value $f$ cannot be improved.
-\\
-Note: The algorithm may fail as it can terminate at a local maximum / plateau.
+\deff{Hill Climbing} (aka. \deff{Steepest Ascent - Greedy Strategy}) - It stores only current state. In each iteration, find a successor that improves - 1) use actions and transitions to determine successors, and 2) use "heuristic-liked" values (e.g. $f(n) = -h(n)$) to evaluate each state. The algorithm terminates with a state when the value $f$ cannot be improved. \underline{Note}: The algorithm may fail as it can terminate at a local maximum / plateau.
 
 \subsubsection{Hill Climbing Variations}
 \deff{Slideways Move} - Replace $<$ with $\leq$, to allow continuation with neighbours of same value and to traverse plateaus. \\
@@ -248,11 +240,7 @@ Note: The algorithm may fail as it can terminate at a local maximum / plateau.
 
 
 \subsubsection{Local Beam Search}
-\deff{Local Beam Search} - Similar to Hill Climbing but start with $k$ random starting states. Each iteration generates successors of all $k$ states and choose new $k$ ones to explore. Stochastic elements can also be incorporated into this algorithm.
-\\
-Note: It is not equivalent to $k$-parallel Hill Climbing.
-\\
-Note: Local Beam requires problems with different possible starting states, otherwise it cannot be run.
+\deff{Local Beam Search} - Similar to Hill Climbing but start with $k$ random starting states. Each iteration generates successors of all $k$ states and choose new $k$ ones to explore. Stochastic elements can also be incorporated into this algorithm. \underline{Note}: {[1]} It is not equivalent to $k$-parallel Hill Climbing. {[2]} Local Beam requires problems with different possible starting states, otherwise it cannot be run.
 
 
 
@@ -268,15 +256,15 @@ Depending on the \deff{Scope}, number of variables involved, of constraints, the
 A \deff{Constraint Graph} is a representation for constraints where each variable is a vertex, each binary constraint is an edge between two variables, and each global constraint is expressed as multiple binary constraints using linking a vertex.
 
 \subsection{CSP Heuristics}
-\subsubsection{Variable Order Heuristics}
 \deff{Minimum-Remaining-Values Heuristic} (MRV) - Choose the variable with fewest legal values to be assigned. \underline{Intuitively}, it means to consider nodes with fewer branches first, so that it tends to prone larger invalid sub-trees.
+\\
+\deff{Degree Heuristic} - Choose the variable with fewest number of constraints with other non-determined variables (smallest \deff{degree}) to be assigned. Typically used as a tie-breaker after MRV Heuristic.
+\\
+\deff{Least-Constraining-Value Heuristic} (LCV) - Choose value that rules out fewest choices (in terms of domain sizes of "neighbour variables") to be assigned. \underline{Intuitively}, it avoids failure.
 
 \smallskip
 
-\deff{Degree Heuristic} - Choose the variable with fewest number of constraints with other non-determined variables (smallest \deff{degree}) to be assigned. Typically used as a tie-breaker after MRV Heuristic.
-
-\subsubsection{Value Order Heuristic}
-\deff{Least-Constraining-Value Heuristic} (LCV) - Choose value that rules out fewest choices (in terms of domain sizes of "neighbour variables") to be assigned. \underline{Intuitively}, it avoids failure.
+\deff{Variable Order Heuristics}: MRV \& Degree. \deff{Value Order Heuristics}: LCV
 
 \subsection{CSP Algorithms}
 \deff{Backtracing Algorithm} uses DFS to examine value assignments of one variable at a time, and backtrack when no possible legal assignments with current assignment of the variable.
@@ -297,12 +285,12 @@ Heuristics can be used for \codein{SELECT-UNASSIGNED-VARIABLE()} and \codein{ORD
 
 \section{Adversarial Search}
 \subsection{Game Model}
-A game model consists of 1) \deff{State representation}, 2) \codein{TO-MOVE(s)}, a function that returns the player to move for state $s$, 3) \codein{RESULT(s, a)}, the transition model that returns resultant state after taking action $a$ at state $s$, 3) \codein{IS-TERMINAL(s)}, whether the game has ended at state $s$, and 4）\codein{UTILITY(s, p)} that defines the final numeric value to $p$ when the game ends in terminal state $s$.
+A game model consists of 1) \deff{State representation}, 2) \codein{TO-MOVE(s)}, a function that returns the player to move for state $s$, 3) \codein{ACTIONS}, legal moves in state $s$, 4) \codein{RESULT(s, a)}, the transition model that returns resultant state after taking action $a$ at state $s$, 5) \codein{IS-TERMINAL(s)}, whether the game has ended at state $s$, and 6) \codein{UTILITY(s, p } that defines the final numeric value to $p$ when the game ends in terminal state $s$.
 \\
 Also, we define two players: 1) \deff{MAX}, the agent with goal to maximise value, and 2) \deff{MIN}, the opponent with goal to minimise (agent's) value.
 
 \subsection{Search Strategies}
-\deff{MiniMax Optimal Strategy} - MAC chooses the move that maximise the minimum payoff while MIN chooses to minimise the maximum payoff.
+\deff{MiniMax Optimal Strategy} - MAX chooses the move that maximise the minimum payoff while MIN chooses to minimise the maximum payoff.
 \\
 Implementation wise, it checks from leaves to root - for every node of MAX / MIN, takes the maximum / minimum utility value of its children nodes. DFS in nature.
 \\
@@ -319,7 +307,7 @@ Implementation wise, it checks from leaves to root - for every node of MAX / MIN
     \item Given a MIN node $n$, stop searching below $n$ if for some ancestor $i$ of $n$, $\alpha(i) \ge \beta(n)$
     \item Given a MAX node $n$, stop searching below $n$ if for some ancestor $i$ of $n$, $\beta(i) \le \alpha(n)$
 \end{itemize}
-\underline{Analysis}: Pruning might not improve efficiency but it does not affect correctness. Limitaions: 1) Effectiveness depends on move ordering and 2) Does not reduce maximum depth of tree.
+\underline{Analysis}: Pruning might not improve efficiency but it does not affect correctness. \underline{Limitations}: 1) Effectiveness depends on move ordering and 2) Does not reduce maximum depth of tree. \underline{Note}: Also pruned when taking '$=$'!
 
 \smallskip
 
@@ -347,6 +335,8 @@ For two sentences $\alpha$ and $\beta$, $\alpha$ \deff{Entails} $\beta$ iff.
 \underline{Intuitively}, entailment is a more abstract form of "implication".
 
 \subsection{Inference Algorithm}
+Inference algorithms assume a query $\alpha$ is given and check if KB entails it. $\alpha$ usually comes from \codein{action = AS(...)}.
+
 \subsubsection{Properties}
 Let $KB \vdash_{\mathcal{A}} \alpha$ means "Sentence $\alpha$ is derived from Knowledge Base, $KB$, using inference algorithm $\mathcal{A}$".
 \\
@@ -373,9 +363,7 @@ A sentence $\alpha$ is \deff{Satisfiable} if it is true for \textbf{some} truth 
 \big( KB \models \alpha \big) \equiv \big( (KB \land \neg \alpha) \text{ is unsatisfiable } \big)
 \]
 
-A valid sentence is a tautology. Proof by contradiction uses the idea that something is true == its negation is unsatisfiable.
-
-% TODO: if need inference algo.
+A valid sentence is a tautology. Proof by contradiction uses the idea that something is true $\equiv$ its negation is unsatisfiable.
 
 \subsection{Resolution}
 \deff{Conjunctive Normal Form} - Conjunctions of Disjunctive. i.e. clauses joined by AND, where each clause uses only OR to join literals. KB is a CNF where each clause is a sentence in KB.
@@ -386,7 +374,9 @@ A valid sentence is a tautology. Proof by contradiction uses the idea that somet
 
 
 \subsubsection{Resolution Algorithm}
-\underline{Procedure}: 1) Make a clause list (KB in CNF, with \textbf{Negation of Query $\alpha$}). 2) Repeatedly resolve two clauses and add resolvent to list. 3) Stop when empty clause $\emptyset$ found, which implies $\alpha$ CAN be inferred, or when no more resolutions possible, which implies $\alpha$ CANNOT be inferred. \textbf{Note}: Cannot be inferred $\neq$ Is incorrect / negation can be inferred.
+\underline{Procedure}: 1) Make a clause list (KB in CNF, with \textbf{Negation of Query $\alpha$}). 2) Repeatedly resolve two clauses and add resolvent to list. 3) Stop when empty clause $\emptyset$ found, which implies $\alpha$ CAN be inferred, or when no more resolutions possible, which implies $\alpha$ CANNOT be inferred. 
+\\
+\textbf{Note}: {[1]} Cannot be inferred $\neq$ Is incorrect / negation can be inferred. {[2]} The negation of query may be a conjunction of 2 clauses (, e.g. if query has $\implies$). {[3]} When clauses have universe qualifier $\forall$, can still resolve by setting variable to certain value.
 \\
 \underline{Analysis}: \textbf{Sound} and \textbf{Complete}.
 
@@ -394,14 +384,6 @@ A valid sentence is a tautology. Proof by contradiction uses the idea that somet
 
 
 \section{Bayesian Inference}
-% TODO: remove?
-\subsection{Handling Uncertainty}
-Sources of Uncertainty include: 1) Partial observability, 2) Noisy Sensors, 3) Uncertainty in action outcomes, or 4) Complexity in modelling and predicting the problem.
-
-\smallskip
-
-In handling uncertainty, a general logical agent will 1) Risk Falsehood, and/or 2) Reach weaker conclusions.
-
 \subsection{Probability Basics}
 \deff{Independent Events} - $P(ABC) = P(A)P(B)P(C)$.
 \\
@@ -439,7 +421,6 @@ return failure
 \begin{lstlisting}
 def BT-SEARCH(csp) -> solution
     return BT(csp, {})
-
 def BT(csp, assign) -> solution
     if assign complete:
         return assign
@@ -481,6 +462,28 @@ def REVISE(csp, i, j):
     return revised
 \end{lstlisting}
 
+\subsection{Alpha-Beta Pruning}
+\begin{lstlisting}
+def AB-SEARCH(game,state) -> action:
+    player = game.TO-MOVE(state)
+    value,move = 
+        MAX-VALUE(game,state,MIN_INT,MAX_INT)
+    return move
+// MAX-VALUE, MIN-VALUE symmetric
+def MAX-VALUE(game,state,a,b) -> (util,move):
+    if game.IS-TERM(state): 
+        return game.UTIL(state,player),NULL
+    v = MIN_INT
+    for ac in game.ACTIONS(state):
+        v2,act2 = 
+            MIN-VALUE(game,game.RES(state,ac),a,b)
+        if v2 > v:
+            v, move = v2, ac
+            a = MAX(a, v)
+        if v >= b: return v, move
+    return v, move
+\end{lstlisting}
+
 \subsection{KB Agent Function}
 \begin{lstlisting}
 global: KB, t = 0 // t for time
@@ -497,7 +500,6 @@ def KB-Agent(percept) -> action:
 def TT-ENTAILS(KB, a):
     symbol = list of prop. symbols in KB & a
     return TT-CHECK-ALL(KB, a, symbols, {})
-
 def TT-CHECK-ALL(KB, a, symbols, model):
     if symbol is empty:
         if PL-TRUE?(KB, model):
@@ -542,6 +544,8 @@ def PL-RESOLUTION(KB, a) -> bool:
 \citeqn{(Quiz2 Qn13)} For Uninformed Search problems with all nodes at a certain depth being goal nodes and all action costs equal, \textbf{DFS} is preferred. \underline{Note}: Distinguish between pushing order and popping order in DFS.
 \\
 \citeqn{(Quiz6 Qn8)} In AC3, each arc is inserted at most $d$ times for domain size $d$.
+\\
+\citeqn{(Tut10 Qn2)} If $T$ affects on $D$ then it is true that $D$ also depends on $T$ as our knowledge of $T$ affects info. about $D$.
 
 
 \subsection{From Past Questions}
