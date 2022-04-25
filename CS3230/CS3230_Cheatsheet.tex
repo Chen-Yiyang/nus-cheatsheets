@@ -198,14 +198,15 @@ There are 3 methods in Amortised Analysis.
 \deff{Potential Method} - Define potential function $\phi(i)$ potential after $i$-th operation. Then it follows:
 \begin{itemize}
     \item $\phi(0) = 0$ and $\phi(i) \ge 0$ for all $i$
-    \item $\triangle \phi(i)$ amortised cost of $i$-th operation
+    \item $c(i) = t(i) + \triangle \phi(i)$ relation between amortised cost, $c(i)$, and actual cost $t(i)$, of $i$-th operation
 \end{itemize}
 
 
 
 
 \section{Reduction \& Intractability}
-
+\subsection{Cook-Levin Theorem}
+Any problem in NP poly-time reduces to 3-SAT. Hence 3-SAT is NP-Hard and NP-Complete.
 
 
 
