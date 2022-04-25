@@ -247,7 +247,7 @@ To show a problem $X$ is \textbf{NP-Complete}, show 1) $X$ is \textbf{NP}, i.e. 
 Given a graph $G = (V, E)$ and an integer $k$, is there a subset of $k$ or more \textbf{vertices} such that no two are adjacent?
 
 \subsubsection{VERTEX-COVER}
-Given a graph $G = (V, E)$ and an integer $k$, is there a subset, $S$, of $k$ or more \textbf{vertices} such that each edge is incident to at least one vertex in $S$?
+Given a graph $G = (V, E)$ and an integer $k$, is there a subset, $S$, of $k$ or less \textbf{vertices} such that each edge is incident to at least one vertex in $S$?
 
 \subsubsection{SET-COVER}
 Given integers $k$ and $n$, and a collection $\mathcal{S}$ of subsets of $\{1, 2, ..., n \}$, are there $k$ or less of these subsets whose union equals $\{1, 2, ..., n \}$?
@@ -259,13 +259,19 @@ Given a CNF (Conjunctive Normal Form) formula $\Phi$ where each clause contains 
 Given a collection $\mathcal{S}$ of non-negative integers $x_1, ..., x_n$, is it possible to partition $\mathcal{S}$ into 2 parts with equal sum?
 
 \subsubsection{KNAPSACK}
-Given $n$ items described by non-negative integer pairs $(w_1, v_1), ..., (w_n, v_n)$, capacity $W$ and value threshold $V$, is there a subset of items with total weight at most $W$ and total value at least $V$?
+Given non-negative integer pairs $(w_1, v_1), ..., (w_n, v_n)$ describing $n$ items, capacity $W$ and value threshold $V$, is there a subset of items with total weight at most $W$ and total value at least $V$?
 
 \subsubsection{LONG-SIMPLE-PATH}
 Given an unweighted directed graph $G = (V, E)$, a positive integer $l$ and two vertices $v, u \in V$, is there a simple path (a path with no repeated vertices) in $G$ from $u$ to $v$ of length at least $l$?
 
 \subsubsection{LONG-SIMPLE-CYCLE}
 Given an unweighted directed graph $G = (V, E)$ and a positive integer $l$, is there a simple cycle (a cycle with no repeated vertices) in $G$ on at least $l$ vertices?
+
+\subsubsection{CLIQUE}
+Given a graph $G = (V, E)$ and a positive integer $k$, is there a clique ($U \subseteq V$ s.t. $forall u \neq v \in U, (u,v) \in E$) of size at least $k$?
+
+\subsubsection{HAMILTONIAN CYCLE}
+Given a graph $G = (V, E)$, is there a path that visits each vertex in the graph exactly once?
 
 \end{multicols}
 \end{document}
