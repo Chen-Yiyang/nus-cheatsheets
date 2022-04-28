@@ -90,7 +90,7 @@
 \graphicspath{ {./img/} }
 
 \begin{center}
-  {\huge\sffamily\bfseries CS2106 Cheatsheet (Midterm)} \huge\bfseries\\
+  {\huge\sffamily\bfseries CS2106 Cheatsheet} \huge\bfseries\\
   by Yiyang, AY21/22
 \end{center}
 \setlength{\premulticols}{0pt}
@@ -421,7 +421,7 @@ High-level Language (HLL) Implementations for Synchronisation are those using on
 
 
 \subsection{Assembly Level Implementation}
-\deff{Test-Set-Lock} (TSL) \textasciitilde \ Similar to HLL Attempt 1 Using Lock Variable, but TSL does not have race condition because it is an \deff{Atomic}, i.e. reading and writiing of the variable can only be done by one process at any time, operation ensured by the hardware.
+\deff{Test-Set-Lock} (TSL) \textasciitilde \ Similar to HLL Attempt 1 Using Lock Variable, but TSL does not have race condition because it is an \deff{Atomic}, i.e. reading and writing of the variable can only be done by one process at any time, operation ensured by the hardware.
 \\
 \underline{Cons:} Busy waiting.
 
@@ -439,7 +439,7 @@ High-level Language (HLL) Implementations for Synchronisation are those using on
 \underline{Note:} Assume no negative value for semaphore in this module.
 
 \subsubsection{Functionality}
-A \deff{Binary Semaphore} that \textbf{initialises to 0} and \textbf{ensures only value 0 or 1} is a \deff{Mutex}, i.e. Mutual Exclusion, for preventing race conditions.
+A \deff{Binary Semaphore} that \textbf{initialises to 1} and \textbf{ensures only value 0 or 1} is a \deff{Mutex}, i.e. Mutual Exclusion, for preventing race conditions.
 \\
 \underline{Note:} Deadlock can be avoided but is possible with improper implementation of two or more mutexes.
 
@@ -448,9 +448,415 @@ A \deff{Binary Semaphore} that \textbf{initialises to 0} and \textbf{ensures onl
 A \deff{General Semaphore} serves as a General Synchronisation Tool (not CS in this case) for multiple processes (e.g. ensuring Processes $P_1, P_2, P_3$ operate in a fixed order.
 \underline{Note:} Semaphore do not use busy waiting.
 
-
 \subsection{Others}
 \deff{Conditional Variable} - An implementation that allows a task to wait for certain event to happen. It can \deff{broadcast}, which wakes up all waiting tasks.
+
+
+
+
+
+
+
+\section{Classical Synchronisation Problems}
+\subsection{Producer-Consumer Problem}
+\underline{Specification:} Processes share a bounded buffer of size $K$. Producers produce items to insert in buffer when buffer not full. Consumers remove items from buffer when buffer is not empty.
+
+\medskip
+
+\textbf{Solution 1 - Busy Waiting}: Use two shared booleans \codein{canProduce} and \codein{canConsume} for indication. Busy wait on the two booleans. Use another semaphore mutex to ensure no race condition where one of production / consumption can take place at a single time (as both will affect count). \underline{Analysis:} Solve the problem but uses Busy Waiting, which is not desired.
+
+\medskip
+
+\textbf{Solution 2 - Blocking}: Use semaphores \codein{notFull} and \codein{notEmpty} to force producers and consumers that are “inappropriate” at the current time to go to sleep, and to wake them up when “appropriate”. \underline{Analysis:} Solve the problem efficiently.
+
+\medskip
+
+\textbf{Solution 3 - Message passing}: Use built-in message passing with desired mechanisms - block on read when empty, block on write when full.
+
+
+\subsection{Reader-Writer Problem}
+\underline{Specification:} Processes share a data structure $D$ where Readers can retrieve information from $D$ and Writers can modify information in $D$. Write must have exclusive access to $D$, while Reader can access with other Readers. i.e. Must write along but can read together.
+
+\medskip
+
+\underline{Solution:} Refer to the diagram for solution. Intuitively, it means when there is an existing writer, the first reader waits at the semaphore while subsequent ones wait at the mutex. \underline{Analysis:} Works, but starvation may arise (e.g. when one write / many readers “hogging” the room).
+
+
+\subsection{Dining Philosopher Problem}
+\underline{Specification:} (This is a toy problem.) 5 Philosophers seat around a table with 5 single chopstick placed between every pair of philosophers. When any philosopher wants to eat, he/she will take both chopsticks from left and right. Devise a deadlock-free and starve-free algorithm for philosophers to dine.
+
+\medskip
+
+\underline{Solution 1 - Limited Eater} \textasciitilde "Social Distancing", allow at most 4 to try to eat.
+
+\medskip
+
+\underline{Solution 2 - Tanenbaum Solution} \textasciitilde “Turn \& Want” for Mutex Implementation.
+
+\section{Memory Abstraction}
+% very brief
+
+
+
+\section{Contiguous Memory Allocation}
+\deff{Contiguous Memory Management} \textasciitilde Process must be in memory, as one piece, during whole execution. So each process owns one contiguous memory region.
+
+\subsection{Memory Partition}
+\deff{Fixed-Size Partition} - Physical memory is split into fixed number of partitions of equal size. A process will occupy one. This partition scheme has \deff{Internal Fragmentation} - If a process does not occupy the whole partition, the leftover space is wasted.
+\\
+\underline{Pros:} 1) Easy to manage, 2) Fast to allocate (identical free partitions, no need choosing).
+\\
+\underline{Cons:} Partition size need to be large enough to contain largest possible process but larger partition size worse internal fragmentation.
+
+\medskip
+
+\deff{Variable-Size Partition} - Partition is created based on the actual size of process. OS keep track of the occupied and free memory regions. This partition scheme has \deff{External Fragmentation} \textasciitilde free memory space ("holes") created with process operations.
+\\
+\underline{Pros:} Flexible and ensure no internal fragmentation.
+\\
+\underline{Cons:} 1) Need to maintain information about each partition,  2) Extra time to locate appropriate free region for allocation.
+\\
+\underline{Note:} External fragmentation can be handled via \deff{Merging}, merging adjacent free holes, and \deff{Compaction}, moving occupied partitions around to create bigger consolidated holes, but they should not be done frequently.
+
+\subsection{Dynamic Partitioning Algorithms}
+\subsubsection{Allocation Methods}
+There are 3 allocations methods: 1) \deff{First-Fit} finding first large-enough hole, 2) \deff{Best-Fit} finding smallest large-enough hole, and 3) \deff{Worst-Fit} finding largest hole.
+
+\subsubsection{Allocation Implementation}
+\textbf{Linked-List Method} - OS maintains a linked list for partition information, where each nodes represents one partition, storing info. about free/occupied, starting address and length, and pointer to next element.
+
+\medskip
+
+\textbf{Multiple-Free-List Method} - OS keeps separate sets of lists, one set of lists for free holes and the other for occupied partitions. In a set, there are multiple lists of different hole sizes (powers of two).
+\\
+\underline{Analysis:} Fast allocation (by getting holes of desired size)
+
+\medskip
+
+\textbf{Buddy System} - (A more efficient version of Multiple-Free-List) Free block is split into half repeatedly to meet request size. The two halves form a pair of sibling blocks ("buddies"). When both buddy blocks are free, they are merged to former a larger block and checked with its own buddy. 
+\\
+\underline{Note:} {[1]}Two adjacent free blocks of same size cannot be merged if they are not buddy. {[2]} When there is no occupied partition, the physical memory is one single free block.
+
+
+
+
+\section{Disjoint Memory Allocation}
+\deff{Disjoint Memory Allocation} \textasciitilde Processes can have disjoint chunks of memory space allocated.
+
+\subsection{Paging}
+\deff{Paging} \textasciitilde The physical memory is split into regions of fixed size, known as \deff{Physical Frames} (with size determined by hardware). Logical memory \textbf{of a process} is also split into regions of the same size, known as \deff{Logical Pages}. \underline{Note:} Logical pages are continuous while physical frames are disjoint.
+\\
+\deff{Page Table}, a lookup take for translation between pages and frames \textbf{per process}, is used for bookkeeping. The physical address can be calculated:
+\[
+\text{Physical Addr } = \text{ Frame ID } \times \text{ size$($Frame$)$ } + \text{ Offset } 
+\]
+, where $\text{ Frame ID }$ is obtained from Page Table for each page and $\text{ Offset }$ is displacement from beginning of page.
+\\
+\underline{Analysis:} 1) Paging has no external fragmentation. 2) Paging has internal fragmentation but always less than 1 page per process.
+
+\subsubsection{Implementation}
+Paging scheme needs to keep track of page tables of processes efficiently. Below are two implementations.
+
+\medskip
+
+\textbf{Software Solution} - OS stores Page Table in PCB, and considers it part of memory context of a process.
+\\
+\underline{Analysis:} Slow, as each memory ref now requires 2 memory accesses (1 to read page table entry for Frame ID, 1 to access actual memory)
+
+\medskip
+
+\textbf{Hardware Solution} - OS has a special component, \deff{Translation Look-Aside Buffer} (TLB), to support paging. It is a cache for page table entries, one TLB per core. \codein{TLB-Hit} and \codein{TLB-Miss} refer to entry found / not found in TLB. Only when not found in TLB, retrieve from Page Table in memory and update TLB.
+
+\subsubsection{Application}
+\textbf{Protection} - Paging can be easily extended to provide memory protection for each entry in a Page Table, using \deff{Access-Right Bits} (\codein{wrx} in Linux) and \deff{Valid Bits}.
+
+\medskip
+
+\textbf{Sharing} - Page table can allow several processes to share the same physical memory frame by using same frame number. Example: share code (text) pages; implement Copy-On-Write between parent \& child.
+
+\subsection{Segmentation}
+\deff{Segmentation} \textasciitilde Memory is managed at the level of memory segments (Text, Data, Heap, Stack), each of which is mapped (disjointly) to a contiguous physical partition. 
+\\
+Each memory segment has 1) a name ( or a \codein{SegID}) and 2) a \codein{Limit}, indicating the exact range of the segment. A segment table stores segment entries for each process. Each logical address is represented \codein{<SegID, Offset>} and need to make sure $\text{Offset $<$ Limit}$ all the time.
+\\
+\underline{Pros:} Each segment is an independent contiguous memory space, so 1) Follow programmer's view of memory, easy to understand, 2) More Efficient bookkeeping, and 3) Segments can grow / shrink and be protected / shared independently.
+\\
+\underline{Cons:} Segmentation uses variable-size contiguous memory regions, so prone to external fragmentation.
+
+\subsection{Segmentation with Paging}
+\deff{Segmentation with Paging} \textasciitilde Each segment is now composed of several pages instead of a contiguous memory region. Each segment has a page table.
+\\
+\underline{Analysis:} 1) Perform no worse than Segmentation or Paging separately. 2) Able to handle different functionalities, as some metadata better managed at segment level and some page level.
+
+
+
+
+\section{Virtual Memory Allocation}
+\deff{Virtual Memory} \textasciitilde A continuation of the idea of Paging Scheme, while some pages are in physical memory, and more “pages” in secondary storage. A \codein{resident bit} in page table entry indicates whether a page is in physical memory.
+\\
+CPU can only access memory resident pages. A \deff{Page Fault} occurs when CPU tries to access a non-memory resident page. \deff{Thrashing} is when memory access results in page fault most of the time.
+
+\medskip
+
+Remedies / Attempted Solution for Thrashing:
+\begin{itemize}
+    \item \deff{Locality Principle}, both Temporal and Spatial
+    \item Skewed Distribution of Object / Access Popularity
+    \item \deff{Demand Paging}, where process starts with no memory-resident pages, and only allocate a page when there is a page fault.
+\end{itemize}
+Analysis of Demand Paging: \underline{Pros:} 1) Fast startup time for new process, and 2) Small "memory footprint". \underline{Cons:} 1) Process appears slow at the start due to multiple page faults, and 2) Page faults may have cascading effects on other processes.
+
+
+\subsection{Page Table Structures}
+\deff{Direct Paging} - Keep all entries in a single (page) table. The implementation used above. Requires the entire structure to be contiguous and fits in one page.
+\\
+\underline{Analysis:} It requires huge page table size for large (secondary) memory. Unrealistic.
+
+\medskip
+
+\deff{2-Level Paging} \textasciitilde Page the page table into smaller page tables, each with a "page table number". The first level "page table" is known as the \deff{Page Directory}, and it is stored in the Memory Context of each process in PCB.
+\\
+\underline{Pros:} 1) Bypass the requirement for entire structure to be contiguous in memory. 2) No need to allocate memory for empty blocks.
+\\
+\underline{Cons:} 1) Require 2 memory access to get the frame number. (Solution: Use \deff{MMU Caches}, "TLB for directory entries" to speed up page-table walk)
+
+\medskip
+
+\deff{Hierarchical Page Table} \textasciitilde Radix-tree structure that extends the idea of 2-Level Page Table to $n$-level. All tables are setup and wired by the OS in software, but traversed by hardware. Used in most modern computers.
+
+\medskip
+
+\deff{Inverted Page Table} - Keep a single mapping of physical frame to \codein{<pid, page\#>} that uniquely identifies a memory page. \underline{Note:} It stores pages belonging to all processes.
+\\
+\underline{Pros:} 1) Huge saving, one table for all processes. 2) Fast translation for answering "which process and page does this frame belong to?", an auxiliary structure.
+\underline{Cons:} Slow translation from a process' page to physical frame.
+
+\subsection{Page Replacement Algorithms}
+\subsubsection{Page Replacement}
+\deff{Eviction} is the freeing of a memory page to store information for a new memory page (e.g. bring in a non-memory resident page). When a \deff{Clean Page}, page not modified, is evicted, no need to write back. When a \deff{Dirty Page}, page modified, is evicted, need to write back.
+\\
+We want to find optimal page replacement algorithms so as to minimise page faults and access / updating of secondary memory.
+
+\subsubsection{Algorithms}
+\deff{Optimal Page Replacement} (OPT) - The theoretical optimal algorithm, not achievable but serves as a benchmark for comparison: If we have future knowledge of memory reference, replace the page that will not be needed again for the longest upcoming period, and this guarantees minimised page faults.
+
+\medskip
+
+\deff{FIFO Page Replacement} - Evict memory pages based on their loading time, i.e. evict the oldest memory page.
+\\
+\underline{Implementation:} OS maintains a queue for resident page numbers. Remove 1st in queue if replacement needed. Update queue during page fault trap.
+\\
+\underline{Pros:} Simple to implement, no need hardware.
+\\
+\underline{Cons:} 1) FIFO does not exploit temporal locality (, oldest memory $\neq$ not used recently). 2) Suffer from \deff{Belady's Anomaly}, where the number of physical frames increases, number of page faults should decrease intuitively, but in reality, more page faults occur for FIFO.
+
+\medskip
+
+\deff{Least Recently Used} (LRU) - Use the notion of temporal locality, and replace page not used in longest time. Aim to approximate OPT (predict future by mirroring the past).
+\\
+\underline{Pros:} Does not suffer from Belady's Anomaly.
+\\
+\underline{Cons:} Hard to implement and require additional hardware support.
+
+\medskip
+
+\deff{Second-Chance Page Replacement} (CLOCK) - Modified FIFO to give a second chance to pages that are accessed. 
+\\
+\underline{Implementation:} Use a \codein{Reference Bit} for each entry where \codein{1} for accessed since last reset and \codein{0} otherwise. For replacement, pop if ref bit \codein{0}, or reset the bit if \codein{1}. When access / bring in a page, update ref bit to \codein{1}. Use a Circular List.
+
+
+\subsection{Frame Allocation}
+\deff{Local Replacement} - Victim pages are selected among pages of the process with page fault. \underline{Pros:} Number of frames allocated to a process unchanged, so performance stable between multiple runs. \underline{Cons:} If frames allocated not enough, the process' performance affected.
+
+\medskip
+
+\deff{Global Replacement} - Victim pages can be chosen among all physical frames during a page fault. \underline{Pros:} Allow self-adjustment between processes. \underline{Cons:} 1) Badly behaved processes can affect others. 2) Number of frames allocated to a process different, so performance vary between runs.
+
+\medskip
+
+\deff{Working Set Model} helps determine number of frames allocated to each process. \deff{Working Set}, $W(t, \Delta)$ is the set of active pages in the time interval $(t - \Delta, t)$. It gives info. about frames needed.
+\\
+\underline{Analysis:} Accuracy of the model is affected by choice of $\Delta$: If too small, then may miss pages in current working set; If too big: then may contain pages in other working set.
+
+
+
+
+\section{File System Abstraction}
+\subsection{File System Introduction}
+Criteria for a File System: 1) \textbf{Self-Contained}, able to "plug-and-play" on another system, 2) \textbf{Persistent}, beyond the lifetime of OS and processes, and 3) \textbf{Efficient}, which provides good management of free and used space, with minimal overhead.
+
+\subsection{File}
+A \deff{File} is a logic unit of info created by process. It contains \deff{Data} and \deff{Metadata}.
+\\
+Different FS have different naming rules, but they usually follow \codein{Name.Extension} format.
+
+\subsubsection{File Type}
+An OS commonly supports a number of file types, each with an associated set of operations and/or a specific program for processing it. Common file types:
+\begin{itemize}
+    \item \deff{Regular Files} - Files containing user info, and can be further categorised as \deff{ASCII Files}, can be displayed as it is, and \deff{Binary Files}, with a predefined internal structure to be processed by specific program.
+    \item \deff{Directories} - System files for FS structure.
+    \item \deff{Special Files} \textasciitilde character / block oriented.
+\end{itemize}
+To distinguish file types: 1) Use file extension as indication, or 2) Use embedded information in the file (e.g. \codein{Magic Number} at the beginning of a file in Unix)
+
+\subsubsection{File Protection}
+To control access to info stored in a file, restrict access based on user identity.
+\begin{itemize}
+    \item \deff{Access Control List} - Store a list of user identities and allowed access type. \underline{Pros:} Very customisable. \underline{Cons:} Additional info associated with file needed.
+    \item \deff{Permission Bits} - Classify user into 3 classes (Owner, Group, Universe) and give \codein{wrx} bit for each class.
+\end{itemize}
+
+\subsubsection{File Data Structure \& Access Methods}
+Structures how a file stores data
+\begin{itemize}
+    \item Array of Bytes: Each byte has a unique offset from file start. Hard to jump to any specific "entries".
+    \item Fixed-Length Records: Can jump to any records.
+    \item Variable-Length Records: Flexible but harder to locate a record.
+\end{itemize}
+Access Methods:
+\begin{itemize}
+    \item Sequential Access: Read data in order from file start. Cannot skip but can rewound.
+    \item Ranom Access: Read data in any order. \codein{Read(Offset)} states the position to start access explicitly, or \codein{Seek()} to move to a new location in file. Both Unix and Windows FS use latter.
+    \item Direct Access: i.e. random access to any records directly, used in files of fixed-length records.
+\end{itemize}
+
+\subsection{Directories}
+\deff{Directories} provide a logical grouping of files (User view) and keep tracks of files (system usage).
+
+\subsubsection{Links in Linux}
+\deff{Hard Link} - Both files have separate pointers to the actual file in disk. Limited to only files.
+\\
+\underline{Pros:} Low overhead (only pointers added).
+\\
+\underline{Cons:} Deletion problem.
+
+\medskip
+
+\deff{Symbolic Link} - For $B$ being a symbol link of $A$ pointing to the actual file $F$, $B$ is a file $G$ with path name of $F$, so accessing $G$ means to find where $F$ is and access it. It acts as an "intermediate jump". Applicable to both files and directories.
+\\
+\underline{Pros:} Simple deletion: If $B$ deletes, $G$ gets deleted but $F$ unaffected. If $A$ deletes, $F$ is gone and $G$ remains but not working.
+\\
+\underline{Cons:} Large overhead, with special link file taking up actual disk space.
+
+
+\subsubsection{Directory Structures}
+\deff{Tree Structure} \textasciitilde Recursively embed directories in other directories, which forms a tree. To refer a file, use either absolute path-name from root directory, or relative path-name followed from current working directory.
+
+\medskip
+
+\deff{DAG Structure} \textasciitilde Based on the Tree structure, but a file can be shared in different directories. Only one copy of actual content exists but it appears in multiple directories of different path-names.
+\\
+In Linux, created with Hard Links.
+
+\medskip
+
+\deff{General Graph Structure} \textasciitilde Hard to traverse and maintain (determine when to remove a file / directory, prevention of infinite loops). Not desirable.
+\\
+In Linux, created with Symbolic Links.
+
+\subsection{OS and File System}
+OS provides syscalls for all file operations, and it also maintains information about FS.
+
+\subsubsection{Runtime Information for Files}
+
+Information kept for an opened file: 1) \deff{File pointer}, current location in file, 2) \deff{Disk Location}, actual file location on disk, and 3) \deff{Open Count}, number of processes that have this file opened.
+\\
+The OS also maintains a \deff{System-wide Open-File Table}, with one entry for each unique file opened, and \deff{Per-Process Open-File Table}, which has an entry for each file opened by the process, and the entry points to the one in the system-wide table. There is also \deff{Buffer} for information read from / written to disk.
+\\
+\underline{Implications:} Two processes can open the same file using same (e.g. parent \& child) or different file descriptors. Same process can also open one file twice simultaneously.
+
+\subsubsection{File Operations}
+To \codein{Create} a file: 1) Use full pathname to locate the parent directory. 2) Use free space list to find free disk blocks. 3) Add an entry to parent directory, with relevant file info \& metadata.
+
+\medskip
+
+To \codein{Open} a file $F$ in process $P$: 1) Search system-wide table for existing entry $E$: If found, create an entry in $P$’s table pointing to $E$; Otherwise, continue. 2) Use full pathname to locate file $F$: When $F$ is located, load its information into a new entry $E$ in system-wide table, and create an entry in $P$’s table pointing to $E$. 3) Return pointer to entry.
+
+
+
+
+\section{File System Implementation}
+\subsection{Hardware}
+A \deff{Storage} is an 1D array of \deff{Logical Blocks}, smallest accessible units. Logical Blocks are mapped into disk sectors.
+\\
+Within one disk, there is a \deff{Master Boot Record} at Sector 0, which contains boot code and partition table. It is followed by several \deff{Partitions}, each containing an independent file system.
+\\
+Within one partition, there are 1) OS Boot-Up Information Block, 2) Block for Partition details (e.g. total number of blocks, number and location of free disk blocks), 3) Directory Structure, 4) Files' info., and 5) Actual File Data.
+
+
+\subsection{File Implementations}
+A file is implemented as a collection of logical blocks. There are different implementations, with different ways of 1) keeping track of the blocks, 2) allowing efficient access, and 3) utilising disk space effectively.
+
+\medskip
+
+\deff{Contiguous Allocation} - Allocate consecutive disk blocks to a file.
+\\
+\underline{Pros:} 1) Simple to keep track - Each file only needs starting block number \& length, 2) Fast access - only need to seek to first block.
+\\
+\underline{Cons:} 1) External fragmentation, 2) File size need to be specified in advance.
+
+\medskip
+
+\deff{Linked List Allocation} - Keep a linked list of disk blocks for each file. Each block stores 1) actual file data and 2) next disk block's number. File info stores first and last disk block number. 
+\\
+\underline{Pros:} No external fragmentation.
+\\
+\underline{Cons:} 1) Random access in a file is very slow. 2) Overhead for "pointers". 3) Less reliable (e.g. a pointer incorrect or a block corrupted.
+\\
+\underline{Variant:} Move all block pointers (of all files in the disk) into a single table, known as \deff{File Allocation Table} (FAT) and store FAT in memory during runtime. \underline{Pros:} Faster random access (memory traversal now). \underline{Cons:} FAT can be huge and consume valuable memory space.
+
+\medskip
+
+\deff{Indexed Allocation} -  Each file has an index block, an array that keeps track of (its) disk block addresses.
+\\
+\underline{Pros:} 1) Lesser memory overhead (than Linked List). 2) Fast direct access to certain location/offset of a file.
+\\
+\underline{Cons:} 1) Max file size limited by number of block entries in the index block. 2) Index block incurs overhead.
+\\
+\underline{Variant:} 1) \deff{Linked Scheme} - keeps a linked list of index blocks, can grow on demand. 2) \deff{Multi-Level Index Scheme} - Each first level index block points to several second level index blocks, with the last level being blocks for file data, example: Unix I-Node.
+
+
+\subsection{Free Space Management}
+\textbf{Bitmap Implementation} - Each disk block is represented by 1 bit (\codein{1} for free, \codein{0} for occupied). \underline{Pros:} Provide a good set of manipulations. \underline{Cons:} Need to keep the bitmap in memory for efficiency reason.
+
+\medskip
+
+\textbf{Linked List Implementation} - Use a linked list of disk blocks, where each disk block contains a number of free disk block numbers, and a pointer to next free space disk block. \underline{Pros:} 1) Easy to locate free blocks. 2) Only first pointer is needed in memory (though others can be cached). \underline{Cons:} High overhead.
+
+
+\subsection{Directory Implementation}
+A \deff{Directory Structure} keeps track of files in the directory and map file names to file information. Sub-directories are usually stored as file entries of special type. Several implementations for a Directory exists.
+\begin{itemize}
+    \item Linear List Implementation - A directory is a list, where each entry represents a file. Each entry stores 1) filename and metadata, and 2) file info / pointer to file info. Use linear search to locate a file. \underline{Analysis:} Linear search can be slow, so cache can be used to explore Locality as an improvement.
+    \item Hash Table Implementation - Each directory has a hash table \codein{<FileName, File>}, and it uses Chained Collision Resolution. \underline{Analysis:} Fast lookup, but limited size for hash table and good hashing function is required.
+\end{itemize}
+
+
+\subsection{File Operation}
+File operations are syscalls provided by the OS.
+
+
+
+\subsection{Disk I/O Scheduling}
+Time taken for one disk I/O is the sum of 1) \deff{Seek Time}, time for the disk head to move to a position over proper track, 2) \deff{Rotational Latency}, time for the desired sector to rotate under the I/O head, and 3) \deff{Transfer Time}, time to transfer data from disk sector to memory which depends on transfer size and transfer rate. 
+\\
+Time \#3 is negligible as compared to the other two (an order of 3 to 5). \textbf{Average time} of \#1 can be reduced with scheduling algorithms while Time of \#2 can be reduced with larger block size (at the compromise of \#3, but negligible).
+\\
+Scheduling Algorithms
+\begin{itemize}
+    \item FCFS - Simple but bad
+    \item \deff{Shortest Seek First} (SSF) \textasciitilde SJF for disk context
+    \item \deff{SCAN / Elevator Algorithm} \textasciitilde 1) bi-directional \deff{SCAN} that alternates between innermost and outermost, and 2) one-directional \deff{C-SCAN} that move from outermost to innermost (i.e. largest to smallest Track number)
+\end{itemize}
+
+
+
+\section{File System Case Studies}
+\subsection{MS FAT}
+
+\subsection{Linux Ext2}
+
+
 
 
 \noindent\rule{8cm}{0.4pt}
@@ -461,12 +867,31 @@ A \deff{General Semaphore} serves as a General Synchronisation Tool (not CS in t
 \subsection{From Tutorials}
 \citeqn{(Tut1 Qn7)} In \codein{int *a = (int *) malloc(sizeof(int));}, the data, \codein{*a}, is created in the Heap while the pointer to this data, \codein{a}, can be in Stack or Data.
 
+\citeqn{(Tut10 Qn3a)} When Process $A$ tries to open a file written by Process $B$, OS uses Open File Table to check for existing opened files and reject $A$'s request since the file is currently being written.
+
+\citeqn{(Tut10 Qn3b)} When Process $A$ tries to use a bogus file descriptor for file-related syscalls, the OS checks whether the fd entry exists and is valid in $A$'s opened file table, and reject the syscall since invalid.
+
+\citeqn{(Tut10 Qn3d)} Two processes $A$ and $B$ can read from the same file independently, as they have their own fds, which refers to two distinct locations in the open file table. Each entry of the open file table keep track of the current location separately. 
+
 \subsection{From Past Questions}
-\citeqn{(AY15/16Sem1 Qn1)} Library calls are language dependent, while syscalls depend only on the OS.
+\citeqn{(AY15/16Sem1 Midterm Qn1)} Library calls are language dependent, while syscalls depend only on the OS.
 
 \medskip
 
-\citeqn{(AY17/18Sem1 Qn8)} In scheduling, \textbf{Short Response Time} is not the same as \textbf{Bounded Waiting Time}. RR ensures latter but not former.
+\citeqn{(AY17/18Sem1 Midterm Qn8)} In scheduling, \textbf{Short Response Time} is not the same as \textbf{Bounded Waiting Time}. RR ensures latter but not former.
+
+\medskip
+
+\citeqn{(AY18/19Sem1 Final Qn8)} In Ext File System, data blocks for a file come from the same block group. One of the reasons is to reduce fragmentation.
+
+\medskip
+
+\citeqn{(AY18/19Sem1 Final Qn19)} In FAT File System, each Directory Entry is also stored in a logical block. So for file operations that modifies directory entry for the file, the logical block where the directory is in is also modified.
+
+\medskip
+
+\citeqn{(AY18/19Sem1 Final Qn25)} In Ext File System, \textbf{Disk Access Number} is the sum of accessing INodes and Contents starting from \codein{"/"}'s INode till the desired block in the file's content. (i.e. 2 accesses needed going down each directory level)
+
 
 
 
@@ -483,8 +908,33 @@ Pseudocode for Peterson's Algorithm (note the order of updating variables before
 \\
 \includegraphics[width=8cm]{img/06_peterson.png}
 
+Pseudocode for Solution to Reader Writer Problem:
+\\
+\includegraphics[width=8cm]{img/08_reader_writer.png}
 
+Pseudocode for Tanenbaum Algorithm:
+\\
+\includegraphics[width=8cm]{img/08_tanenbaum.png}
 
+Illustration for Hiearchical Level Paging:
+\\
+\includegraphics[width=8cm]{img/11_hierarchical_paging.png}
+
+Illustration for File Opening:
+\\
+\includegraphics[width=8cm]{img/12_open_file_table.png}
+
+Common File Operations:
+\\
+\includegraphics[width=8cm]{img/12_file_operations.png}
+
+Illustration for One Slice of Magnetic Disk (note that multiple slices of disks stack over one another to form the hard disk):
+\\
+\includegraphics[width=8cm]{img/13_magnetic_disk_slice.png}
+
+\citeqn{(Tut09 Qns3)} Algorithms for Virtual Memory Operations
+\includegraphics[width=8cm]{img/tut09_vm_algo_a.png}
+\includegraphics[width=8cm]{img/tut09_vm_algo_b.png}
 
 
 \newpage
