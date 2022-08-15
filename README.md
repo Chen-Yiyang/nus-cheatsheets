@@ -11,15 +11,25 @@ If you have noticed any typos or errors, please let me know. Thank you!
 - Midterm Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2 till Midterm.
 - Final Summary: A 2-page summary sheet for all the contents coverred for AY20/21 Sem 2.
 
+
 ### CS2106
 - Cheatsheet: A detailed summary sheet for Final.
+
 
 ### CS3230
 - Cheatsheet: A short summary sheet for Final.
 
+
+### CS3241
+
+
 ### CS3243
 - Midterm: A 2-page summary sheet for Midterm.
 - Cheatsheet: A detailed summary sheet for Final.
+
+
+### CS4261
+
 
 ### MA1101R
 - Exercise Question Summary: A compilation of Lemmas / statements left as proving questions in the Exercises of the textbook.
@@ -32,12 +42,18 @@ If you have noticed any typos or errors, please let me know. Thank you!
 ### MA2108
 
 
+### MA3209
+
+
 ### ST2131
 - Cheatsheet: A compilation of important Theorems and notes from lectures, as well as lemmas / statements from tutorial questions. Also includes common distributions covered in the module.
 
 
 ### ST2132
 - Cheatsheet: A 2-page summary sheet for Final, worked together with [Ng Wei En](https://github.com/weien2912) for the cheatsheet.
+
+
+### ST3131
 
 
 ### ST3236
