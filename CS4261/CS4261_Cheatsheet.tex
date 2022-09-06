@@ -101,6 +101,187 @@
 % -----------------------------------------------------------------------
 
 \section{Nash Equilibrium}
+A \deff{Game} is a general abstract framework for strategic interactions, with usually 1) A set of \textbf{Players} $N = \{1, ..., n \}$, and subsequently for each player $i \in N$, 2) A set of possible \textbf{Actions} $A_i = \{a_{i1}, a_{i2}... \}$, and 3) a \textbf{Utility Function} $u_i : A \mapsto \mathbb{R}$, which indicates the utility Player $i$ can get from an action profile, then lastly 4) a \deff{(Pure) Action Profile} that denotes the actions taken by all the players $\vec{a} \in A_1 \times A_2 \times ... \times A_n = A$.
+\\
+A \deff{Normal Form Game} is a Matrix Representation of the player utilities for a 2-Player game. Conventionally, each element in the Normal Form Game is a pair of real values $C_{ij} = (u, v) \in \mathbb{R}^2$ where $u$ and $v$ are the utility of the row and column player given an action profile $\vec{a} = (a_{1, i}, a_{2, j})$.
+
+
+\subsection{Pure Nash Equilibrium}
+Given actions taken by everyone else $\vec{a}_{-i}$, the \deff{Best Response} set of Player $i$ is defined
+\[
+BR_i(\vec{a}_{-i}) = \{ b \in A_i | b \in \text{argmax }  u_i(\vec{a}_{-i}, b) \}
+\]
+\\
+An action profile is a \deff{Pure Nash Equilibrium} if it is one best response for everyone given what others have chosen, i.e. 
+\[
+\forall i \in N, a_i \in BR_i(\vec{a}_{-i})
+\]
+\underline{Analysis}: Not all games have Pure Nash Equilibria.
+
+
+\subsection{Mixed Nash Equilibrium}
+Let $\vec{p} \in \Delta(A_i)$ be the probability distribution over Player $i$'s actions. A \deff{Mixed / Randomised Strategy Profile} is given by $\vec{p} = (\vec{p}_1, ..., \vec{p}_n) \in \Delta(A_1) \times ... \times \Delta(A_n)$. Player utility is $u_i(\vec{p}) = \sum_{\vec{a} \in A} u_i(\vec{a}) P(\vec{a}) = \mathbb{E} _{\vec{a} \sim \vec{p}} [u_i(\vec{a})]$.
+\\
+A mixed profile is a \deff{Mixed Nash Equilibrium} if 
+\[
+\forall i \in N, \vec{q}_i \in \Delta(A_i), \ u_i(\vec{p}) \ge u_i(\vec{p}_{-1}, \vec{q}_i)
+\]
+\underline{Analysis}: All games have Mixed Nash Equilibria.
+
+\smallskip
+
+In a Mixed Nash Equilibrium, a player is \deff{Indifferent} if he gets the same \textbf{expected utility} from choosing any action (as a result of the other player playing a mixed strategy).
+
+\subsubsection{Compute Nash Equilibria in 2 Player Games}
+\begin{itemize}
+    \item Compute all NE in which at least one player plays a pure strategy.
+    \item Compute all NE in which both players play mixed strategies. In this case, each player must be  indifferent between the two strategies.
+\end{itemize}
+
+
+\subsection{Dominant Strategies}
+A strategy $\vec{p} \in \Delta(A_i)$ \deff{Dominates} $\vec{q} \in \Delta(A_i)$ if
+\[
+\forall \vec{p}_{-i} \in \Delta(A_{-i}), \ u_i(\vec{p}_{-i}, \vec{p}) \ge u_i(\vec{p}_{-i}, \vec{q})
+\]
+There are similar definitions for \deff{Strictly Domination}.
+\\
+\underline{Intuitively}, it means no mather what others do, playing $\vec{p}$ is always better than $\vec{q}$.
+
+\subsubsection{Dominant Strategy Theorem}
+If an action $a \in A_i$ is \textbf{strictly dominated} by some strategy $\vec{p} \in \Delta(A_i)$, then action $a$ is never played with any positive probability in any Nash Equilibrium.
+\\
+\underline{Note}: The theorem enables us to prune actions that will not occur in any Nash Equilibria.
+
+
+
+
+
+\section{Auction}
+\subsection{Single-Item Auction}
+Types of Single-Item Auction
+\begin{itemize}
+    \item \deff{English Auction} - Auctioneer sets a starting price. Bidders take turn raising their bids. The bidder makes the last bid wins and pay his bid.
+    \item \deff{Japanese Auction} - Auctioneer sets a starting price and raises it. A bidder can drop out and not return once dropped. The last standing bidder gets the item and pays the current price.
+    \item \deff{Vickrey / Second-Price Auction} - All bidders submit bids simultaneously. The highest bidder wins and pays the second highest price.
+\end{itemize}
+
+\subsubsection{Vickrey Auction Problem Specification}
+There are $n$ players $N = \{ 1, 2, ..., n\}$, each with a valuation of the item $v_i$. The actions are to place a bid at different prices. The payoff for a player is $v - p$ if getting the item, and $0$ otherwise.
+
+\subsubsection{Analysis}
+Vickrey Auctions are \deff{Truthful}, i.e. bidding according to one's true valuation is a dominant strategy.
+\\
+First-Price Auctions are \textbf{Not Truthful}.
+\\
+\underline{Note}: Dominant strategies are Nash Equilibria in Auction games, but they are not necessarily the only Nash Equilibria.
+
+
+
+\subsection{Multi-Unit Auction}
+\subsubsection{Game Specification}
+There are $n$ players $N = \{ 1, 2, ..., n\}$, each with a valuation of the item $v_i$. There are $k \le n$ identical copies of the item.
+
+\smallskip
+
+The objective is to design a mechanism where
+\begin{itemize}
+    \item Truthful bidding is a dominant strategy
+    \item Items are allocated to the $k$ highest bidders
+\end{itemize}
+
+\subsubsection{Vickrey Clarke Groves (VCG) Mechanism}
+Procedures:
+\begin{enumerate}
+    \item Choose some outcome $o^*$ that maximises social welfare $\sum_{i} v_i(o^*)$
+    \item Calculate the payment that Player $j$ must take with $p_j = \sum_{i \neq j} v_i(o_{-j}^*) - \sum_{i \neq j} v_i(o^*)$, where $o_{-j}^*$ is the outcome that maximises $\sum_{i \neq j} v_i(o_{-j})$.
+\end{enumerate}
+\underline{Note}: The payment for each Player is essentially the \deff{Externality} that he imposes on other players, which is the difference in the max welfare of others between if he is absent and if present.
+\\
+\underline{Analysis}: VCG is truthful. Vickrey Auction is a special case of VCG.
+
+
+
+\subsection{Combinatorial Auction}
+\subsubsection{Problem Specification}
+There are $n$ Players and $m$ possibly distinct items for sale. Each player has a valuation for each subset of the $m$ objects.
+
+\smallskip
+
+VCG is truthful, but it can be computationally intensive, and suffers from \deff{Revenue Non-Monotonicty}, a paradox where adding more players in the bidding game may lead to a decrease in the \deff{Revenue}, i.e. sum of all players' payment $R = \sum_{i=1}^n p_i$.
+\\
+\underline{Note}: Single-Item Auctions have no revenue non-monotonicity.
+
+
+
+
+
+\section{Facility Location}
+\subsubsection{Problem Specification}
+There are $n$ players $N = \{1, ..., n\}$, each with a location $x_i \in \mathbb{R}$ assuming $x_1 \le x_2 \le ... \le x_n$ for convenience.
+
+\smallskip
+
+The objective is to design $f : \mathbb{R}^n \mapsto \mathbb{R}$ that minimises either of
+\begin{itemize}
+    \item \deff{Total Cost} - $\sum_{i \in N} |f(\vec{x}) - x_i|$ 
+    \item \deff{Max Cost} - $\max_{i \in N} |f(\vec{x}) - x_i|$ 
+\end{itemize}
+
+\underline{Analysis}: OPT for Total Cost is \textbf{Not Truthful}. OPT for Max Cost is \textbf{Truthful} if it always "snaps" to a median player.
+
+
+\subsection{Max Cost Approximation Theorems}
+\subsubsection{Deterministic Case}
+Any deterministic truthful mechanism for facility location has a worst-case approximation ratio $\le 2$ to the maximum cost.
+
+\subsubsection{Randomised Case}
+Any randomised truthful mechanism for facility location has a worst-case approximation ratio $\le \frac{3}{2}$ to the maximum cost.
+
+
+
+
+
+\section{Routing Games}
+In a traffic network, players are drivers trying to find a route that minimises their total traffic time.
+\begin{itemize}
+    \item \deff{Proportion Version} There is $1$ unit of traffic to allocate in total. Drivers are considered proportion of the total traffic.
+    \item \deff{Atomic Version} The traffic consists of $k \in \mathbb{N}$ drivers, each being an atomic entity.
+\end{itemize}
+
+\smallskip
+
+\deff{Price of Anarchy} (PoA) is the ratio of the social cost under the worst case Nash Equilibrium and under socially optimal solution
+\[
+PoA = \frac{\text{WorstNash}(G)}{OPT(G)}
+\]
+\underline{Analysis}: 1) $PoA \ge 1$ with the smaller being the better. 2) All Nash Equilibria in a Routing Game have the same social cost.
+
+\subsection{Atomic Version}
+\subsubsection{Atomic Routing Game Theorem}
+In an atomic routing game, a pure Nash Equilibrium flow always exists.
+
+\subsubsection{Higher Level Idea}
+Every atomic routing game is a potential game, where all players are inadvertently and collectively striving to optimise a potential function, $\Phi(f)$,
+\[
+\Phi(f) = \sum_{e \in E} \sum_{i=1}^{f_e} c_e(i)
+\]
+\underline{Analysis}: When a player deviates (changes path), change in the deviator’s individual cost is equal to $\triangle \Phi $. “Alignment in individual and social objective”.
+
+
+
+\section{Cooperative Games}
+\subsection{The Core}
+
+
+\subsection{Induced Subgraph Games}
+\subsubsection{Problem Specification}
+
+
+
+
+
+
 
 \end{multicols}
 \end{document}
