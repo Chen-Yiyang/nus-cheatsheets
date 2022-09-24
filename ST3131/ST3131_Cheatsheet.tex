@@ -16,7 +16,8 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{amsthm}
-\usepackage{physics} % for vectors
+\usepackage{physics}  % for vectors
+\usepackage{bbm}  % for mathbb-ed digits
 %\usepackage{fonts}
 \usepackage{multicol,multirow}
 \usepackage{spverbatim}
@@ -79,7 +80,7 @@
 \everydisplay{\color{mathBlue}}
 
 % for vector notation in this module
-\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\vect}[1]{\pmb{#1}}
 \newcommand{\deff}[1]{\textcolor{defOrange}{\textbf{#1}}}
 \newcommand{\codein}[1]{\textcolor{codeInlineRed}{\texttt{#1}}}
 \newcommand{\citeqn}[1]{\underline{\textit{#1}}}
@@ -100,7 +101,229 @@
 
 % -----------------------------------------------------------------------
 
-\section{Simple Linear Regression}
+\section{1. Simple Linear Regression}
+\subsection{Simple Regression Model}
+Consider regressing $Y$ on $X$:
+\[
+Y = \beta_0 + \beta_1 + \epsilon
+\]
+Here $X$ is called \deff{Covariate}, \deff{Predictor} or \deff{Regressor}, and $Y$ \deff{Response}.
+\\
+The Regression function:
+\[
+EY = \mathbb{E}[Y | X] = \beta_0 + \beta_1 X
+\]
+Regression coefficients, $\beta_1 = \rho_{xy} \frac{\sigma_y}{\sigma_x}$ and $\beta_0 = \mu_y - \beta_1 \mu_x$, minimising $\mathbb{E} \big( Y - \beta_0 - \beta_1 X \big) ^2$
+
+\subsubsection{Observed \textasciitilde}
+Assumptions of LRM
+\begin{enumerate}
+    \item $x_i$ and $\epsilon_i$ independent
+    \item $\frac{1}{n} \sum_{j=1}^n \epsilon_j = 0$
+    \item $Cov(\epsilon_i, \epsilon_j) = 0, \ \forall i, j$
+    \item \deff{Homogenity}, $var{\epsilon_j} = \sigma^2$ for all $j$
+    \item \deff{Normality}, $\epsilon_j \sim \mathcal{N}(\cdot, \cdot)$ for all $j$
+\end{enumerate}
+
+\deff{Least Square Estimates} of $n$ observations $(x_i, y_i)$ gives
+\[
+\hat\beta_1 = \frac{\sum_{i=1}^n (x_i - \bar X)(y_i - \bar Y)}{\sum_{i=1}^n (x_i - \bar X)^2}
+, \
+\hat\beta_0 = \hat Y - \hat\beta_1 \bar X
+\]
+, where $\hat X = \frac{1}{n}\sum_{i=1}^n x_i$ and $\hat Y = \frac{1}{n}\sum_{i=1}^n y_i$, and the estimates minimises
+\[
+Q = Q(\hat\beta_0, \hat\beta_1) = \sum_{i=1}^n (y_i - \hat\beta_0 - \hat\beta_1 x_i)^2
+\]
+Lastly, \deff{Residual Stanndard Error} $\hat\sigma^2 = s^2 = \frac{1}{n-2}\text{SSE}$ gives $\hat\sigma$ the LSE for $\sigma$.
+
+
+\subsection{Analysis of Variance (ANOVA)}
+\subsubsection{Sum of Squares}
+\deff{Sum of Square Errors} $\text{SSE} = \sum_{i=1}^n (y_i - \hat y_i)^2 = \sum_{i=1}^n e_i^2$, measures variation of $Y$ due to random errors.
+\\
+\deff{Regression Sum of Squares} $\text{SSR} = \sum_{i=1}^n (\hat y_i - \bar Y)^2$, measures variation of $Y$ explained by $X$.
+\\
+\deff{Total Sum of Squares} $\text{SST} = \sum_{i=1}^n (y_i - \bar Y)^2$
+\[
+\text{SST} = \text{SSR} + \text{SSE}
+\]
+
+\subsubsection{Coefficients of Determination}
+\deff{Coefficients of Determination} measures how much of $Y$ is explained by $X$,
+\[
+R^2 = \frac{\text{SSR}}{\text{SST}} = \frac{\beta_1^2 \sigma_x^2}{\beta_1^2 \sigma_x^2 + \sigma^2}
+\]
+\underline{Note}: $R^2 \in [0, 1]$ and $R^2 = corr(X, Y)^2 = corr(Y, \hat Y)^2$.
+
+\smallskip
+
+\deff{Adjusted $R^2$} for a RM with $p$ regressors,
+\[
+R_a^2 = \frac{n-1}{n-p-1} R^2 - \frac{p}{n-p-1}
+\]
+\underline{Note}: [1] $R^2$ strictly increasing as $p$ increases while $R^2_a$ does not. [2] Sample $R^2$ and $R^2_a$ are both biased estimated for their population counterparts, but latter less biased.
+
+
+\subsection{Theoretical Properties of LSE}
+\subsubsection{Unbiasedness of LSE}
+$\hat\beta_0$, $\hat\beta_1$, $s$ are unbiased estimators for their population counterparts. $\hat Y = \hat\beta_0 + \hat\beta_1 X$ unbiased estimator for $EY = \beta_0 + \beta_1 X$.
+
+\subsubsection{Standard Errors}
+\begin{align*}
+    var(\hat\beta_0) &= \frac{\sigma^2}{\sum_{i=1}^n (x_i - \bar X)^2} 
+    \\
+    var(\hat\beta_0) &= var(\bar Y) + \bar X^2 var(\hat\beta_1)
+    \\
+    &= \frac{\sigma^2}{n} + \frac{\bar X^2}{\sum_{i=1}^n (x_i - \bar X)^2}\sigma^2 
+    \\
+    var(\hat Y) &= \Big[ \frac{1}{n} + \frac{(X - \bar X)^2}{\sum_{i=1}^n (x_i - \bar X)^2}  \Big] \sigma^2
+\end{align*}
+The sample SEs are estimated by substituting $\sigma^2$ with $s^2$.
+
+
+\subsection{Inferences for \textasciitilde}
+\subsubsection{Statistical Tests}
+Significance Test (ANOVA)
+\\
+\underline{Null}: $\beta_1=0$. \underline{Statistics}: $F = \frac{\text{MSR}}{\text{MSE}} \sim F_{1, n-2}$. \\
+\underline{Decision}: Reject null if $F > f_{1, n-2} (\alpha)$
+
+\medskip
+
+Test for $\beta_1$ (and $\beta_0$)
+\\
+\underline{Statistic}: $T_{\beta_1} = \frac{\hat\beta_1 - \beta_1}{s(\hat\beta_1)} \sim t_{n-2}$.
+\\
+\underline{Confidence Interval}: $\hat\beta_1 \pm t_{n-2}(\alpha / 2) \ s(\hat\beta_1)$
+\\
+\underline{Confidence Lower Bound}: $\hat\beta_1 - t_{n-2}(\alpha) \ s(\hat\beta_1)$, upper similar.
+
+
+\subsubsection{Predictions}
+Confidence Interval for $E[Y|X=x_h]$:
+\[
+\hat y_h \pm t_{n-2}(\alpha/2) \cdot \sqrt{\hat\sigma^2 \Big( \frac{1}{n} + \frac{(x_h - \bar X)^2}{\sum_{i=1}^n(x_i - \bar X)^2} \Big)}
+\]
+Prediction Interval for $Y$ when $X = x_h$:
+\[
+\hat y_h \pm t_{n-2}(\alpha/2) \cdot \sqrt{\hat\sigma^2 \Big(1 + \frac{1}{n} + \frac{(x_h - \bar X)^2}{\sum_{i=1}^n(x_i - \bar X)^2} \Big)}
+\]
+
+
+
+
+\section{2. Multiple Linear Regression}
+\subsection{Multiple Regression Model}
+Objective: To investigate relationship between $Y$ and $p$ predictors $\vec{X} = (X_1, ..., X_p)$ with $n$ observations.
+
+\subsubsection{Least Square Estimation}
+Let $\vect{\beta} = (\beta_0, \beta_1, ..., \beta_p)^T \in \mathbb{R}^{p+1}$,
+\begin{align*}
+    \vect{\hat\beta} &= (X^T X)^{-1} X^T \vect{y}
+    \\
+    s^2 &= \frac{\lVert  \vect{y} - H\vect{y}   \rVert ^2}{n - p -1}
+\end{align*}
+
+Here $X = X_{n \times (p+1)}$ is the \deff{Design Matrix} where a column of $1$ is joined to the left of observed predictors.
+
+\subsubsection{Hat Matrix}
+The \deff{Hat Matrix} $H = H_{n \times n}$ is the projection matrix of linear space spanned by column vectors of $X$.
+\[
+H = X(X^T X)^{-1}X^T
+\]
+Properties of $H$:
+\begin{itemize}
+    \item $HX = X$
+    \item Idempotent, $H^2 = H$, so does $I - H$
+    \item $H \vect{\mathbb{1}} = \vect{\mathbb{1}}$ for $\vect{\mathbb{1}} = \text{One}(n, 1)$
+    \item $H \vect{x_j} = \vect{x_j}$ for $\vect{x_j} = (x_{1j}, ..., x_{nj})^T$
+    \item $\vect{\hat y} = H \vect{y}$ is the fitted values, and $\vect{e} = (I-H) \vect{y}$ is the residuals.
+\end{itemize}
+
+\subsubsection{Explicit Expression for One Coefficient}
+\[
+\hat\beta_j = \frac{\vect{x_j}^T (I - H_{-j} \vect{y})}{\vect{x_j}^T (I - H_{-j} \vect{x_j})}
+\]
+, where $X_{-j}$ is the Sub-Design Matrix with column $\vect{x_j}$ removed, and $H_{-j}$ the corresponding Hat Matrix.
+
+
+
+\subsection{ANOVA}
+\subsubsection{Sum of Squares}
+\begin{align*}
+    \text{SST} &= \vect{y}^T H_T \vect{y}, \; \; H_T = I - \frac{1}{n} \vect{\mathbb{1}} \vect{\mathbb{1}}^T
+    \\
+    \text{SSR} &= \vect{y}^T H_R \vect{y}, \; \; H_R = H - \frac{1}{n} \vect{\mathbb{1}} \vect{\mathbb{1}}^T
+    \\
+    \text{SSE} &= \vect{y}^T H_E \vect{y}, \; \; H_E = I - H 
+\end{align*}
+
+\subsubsection{Distributions of Sum of Squares}
+\[
+\frac{\text{SSE}}{\sigma^2} \sim \chi^2_{n-p-1}, \; \; 
+\frac{\text{SSR}}{\sigma^2} \sim \chi^2_{p}
+\]
+
+\subsubsection{ANOVA Table}
+\begin{center}
+\begin{tabular}{ |c|c c c c |}
+ \hline
+                & df    & SS    & MS    & F         \\
+ \hline
+ Regression     & p     & SSR   & MSR   & MSR/MSE   \\ 
+ Error          & n-p-1 & SSE   & MSE   &           \\ 
+ Total          & n-1   & SST   &       &           \\
+ \hline
+\end{tabular}
+\end{center}
+
+%MCORR, CORR and partial
+
+\subsection{Inferences for \textasciitilde }
+\subsubsection{Statistical Tests}
+Significance Test (ANOVA)
+\\
+\underline{Null}: $\vect \beta = \vect{0}$. 
+\underline{Statistics}, $F = \frac{\text{MSR}}{\text{MSE}} \sim F_{p, n-p-1}$.
+
+\medskip
+
+Individual $t$-Test
+\\
+\underline{Null}: $\beta_i = 0$.
+\underline{Statistic}: $T_{\beta_i} = \frac{\hat\beta_i}{s(\hat\beta_i)} \sim t_{n-p-1}$.
+
+\medskip
+
+General Linear Hypothesis Test
+\\
+For a given linear hypothesis $\vect{c} = (c_0, c_1, ..., c_p)^T$,
+\\
+\underline{Null}: $\vect{c}^T \vect{\beta} = 0$
+\underline{Statistics}: $T = \frac{\vect{c}^T \vect{\hat\beta} }{\sqrt{\vect{c}^T \hat\Sigma \vect{c}}} \sim t_{n-p-1}$
+
+\subsubsection{Predictions}
+Confidence Interval for $E[Y|\vec X=\vect{x_h}]$:
+\[
+\hat y_h \pm \hat\sigma_F^2 (\hat y_h) \times t_{n-p-1}(\alpha / 2)
+\]
+where the estimated variance is
+\[
+\hat\sigma_F^2(\hat y_h) = \vect{x_h}^T Var(\vect{\hat\beta})\vect{x_h} = \vect{x_h}^T (X^TX)^{-1}\vect{x_h} \hat\sigma^2
+\]
+
+Prediction Interval for $Y$ when $\vec X=\vect{x_h}$:
+\[
+\hat y_h \pm \hat\sigma_P^2 (\hat y_h) \times t_{n-p-1}(\alpha / 2)
+\]
+where the estimated variance is
+\[
+\hat\sigma_P^2(\hat y_h) =  \Big[ 1 + \vect{x_h}^T (X^TX)^{-1}\vect{x_h} \Big] \hat\sigma^2 = \hat\sigma^2 + \hat\sigma_F^2
+\]
+
+
+
 
 \end{multicols}
 \end{document}

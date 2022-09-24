@@ -54,7 +54,7 @@ If you have noticed any typos or errors, please let me know. Thank you!
 
 
 ### ST3131
-
+- Updated for Midterm
 
 ### ST3236
 - Cheatsheet: A short summary sheet for Final.
