@@ -21,7 +21,7 @@ If you have noticed any typos or errors, please let me know. Thank you!
 
 
 ### CS3241
-
+- Cheatsheet: Updated for Midterm
 
 ### CS3243
 - Midterm: A 2-page summary sheet for Midterm.
