@@ -111,7 +111,7 @@
 \section{Overview}
 \subsection{Graphics Basics}
 \deff{Addictive Colour} - Form a colour by adding amounts of three primaries (RGB).\\
-\deff{Subtractive Colour} - Form Form a colour by filtering white with Cyan (C), Magenta (M), and Yellow (Y).
+\deff{Subtractive Colour} - Form Form a colour by filtering white with Cyan (C), Magenta (M), and Yellow (Y). \underline{Note}: For subtractive colours, M absorbs G and allows R \& B to pass through.
 
 
 \subsection{OpenGL Basics}
@@ -150,7 +150,7 @@ x_\text{opengl} = x_\text{win}, \;\; y_\text{opengl} = h - 1 - y_\text{win}
 \subsection{Animation}
 \deff{Double Buffering} - The usage of two \textbf{colour buffers} for display where the \deff{Front Buffer} displays and the \deff{Back Buffer} is written to. It minimises flickering in animation.
 \\
-\underline{Note}: They are two identical buffers, switched once writing to back buffer is done.
+\underline{Note}: Two identical buffers, switched once writing to back is done.
 
 
 
@@ -158,18 +158,16 @@ x_\text{opengl} = x_\text{win}, \;\; y_\text{opengl} = h - 1 - y_\text{win}
 
 \section{Geometry}
 \subsection{Representation}
-\deff{Affine Space} - A frame formed by a point as origin and the basis vectors.
+\deff{Affine Space} - A frame formed by an origin point and basis vectors.
 
 \smallskip
 
-\deff{Homogeneous Coordinates} \textasciitilde A 4D representation for both 3D points and vectors.
+\deff{Homogeneous Coordinates} \textasciitilde A 4D system for 3D points \& vectors.
 \begin{itemize}
     \item Vector $v = [\alpha_1, \alpha_2, \alpha_3, 0]^T = (\alpha_1, \alpha_2, \alpha_3)$
     \item Point $p = [\beta_1, \beta_2, \beta_3, w]^T = (\frac{\beta_1}{w}, \frac{\beta_2}{w}, \frac{\beta_3}{w})$
 \end{itemize}
-\underline{Note}: The Homogeneous Coordinate representation for each point is non-unique. We typically use $w=1$ by default.
-\\
-\underline{Note}: All Homogeneous Coordinate elements are denoted as \textbf{Column Vectors}.
+\underline{Note}: [1] All Homogeneous Coordinate elements are denoted as \textbf{Column Vectors}. [2] $\text{Point} + \text{Vector} = \text{Point}$. [3] Representation for each point is non-unique. We typically use $w=1$. \deff{Perspective Division} is the process of dividing $x, y, z$ by $w$.
 
 
 \subsection{Transformation}
@@ -237,7 +235,8 @@ s_x     & 0         & 0         & 0     \\
 \textbf{General Rotation about Origin}: $R(\theta) = R_z(\theta_z)R_y(\theta_y)R_x(\theta_x)$, where $\theta_x, \theta_y, \theta_z$ are the Euler angles.
 \\
 \textbf{Rotation about Arbitrary Point}: $M = T(p_f) R(\theta) T(-p_f)$, where $p_f$ is the point and $\theta$ rotational angle.
-
+\\
+\underline{Note}: Matrix ordering is the reverse of the actual transformation's. 
 
 \subsection{OpenGL Transformation}
 For each matrix mode, \deff{Current Transformation Matrix} (CTM) stores the $4 \times 4$ homogeneous coordinate matrix, as part of the state and it is applied to all vertices in the pipeline. Some matrix modes include Model-View (\codein{GL\_MODEVIEW}) and Projection (\codein{GL\_PROJECTION}).
@@ -250,6 +249,13 @@ OpenGL also maintains a stack for each matrix mode.
 
 \section{Camera \& Viewing}
 OpenGL Spaces: \deff{Object Space}, for modelling each object where the object is centred in the frame. \deff{World Space}, a common frame for all objects, and for defining lightning and camera pose. \deff{Camera Space}, the local frame for camera where it is at the origin and looking into the \textbf{Negative z-direction}, initially the same as the world frame.
+
+\smallskip
+
+An OpenGL \deff{Viewport} defines a rectangular region of the window in which OpenGL can draw.
+\\
+\underline{Note}: [1] A window can have multiple viewports. [2] A viewport can be larger than the window, and whatever inside the viewport but outside the window will not be displayed.
+
 
 \subsection{Transformations}
 \deff{View Transformation} - Transform points from World Frame to Camera Frame. The transformation matrix
@@ -313,7 +319,13 @@ M_\text{persp} =
 \end{bmatrix}
 \]
 
+
+
+
+
 \section{Rendering}
+\deff{Primitive Assembly} - The stage where primitive types are recalled and  their processed vertices are collected for polygons, so that we can redefine the primitive for clipping and rasterization.
+
 \subsection{Clipping}
 \subsubsection{Brute Force Approach}
 Compute intersections with all sides of the clipping window.
@@ -364,7 +376,15 @@ for (x=x0, y=y0; x <= xe; x++) {
 
 \subsubsection{Bresenham’s Algorithm}
 Use a \deff{Decision Variable}, $p_k$ to determine which $y$-value to rasterise for every $x$.
-\\
+
+\begin{enumerate}
+    \item Input line and store left end in $(x_0, y_0)$. Assume $|m| <= 1$.
+    \item Calculate constants $\triangle x, \triangle y, 2\triangle y, 2\triangle y - 2\triangle x$.
+    \item Fill $(x_0, y_0)$, and obtain $ p_0 = 2\triangle y - \triangle x $.
+    \item At each $x_k$ along the line, starting at $k=0$, perform the following test: [1] If $p_k < 0$, then next point is $(x_k + 1, y_k)$, and $p_{k+1} = p_k + 2\triangle y$. [2] Otherwise, next point $(x_k+1, y_k+1)$ and $p_{k+1} = p_k + 2\triangle y - 2 \triangle x$.
+    \item Repeat Step 4 for $\triangle x - 1$ more times.
+\end{enumerate}
+
 \underline{Analysis}: [1] Only applicable to line (and circle) rasterisation. [2] Efficient, due to no floating points. 
 
 
@@ -403,11 +423,28 @@ Use a \deff{Decision Variable}, $p_k$ to determine which $y$-value to rasterise 
 
 
 
-% \section{Others}
+\section{Others}
 % % For intermediate results, code usage, and images/screenshots
 % \subsection{From Tutorials \& Assignments}
 % \subsection{From Past Year Papers}
-% \subsection{Diagrams}
+\subsection{Diagrams}
+Colour Theory, Transformation Pipeline
+\\
+\begin{center}
+\includegraphics[width=4cm]{img/01_colours.png}
+\includegraphics[width=4cm]{img/03_transformation_pipeline.png}
+\end{center}
+
+Rendering Pipeline
+\\
+\includegraphics[width=8cm]{img/02_rendering_pipeline.png}
+
+gluLookAt Coordinate Specification
+\\
+\includegraphics[width=8cm]{img/04_glulookat.png}
+
+
+
 % % 5, transformation pipeline
 % %5  up vectors
 % %6, Rendering pipeline
@@ -422,6 +459,10 @@ Use a \deff{Decision Variable}, $p_k$ to determine which $y$-value to rasterise 
 \subsection{Miscellaneous}
 \subsubsection{Settings}
 \codein{glutInitDisplayMode(...|GLUT\_DOUBLE)} uses Double Buffering, as compared to \codein{GLUT\_SINGLE} for Single Buffering.
+
+\smallskip
+
+\codein{glViewport(u, v, w, h)} - Define the rectangular viewport.
 
 
 
