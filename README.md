@@ -21,7 +21,7 @@ If you have noticed any typos or errors, please let me know. Thank you!
 
 
 ### CS3241
-- Cheatsheet: Updated for Midterm
+- Cheatsheet: Updated for Midterm. Worked together with [Zihao](https://github.com/9teMare) for the cheatsheet.
 
 ### CS3243
 - Midterm: A 2-page summary sheet for Midterm.

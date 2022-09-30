@@ -98,7 +98,7 @@
 
 \begin{center}
   {\huge\sffamily\bfseries CS3241 Cheatsheet} \huge\bfseries\\
-  by Yiyang, AY22/23
+  by Yiyang \& Zihao, AY22/23
 \end{center}
 \setlength{\premulticols}{0pt}
 \setlength{\postmulticols}{0pt}
@@ -224,6 +224,19 @@ s_x     & 0         & 0         & 0     \\
 = diag(s_x, s_y, s_z, 1)
 \]
 
+\subsubsection{Shear}
+Shearing along $x$-axis maps $(x, y, z)$ to $(x+y\cot \theta, y, z)$:
+\[
+H(\theta) =
+\begin{bmatrix}
+1       & \cot\theta    & 0     & 0     \\
+0       & 1             & 0     & 0     \\
+0       & 0             & 1     & 0     \\
+0       & 0             & 0     & 1
+\end{bmatrix}
+\]
+\underline{Note}: There is no direct matrix for shearing in OpenGL.
+
 \subsubsection{Inverse of Transformation Matrices}
 \begin{itemize}
     \item $T^{-1}(d_x, d_y, d_z) = T(-d_x, -d_y, -d_z)$
@@ -260,8 +273,26 @@ An OpenGL \deff{Viewport} defines a rectangular region of the window in which Op
 \subsection{Transformations}
 \deff{View Transformation} - Transform points from World Frame to Camera Frame. The transformation matrix
 \[
-M_\text{view} = RT
+\begin{aligned}
+M_\text{view} 
+&= RT
+\\
+&= 
+\begin{bmatrix}
+u_x     & u_y   & u_z   & 0     \\
+v_x     & v_y   & v_z   & 0     \\
+n_x     & n_y   & n_z   & 0     \\
+0       & 0     & 0     & 1     
+\end{bmatrix}
+\begin{bmatrix}
+1       & 0     & 0     & -e_x  \\
+0       & 1     & 0     & -e_y  \\
+0       & 0     & 1     & -e_z  \\
+0       & 0     & 0     & 1
+\end{bmatrix}
+\end{aligned}
 \]
+
 where $T$ moves camera position back to world origin, and $R$ rotates axes of camera to coincide with world frame's.
 \\
 View transformation for normal vectors:
@@ -276,6 +307,22 @@ M_n = \big( M_t^{-1} \big)^T
 \\
 \underline{Note}: It preserves depth order and lines.
 
+\smallskip
+
+\deff{Viewport transformation}
+The canonical view volume is then mapped to the viewport (from NDC to window coordinates)
+\\
+\begin{align*}
+\frac{x_{NDC}-(-1)}{2}=\frac{x_{win}-x_{vp}}{w}
+&\Rightarrow
+x_{win}=x_{vp}+\frac{w(x_{NDC}+1)}{2}
+\\
+\frac{y_{NDC}-(-1)}{2}=\frac{y_{win}-y_{vp}}{h}
+&\Rightarrow
+y_{win}=y_{vp}+\frac{h(y_{NDC}+1)}{2}
+\\
+z_{win}=\frac{z_{NDC}+1}{2}
+\end{align*}
 
 \subsection{Projections}
 Types of projection
@@ -286,6 +333,7 @@ Types of projection
 
 Perspective Transformation for Homogeneous Coordinates
 Any point $q = [x, y, z, 1]^T$ projected perspectively onto vertical plane at $z = d < 0$ will be at $(xd/z, yd/z, d)$, equivalent to $p = [x, y, z, z/d]^T = Mq$ for
+
 \[
 M = 
 \begin{bmatrix}
@@ -299,13 +347,19 @@ M =
 \subsubsection{OpenGL Projection Matrix Equivalences}
 \codein{glOrtho(L, R, B, T, N, F)}:
 \[
-M_\text{ortho} = 
+\begin{aligned}
+M_\text{ortho} 
+&= 
 \begin{bmatrix}
-\frac{2}{R-L}   & 0             &  0                & -\frac{R+L}{R_L}       \\
+\frac{2}{R-L}   & 0             &  0                & -\frac{R+L}{R-L}       \\
 0               & \frac{2}{T-B} &  0                & -\frac{T+B}{T-B}       \\
 0               & 0             &  \frac{-2}{F-N}   & -\frac{F+N}{F-N}       \\
 0               & 0             &  0                & 1     
 \end{bmatrix}
+\\
+&=S(\frac{2}{R-L},\frac{2}{T-B},\frac{2}{N-F})
+T(\frac{-(R+L)}{2},\frac{-(T+B)}{2},\frac{F+N}{2})
+\end{aligned}
 \]
 
 \codein{glFrustum(L, R, B, T, N, F)}:
@@ -314,17 +368,35 @@ M_\text{persp} =
 \begin{bmatrix}
 \frac{2N}{R-L}  & 0                 & \frac{R+L}{R-L}   & 0                     \\
 0               & \frac{2N}{T-B}    & \frac{T+B}{T-B}   & 0                     \\
-0               & 0                 & -\frac{F+L}{F-L}  & -\frac{2FN}{F-L}      \\
+0               & 0                 & -\frac{F+N}{F-N}  & -\frac{2FN}{F-N}      \\
 0               & 0                 & -1                & 0
 \end{bmatrix}
 \]
-
+\underline{Note}: The default projection matrix in OpenGL is an identity and orthographic, equivalent to \codein{glOrtho(-1, 1, -1, 1, -1, 1)}.
 
 
 
 
 \section{Rendering}
-\deff{Primitive Assembly} - The stage where primitive types are recalled and  their processed vertices are collected for polygons, so that we can redefine the primitive for clipping and rasterization.
+\subsection{Overview}
+\subsubsection{Pipeline Stages}
+\deff{Vertex Process} - The stage where Model-View and Projection transformations, and lighting and textures are applied. The result is in Clip Space.
+\\
+\deff{Primitive Assembly} - The stage where primitive types are recalled and  their processed vertices are collected for polygons, so that we can redefine the primitive for clipping and rasterisation.
+\\
+\deff{Perspective Division} - The stage where points with $w \neq 1$ are converted into $w=1$, from Clip Space into NDC Space.
+\\
+\deff{Viewport Transformation} - Transformation into Window Space, with depth range linearly scaled from $[-1, 1]$ in NDC to $[0, 1]$ in Window Space.
+\\
+\deff{Back-Face Culling} - Eliminate polygon if it is \textbf{back-facing} and invisible, i.e. when $N_p \cdot N < 0$. \underline{Note}: Need to specify polygon vertices in Anti-Clockwise order to ensure correct front-face (RHGR).
+
+\subsubsection{Visibility \& Occlusion Tests}
+\textbf{Visibility Tests}: Back-Face Culling, Screen Clipping.
+\\
+\textbf{Occlusion Tests}: Painter’s Algorithm, z-Buffer Algorithm.
+\\
+\underline{Note}: Perform Visibility before Occlusion Tests.
+
 
 \subsection{Clipping}
 \subsubsection{Brute Force Approach}
@@ -339,9 +411,9 @@ Define \deff{Outcode} $b_0 b_1 b_2 b_3$ where bit is $1$ iff it is outside $y_\t
 For a line with 2 endpoints $A$ and $B$, four cases to consider:
 \begin{itemize}
     \item \codein{Out(A) == Out(B) == 0} - Both points inside all 4 boundaries. Accept the entire line.
-    \item \codein{Out(A) == 0 \&\& Out(B) != 0} - One point inside all and one outside some, at least one intersection.
+    \item \codein{Out(A) == 0 \&\& Out(B) != 0} - One point inside all and one outside some. Num of intersections == num of 1 bit in B.
     \item \codein{Out(A) \& Out(B) != 0} - Both points outside the same boundary. Discard the entire line.
-    \item \codein{Out(A) \& Out(B) == 0 \&\& Out(A) | Out(B) != 0} - May or may not be intersection. Most complicated.
+    \item \codein{Out(A) \& Out(B) == 0 \&\& Out(A) | Out(B) != 0} - May or may not be intersection. Most complicated. Need to compute intersections for all 4 sides.
 \end{itemize}
 \underline{Analysis}: [1] Efficient, as it filters out simple cases. [2] Yet, still need computation for complicated cases. [3] Can extend to 3D using $6$-digit outcodes.
 
@@ -401,9 +473,6 @@ Use a \deff{Decision Variable}, $p_k$ to determine which $y$-value to rasterise 
 
 \smallskip
 
-\deff{Back-Face Culling} - Eliminate polygon if it is \textbf{back-facing} and invisible, i.e. when $N_p \cdot N < 0$.
-\\
-\underline{Note}: Need to specify polygon vertices in Anti-Clockwise order to ensure correct orientation for convex polygons.
 
 \smallskip
 
@@ -425,21 +494,50 @@ Use a \deff{Decision Variable}, $p_k$ to determine which $y$-value to rasterise 
 
 \section{Others}
 % % For intermediate results, code usage, and images/screenshots
-% \subsection{From Tutorials \& Assignments}
-% \subsection{From Past Year Papers}
+\subsection{From Tutorials \& Assignments}
+\citeqn{(Tut1 Qn2)} Human eyes' sensitivity to change in colour: G > R > B.
+\\
+\citeqn{(Tut5 Qn4)} \deff{z-Fighting} \textasciitilde when different fragments at the same pixel have the same or very similar z-buffer values. \underline{Solution}: [1] Minimise distance \codein{far-near}. [2] Use z-buffers with higher precision.
+
+
+\subsection{From Past Year Papers}
+\citeqn{(AY19/20 Sem1 Midterm Qn7\&8)} Vertices for Primitive Assembly are in Clip Space. Vertices for Rasterisation are in Window Space.
+\\
+\citeqn{(AY20/21 Sem1 Midterm Qn22)} z-fighting is more serious for polygons further away in a \textbf{perspective} projection; z-fighting is unaffected by how far a polygon is in a \textbf{orthographic} projection.
+\\
+\citeqn{(AY20/21 Sem1 Midterm Qn24)} Back-Face Culling can be performed in Window Sapce or Camera Space, but cannot be performed in the Vertex Processing stage.
+
+
+
+
+
 \subsection{Diagrams}
 Colour Theory, Transformation Pipeline
 \\
 \begin{center}
-\includegraphics[width=4cm]{img/01_colours.png}
-\includegraphics[width=4cm]{img/03_transformation_pipeline.png}
+\begin{multicols}{2}
+    \includegraphics[width=3cm]{img/rgb.jpeg}
+    \includegraphics[width=3cm]{img/cmyk.jpeg}
+    \includegraphics[width=4cm]{img/03_transformation_pipeline.png}
+\end{multicols}
+
+\end{center}
+
+
+Outcode
+\\
+\begin{center}
+\includegraphics[width=4cm]{img/2d-outcode.png}
+\includegraphics[width=2.5cm]{img/3d-outcode.png}
 \end{center}
 
 Rendering Pipeline
 \\
 \includegraphics[width=8cm]{img/02_rendering_pipeline.png}
 
-gluLookAt Coordinate Specification
+gluLookAt Coordinate Specification 
+\\
+($u, v, n$ for $x, y, z$ of the Camera)
 \\
 \includegraphics[width=8cm]{img/04_glulookat.png}
 
@@ -531,6 +629,7 @@ Other common trigger callbacks: \codein{glutMouseFunc}, \codein{glutReshapeFunc}
 \\
 \underline{Note}: \codein{fovy} vertical field of view angle in degrees. \codein{aspect} $w / h$ ratio.
 
+\codein{glViewport(x, y, width, height} - Specify transformation matrix for xy from NDC to window coordinates. 
 
 % 5. M_persp equiv matrix for glFrustum
 
