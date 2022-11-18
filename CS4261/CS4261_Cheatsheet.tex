@@ -65,10 +65,19 @@
 \setcounter{secnumdepth}{0}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt plus 0.5ex}
-% -----------------------------------------------------------------------
+
 
 \usepackage{academicons}
 
+
+
+% Declare math
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+
+
+
+% -----------------------------------------------------------------------
 \begin{document}
 
 \definecolor{mathBlue}{cmyk}{1,.72,0,.38}
@@ -79,7 +88,7 @@
 \everydisplay{\color{mathBlue}}
 
 % for vector notation in this module
-\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\vect}[1]{\vec{#1}}
 \newcommand{\deff}[1]{\textcolor{defOrange}{\textbf{#1}}}
 \newcommand{\codein}[1]{\textcolor{codeInlineRed}{\texttt{#1}}}
 \newcommand{\citeqn}[1]{\underline{\textit{#1}}}
@@ -217,8 +226,9 @@ VCG is truthful, but it can be computationally intensive, and suffers from \deff
 
 
 \section{Facility Location}
+\subsection{Overview}
 \subsubsection{Problem Specification}
-There are $n$ players $N = \{1, ..., n\}$, each with a location $x_i \in \mathbb{R}$ assuming $x_1 \le x_2 \le ... \le x_n$ for convenience.
+There are $n$ players $N = \{1, ..., n\}$, each with a location $x_i \in \mathbb{R}$, assuming $x_1 \le x_2 \le ... \le x_n$ for convenience.
 
 \smallskip
 
@@ -259,10 +269,10 @@ PoA = \frac{\text{WorstNash}(G)}{OPT(G)}
 
 \subsection{Atomic Version}
 \subsubsection{Atomic Routing Game Theorem}
-In an atomic routing game, a pure Nash Equilibrium flow always exists.
+In an atomic routing game, a pure NE flow always exists.
 
 \subsubsection{Higher Level Idea}
-Every atomic routing game is a potential game, where all players are inadvertently and collectively striving to optimise a potential function, $\Phi(f)$,
+Every atomic routing game is a potential game, where all players are inadvertently and collectively optimising a potential function, $\Phi(f)$,
 \[
 \Phi(f) = \sum_{e \in E} \sum_{i=1}^{f_e} c_e(i)
 \]
@@ -271,13 +281,280 @@ Every atomic routing game is a potential game, where all players are inadvertent
 
 
 \section{Cooperative Games}
+\subsection{Overview}
+\subsubsection{Problem Specifications}
+A \deff{Cooperative Game} $\mathcal{G}(N, v)$ consists of a set of players $N = \{ 1, ..., n \}$, and a valuation function $v: 2^n \to \mathbb{R}_{\ge 0 }$ for each player. A \deff{Coalition Structure} (CS) is a partition of $N$ while $\text{OPT}(G) = \max_\text{CS} \sum_{S \in \text{CS}} v(S)$ is the optimal.
+
+\subsubsection{Properties, Cooperative Games}
+\deff{Monotone} - For all $S \subseteq T \subseteq N$, $v(S) \le v(T)$.
+\\
+\deff{Simple} - Monotone and for all $S \subseteq N$, $v(S) \in \{ 0, 1\}$.
+\\
+\deff{Super-additive} - For any disjoint $S, T \subseteq N$, $v(S) + v(T) \le v(S \cup T)$.
+\\
+\deff{Convex} - For $S \subseteq T \subseteq N$ and any $i \in N \backslash T$, $v(S \cup \{ i \}) - v(S) \le v(T \cup \{ i \}) - v(T)$.
+
+
+\subsubsection{Properties, Game Payoff}
+\deff{Imputation} - An efficient \& individual rational payoff allocation $\vect{x}$.
+\\
+$\vect{x}$ is \deff{Efficient} if satisfying $\sum_{i \in N} x_i = v(N)$.
+\\
+$\vect{x}$ is \deff{Individual Rational} if $x_i \ge v(i)$ for all $i \in N$.
+
+
+
+
 \subsection{The Core}
+An imputation $\vect{x}$ is in the \deff{Core} if it satisfies for all $S \subseteq N$,
+\[
+\sum_{i \in S} x_i = x(s) \ge v(S)
+\]
+\underline{Note}: A core is a set of vectors, not a set of players.
+
+\subsubsection{Properties, the Core}
+Assume the game $\mathcal{G} = (N, v)$ is simple:
+\\
+\deff{Winning} / \deff{Losing Coalition} - A coalition with value $1$ / $0$.
+\\
+\deff{Veto Player} - a player that is in every winning coalition.
+\\
+\underline{Analysis}: For $p$ veto, any coalition without $p$ cannot win, and any wit $p$ does not necessarily win.
+
+\subsubsection{Veto Player Theorem}
+For a simple game, $\text{Core}(\mathcal{G}) \neq \emptyset$ iff. $\mathcal{G}$ has veto players.
+\\
+The core only distribute payoffs among the veto players.
+
+\subsection{Shapley Value}
+\subsubsection{Definitions}
+For Player $i$ and $S \subseteq N$, the \deff{Marginal Contribution} of $i$ to $S$ is
+\[
+m_i(S) = v(S \cup \{i\}) - v(S)
+\]
+Given a permutation $\sigma \in \Pi(N)$, the \deff{Predecessors} of $i$ in $\sigma$ are
+\[
+P_i(\sigma) = \{ j \in N | \sigma(j) < \sigma(i) \}
+\]
+We can write $m_i(\sigma) = m_i(P_i(\sigma))$ for marginal contribution.
+\\
+\deff{Shapley Value} of a player in a Coalition is his expected marginal contribution.
+\[
+Sh_{i} = \mathbb{E} \Big[ m_i(\sigma) \Big] 
+= \frac{1}{n!} \sum_{\sigma \in \Pi(N)} m_i(\sigma)
+\]
+
+\subsubsection{Shapley Value Theorem}
+Shapley Value is the only payoff allocation value satisfying efficiency, linearity, dummy and symmetry.
+\\
+\underline{Note}: [1] \deff{Symmetry}: symmetric players are paid equally. [2] \deff{Dummy}: Dummy players are not paid.
+
 
 
 \subsection{Induced Subgraph Games}
-\subsubsection{Problem Specification}
+\subsubsection{Problem Specifications}
+An example of Cooperative Games $\mathcal{G} = (V, E)$ where players are vertices and $e = (u, v) \in E$ with weight $w_e$ describing the utility of $u$ and $v$ in a coalition.
+
+\subsubsection{Induced Subgraph Game Core Theorem}
+The core of an induced subgraph game is non-empty iff. the graph has no negative cut.
+\\
+\underline{Note}: A negative cut is a cut (set of edges that parition the graph into two) where the sum of edge weights is negative.
+
+\subsubsection{Shapley Value, Induced Subgraph Game}
+The payoff for each player i will be
+\[
+\phi_i = \frac{1}{2} \sum_{j \in N} w(i, j)
+\]
 
 
+
+
+\section{Nash Bargaining Solution}
+\subsection{Definitions}
+\subsubsection{Problem Specifications}
+A \deff{Bargaining Game} is a pair $(S, \vec{d})$ for $S \subseteq \mathbb{R}^2$ and $\vec{d} \in \mathbb{R}^2$ with at least one point $(x_1, y_1) \in S$ such that $x_1 \ge d_1$ and $y_1 \ge d_2$ for $\vec{d} = (d_1, d_2)$. \textbf{Two players} chooses $x, y \in \mathbb{R}$ respectively. If $(x, y) \in S$, the two players receives $x$ and $y$ respectively. Otherwise, they receive $d_1$ and $d_2$. A \textbf{solution} is a function $\vec{f} = (f_1, f_2)$ that takes in $(S, \vec{d})$ and outputs a value for the two players each.
+
+
+\subsubsection{Pareto Optimality}
+An outcome $(x_1, x_2)$ \deff{Pareto Dominates} another outcome $(x_2, y_2)$ if $x_1 \ge x_2$ and $y_1 \ge y_2$ and at least one of these two inequalities is strict. The dominating one is the \deff{Pareto Improvement}. An outcome without a Pareto Improvement is \deff{Pareto Optimal}.
+
+In a Bargaining game, $S$'s top right boundary is the Pareto Frontier.
+
+\subsubsection{Properties, Bargaining Game Solutions}
+\deff{Efficiency} - No outcome $(v_1, v_2)$ dominates $\Big( f_1(S, \vec{d}), f_2(S, \vec{d} \Big)$.
+
+\deff{Symmetry} - Let $S^T = \{ (y, x): (x, y) \in S \}$ and $\vec{d}^T = (d_2, d_1)$, then
+\[
+\Big( f_1(S^T, \vec{d}^T), f_2(S^T, \vec{d}^T \Big) = \Big( f_1(S, \vec{d}), f_2(S, \vec{d} \Big)
+\]
+
+\deff{Independence of Irrelevant Alternative} (IIA) -  Let $S’ \subseteq S$ such that $\Big( f_1(S, \vec{d}), f_2(S, \vec{d} \Big) \in S’$, then,
+\[
+\Big( f_1(S', \vec{d}), f_2(S', \vec{d} \Big) = \Big( f_1(S, \vec{d}), f_2(S, \vec{d} \Big)
+\]
+
+\deff{Invariance under Equivalent Representations} (IER) - For any $\alpha_1, \alpha_2 \in \mathbb{R}, \vec{\beta} \in \mathbb{R}^2$,
+\[
+f_i((\alpha_1, \alpha_2)S + \vec\beta, \ (\alpha_1, \alpha_2)\vec{d} + \vec\beta)
+ = \alpha_i f_i(S, \vec{d}) + \beta_i, \ i = 1, 2 \]
+
+
+\subsection{Nash Bargaining Solution}
+The \deff{Nash Bargaining Solution} for a bargaining game is the solution
+\[
+\argmax_{(v_1, v_2) \in S} (v_1 - d_1)(v_2 - d_2)
+\]
+
+The Nash Bargaining Solution is the only solution that satisfies Efficiency, Symmetry, IIA and IER.
+
+\subsubsection{Utility Maximises}
+\begin{itemize}
+    \item \deff{Utilitarian}: $\max \sum_i u_i(A)$. 
+    \item \deff{Nash}: $\max \prod_i u_i(A)$. 
+    \item \deff{Egalitarian}: $\max \min_i u_i(A)$.
+\end{itemize}
+
+
+
+
+
+\section{Stable Matching}
+\subsection{Definitions}
+% Criterion for a good market, 1 sentence
+\subsubsection{Problem Specifications}
+In the case of matching medical students $S$ to hospitals $H$, with $|S| = n, |H| = m$: Each student $s$ has a strict preference order over $H$, denoted by $\succ_s$. Similarly for $\succ_h$. A matching $M: S \to H$ is a one-to-one mapping.
+
+\smallskip
+
+The goal is to design a market that \textbf{Thick}, \textbf{Safe} (truthful, fair and encouraging participation), and \textbf{Timely}.
+
+\subsubsection{Stable Matching}
+A pair $(s, h) \in S \times H$ \deff{Blocks} matching $M$, if
+\[
+h \succ_s M(s) \land s \succ_h M^{-1}(h)
+\]
+A matching $M$ is \deff{Stable} if there are no blocking pairs.
+
+\underline{Analysis}: [1] A stable matching always exists. [2] A stable matching can always be found in polynomial time. e.g. GS Algorithm.
+
+\subsection{Gale-Shapley Deferred Acceptance Algorithm}
+Procedures:
+\begin{enumerate}
+    \item Start with all students unassigned.
+    \item While there are unassigned students: Each unassigned student proposes to favourite \textbf{not-yet-proposed-to} hospital. Then each hospital looks at \textbf{students proposed to it in this round and whoever currently assigned} to it, and picks most preferred; all others remain unassigned.
+    \item Repeat until all matched.
+\end{enumerate}
+
+\underline{Analysis}: [1] Terminate in $\le n^2$ iterations with a stable matching.
+
+\subsubsection{Fairness for GS Algorithm}
+Given $s \in S$, a \deff{Valid} hospital $h \in H$ is one that there exists some stable matching $M$ such that $M(s) = h$. \deff{best(s)} and \deff{worse(s)} are the most and least highly ranked valid hospital for $s$.
+
+\smallskip
+
+\subsubsection{Theorem}
+
+The GS Algorithm (with student proposing) assigns each student $s \in S$ to the hospital $\text{best}(s)$, and each hospital $h \in H$ to the student $\text{worst}(h)$.
+
+
+
+
+
+\section{Fair Allocation of Indivisible Goods}
+\subsection{Definitions}
+\subsubsection{Problem Specifications}
+With players $N = \{ 1,2,..., \}$ and indivisible goods $G = \{g_1, g_2, ..., g_m\}$, Player $i$ has value $v_i(g)$ for good $g$. An \deff{Allocation}, $A = (A_1, ..., A_n)$ is a partition, with \deff{Bundle} $A_i$ is allocated to Player $i$.
+\\
+Valuation is \deff{Additive} if 
+\[
+v_i(G') = \sum_{g\in G'} v_i(g), \ \forall G' \subseteq G 
+\]
+
+
+\subsubsection{Fairness}
+\deff{Proportionality} - $v_i(A_i) \ge \frac{1}{n} \cdot v_i(G)$ for all $i \in N$.
+\\
+\deff{Envy-freness} -  $v_i(A_i) \ge v_i(A_j)$ for all $i, j \in N$.
+\\
+\deff{Envy-freeness Up to One Good} (EF1) - For any $i, j \in N$, if $A_j \neq \emptyset$, there exists $g \in A_j$ such that
+\[
+v_i(A_i) \ge v_i(A_j \backslash \{ g \})
+\]
+\underline{Analysis}: EF1 allocations always exist.
+
+\\
+\deff{Envy-freeness Up to Any Good} (EFX) - For any $i, j \in N$ and any $g \in A_j$, we have
+\[
+v_i(A_i) \ge v_i(A_j \backslash \{ g \})
+\]
+
+% analysis
+\underline{Analysis}: [1] EFX is stronger than EF1. [2] EFX allocations always for $n=2$ (Cut-and-Choose protocol) and $n=4$, and its existence for $n \ge 4$ remains an open problem.
+
+
+
+\subsubsection{Maximum Nash Welfare}
+An allocation that maximises the Nash welfare, known as \deff{Maximum Nash Welfare} (MNW) allocation, satisfies EF1.
+\\
+\underline{Note}: If $MNW =0$, maximising the number of players with positive utility, then maximise Nash welfare among these players.
+\\
+\underline{Analysis}: The allocation is also Pareto Optimal.
+
+
+
+
+\subsection{Envy-free}
+\subsubsection{Round-Robin}
+\underline{Procedures}: Let players take turns choosing their favourite good from the remaining, in the order $1,2,...,n,1,2,...,n,1,2,...$ until goods run out.
+\\
+\underline{Note}: Require \textbf{additive} valuations.
+
+
+\subsubsection{Envy-Cycle Elimination}
+\underline{Procedures}: [1] Allocate one good at a time in an arbitrary order. [2] Maintain an \textbf{envy graph} with $e: i \to j$ for each $i$ envying $j$. [3] At each step, the next good is allocated to a player with no incoming edges. [3'] Any cycle that arises is eliminated by giving $j$'s entire bundle to any $i$ for $i \to j$.
+\\
+\underline{Note}: Require \textbf{Monotone} valuation, not necessarily \textbf{additive}.
+
+
+\subsection{Proportionality}
+\deff{Maximin Share} (MMS) of Player $i$: Player $i$ divides all goods into $n$ bundles so as to maximise the values of the value of the minimum-value bundle. An relaxation of proportionality:
+\[
+\text{MMS}_i \le \frac{v_i(G)}{n}
+\]
+\underline{Analysis}: [1] Solution achieving MMS for every player exists for $n=2$ (Cut-and-Choose), but might not exist for $n \ge 3$. [2] Solution with at least $\frac{3}{4}\text{MMS}_i$ for each always achievable for all $n$. 
+
+
+\subsection{Query Complexity}
+The Envy-Cycle Elimination Algoritm can be implemented using $O(nm)$ queries, even with monotonic valuations.
+\\
+For EF1 solution for two agents with monotonic valuations, $O(\log m)$ queries suffice.
+\\
+Any deterministic EF1 algorithm needs $\Omega(\log m)$ queries.
+\\
+Any deterministic EFX algorithm needs queries \textbf{exponential} in $m$.
+
+
+
+
+
+\section{Cake Cutting}
+
+
+
+
+
+
+
+
+
+
+
+
+\hline
+
+\section{Imtermediate Results}
+\subsection{From Assignments}
+\citeqn{Assignment5 Qn3} For a cooperative game with non-empty core, the Shapley vector is not necessarily in the core.
 
 
 
