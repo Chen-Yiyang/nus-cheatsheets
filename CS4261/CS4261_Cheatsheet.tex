@@ -155,7 +155,7 @@ A strategy $\vec{p} \in \Delta(A_i)$ \deff{Dominates} $\vec{q} \in \Delta(A_i)$ 
 \]
 There are similar definitions for \deff{Strictly Domination}.
 \\
-\underline{Intuitively}, it means no mather what others do, playing $\vec{p}$ is always better than $\vec{q}$.
+\underline{Intuitively}, no mather what others do, playing $\vec{p}$ is always better than $\vec{q}$.
 
 \subsubsection{Dominant Strategy Theorem}
 If an action $a \in A_i$ is \textbf{strictly dominated} by some strategy $\vec{p} \in \Delta(A_i)$, then action $a$ is never played with any positive probability in any Nash Equilibrium.
@@ -188,7 +188,6 @@ First-Price Auctions are \textbf{Not Truthful}.
 
 
 \subsection{Multi-Unit Auction}
-\subsubsection{Game Specification}
 There are $n$ players $N = \{ 1, 2, ..., n\}$, each with a valuation of the item $v_i$. There are $k \le n$ identical copies of the item.
 
 \smallskip
@@ -200,7 +199,6 @@ The objective is to design a mechanism where
 \end{itemize}
 
 \subsubsection{Vickrey Clarke Groves (VCG) Mechanism}
-Procedures:
 \begin{enumerate}
     \item Choose some outcome $o^*$ that maximises social welfare $\sum_{i} v_i(o^*)$
     \item Calculate the payment that Player $j$ must take with $p_j = \sum_{i \neq j} v_i(o_{-j}^*) - \sum_{i \neq j} v_i(o^*)$, where $o_{-j}^*$ is the outcome that maximises $\sum_{i \neq j} v_i(o_{-j})$.
@@ -212,7 +210,6 @@ Procedures:
 
 
 \subsection{Combinatorial Auction}
-\subsubsection{Problem Specification}
 There are $n$ Players and $m$ possibly distinct items for sale. Each player has a valuation for each subset of the $m$ objects.
 
 \smallskip
@@ -227,7 +224,6 @@ VCG is truthful, but it can be computationally intensive, and suffers from \deff
 
 \section{Facility Location}
 \subsection{Overview}
-\subsubsection{Problem Specification}
 There are $n$ players $N = \{1, ..., n\}$, each with a location $x_i \in \mathbb{R}$, assuming $x_1 \le x_2 \le ... \le x_n$ for convenience.
 
 \smallskip
@@ -267,6 +263,7 @@ PoA = \frac{\text{WorstNash}(G)}{OPT(G)}
 \]
 \underline{Analysis}: 1) $PoA \ge 1$ with the smaller being the better. 2) All Nash Equilibria in a Routing Game have the same social cost.
 
+
 \subsection{Atomic Version}
 \subsubsection{Atomic Routing Game Theorem}
 In an atomic routing game, a pure NE flow always exists.
@@ -281,8 +278,7 @@ Every atomic routing game is a potential game, where all players are inadvertent
 
 
 \section{Cooperative Games}
-\subsection{Overview}
-\subsubsection{Problem Specifications}
+\subsection{Definitions}
 A \deff{Cooperative Game} $\mathcal{G}(N, v)$ consists of a set of players $N = \{ 1, ..., n \}$, and a valuation function $v: 2^n \to \mathbb{R}_{\ge 0 }$ for each player. A \deff{Coalition Structure} (CS) is a partition of $N$ while $\text{OPT}(G) = \max_\text{CS} \sum_{S \in \text{CS}} v(S)$ is the optimal.
 
 \subsubsection{Properties, Cooperative Games}
@@ -301,8 +297,6 @@ A \deff{Cooperative Game} $\mathcal{G}(N, v)$ consists of a set of players $N = 
 $\vect{x}$ is \deff{Efficient} if satisfying $\sum_{i \in N} x_i = v(N)$.
 \\
 $\vect{x}$ is \deff{Individual Rational} if $x_i \ge v(i)$ for all $i \in N$.
-
-
 
 
 \subsection{The Core}
@@ -327,7 +321,6 @@ For a simple game, $\text{Core}(\mathcal{G}) \neq \emptyset$ iff. $\mathcal{G}$ 
 The core only distribute payoffs among the veto players.
 
 \subsection{Shapley Value}
-\subsubsection{Definitions}
 For Player $i$ and $S \subseteq N$, the \deff{Marginal Contribution} of $i$ to $S$ is
 \[
 m_i(S) = v(S \cup \{i\}) - v(S)
@@ -352,7 +345,6 @@ Shapley Value is the only payoff allocation value satisfying efficiency, lineari
 
 
 \subsection{Induced Subgraph Games}
-\subsubsection{Problem Specifications}
 An example of Cooperative Games $\mathcal{G} = (V, E)$ where players are vertices and $e = (u, v) \in E$ with weight $w_e$ describing the utility of $u$ and $v$ in a coalition.
 
 \subsubsection{Induced Subgraph Game Core Theorem}
@@ -371,9 +363,7 @@ The payoff for each player i will be
 
 \section{Nash Bargaining Solution}
 \subsection{Definitions}
-\subsubsection{Problem Specifications}
 A \deff{Bargaining Game} is a pair $(S, \vec{d})$ for $S \subseteq \mathbb{R}^2$ and $\vec{d} \in \mathbb{R}^2$ with at least one point $(x_1, y_1) \in S$ such that $x_1 \ge d_1$ and $y_1 \ge d_2$ for $\vec{d} = (d_1, d_2)$. \textbf{Two players} chooses $x, y \in \mathbb{R}$ respectively. If $(x, y) \in S$, the two players receives $x$ and $y$ respectively. Otherwise, they receive $d_1$ and $d_2$. A \textbf{solution} is a function $\vec{f} = (f_1, f_2)$ that takes in $(S, \vec{d})$ and outputs a value for the two players each.
-
 
 \subsubsection{Pareto Optimality}
 An outcome $(x_1, x_2)$ \deff{Pareto Dominates} another outcome $(x_2, y_2)$ if $x_1 \ge x_2$ and $y_1 \ge y_2$ and at least one of these two inequalities is strict. The dominating one is the \deff{Pareto Improvement}. An outcome without a Pareto Improvement is \deff{Pareto Optimal}.
@@ -421,7 +411,6 @@ The Nash Bargaining Solution is the only solution that satisfies Efficiency, Sym
 \section{Stable Matching}
 \subsection{Definitions}
 % Criterion for a good market, 1 sentence
-\subsubsection{Problem Specifications}
 In the case of matching medical students $S$ to hospitals $H$, with $|S| = n, |H| = m$: Each student $s$ has a strict preference order over $H$, denoted by $\succ_s$. Similarly for $\succ_h$. A matching $M: S \to H$ is a one-to-one mapping.
 
 \smallskip
@@ -453,8 +442,7 @@ Given $s \in S$, a \deff{Valid} hospital $h \in H$ is one that there exists some
 \smallskip
 
 \subsubsection{Theorem}
-
-The GS Algorithm (with student proposing) assigns each student $s \in S$ to the hospital $\text{best}(s)$, and each hospital $h \in H$ to the student $\text{worst}(h)$.
+GS Algorithm (with student proposing) assigns each student $s \in S$ to hospital $\text{best}(s)$, and each hospital $h \in H$ to student $\text{worst}(h)$.
 
 
 
@@ -462,13 +450,12 @@ The GS Algorithm (with student proposing) assigns each student $s \in S$ to the 
 
 \section{Fair Allocation of Indivisible Goods}
 \subsection{Definitions}
-\subsubsection{Problem Specifications}
 With players $N = \{ 1,2,..., \}$ and indivisible goods $G = \{g_1, g_2, ..., g_m\}$, Player $i$ has value $v_i(g)$ for good $g$. An \deff{Allocation}, $A = (A_1, ..., A_n)$ is a partition, with \deff{Bundle} $A_i$ is allocated to Player $i$.
 \\
-Valuation is \deff{Additive} if 
-\[
-v_i(G') = \sum_{g\in G'} v_i(g), \ \forall G' \subseteq G 
-\]
+Valuation is \deff{Additive} if for all $G' \subseteq G$,
+$
+v_i(G') = \sum_{g\in G'} v_i(g)
+$
 
 
 \subsubsection{Fairness}
@@ -538,6 +525,204 @@ Any deterministic EFX algorithm needs queries \textbf{exponential} in $m$.
 
 
 \section{Cake Cutting}
+\subsection{Definitions}
+Given a cake represented as interval $[0, 1]$, players $N = \{ 1, ..., n \}$, and valuation $v_1, ..., v_n$ over the cake, the goal is to find an allocation $A = (A_1, ..., A_n)$ where each $A_i$ is a union of \textbf{finitely many} intervals.
+
+\subsubsection{Valuation Function}
+Each valuation function $v_i$ is defined with a density function $f_i$
+\[
+v_i(B) = \int_B f_i(x), \ \forall B \subseteq [0, 1]
+\]
+\underline{Note}: $v_i(x, y) = v_i([x, y])$ denotes the utility of Player $i$ getting $[x, y]$.
+\\
+Valuation function is [1] Non-negative, [2] Additive (over disjoint pieces), [3] Non-atomic (where value of a point is $0$), and [4] Normalised (where value of entire cake is $1$).
+
+
+\subsubsection{Robertson-Webb Model}
+\deff{Robertson-Webb Model} defines two types of queries:
+\begin{itemize}
+    \item \codein{Eval\_i(x, y)} - Return $v_i(x, y)$.
+    \item \codein{Cut\_i(x, a)} - Return the leftmost point $y$ s.t. $v_i(x, y) = a$ or such points do not exist.
+\end{itemize}
+Complexity of a model can be determined based on numbers of RW Model queries needed.
+
+
+\subsection{Proportionality}
+\deff{Cut-and-Choose Protocol} (for $n=2$ players) - One player cuts, the other player chooses first.
+\\
+\underline{Analysis}: It is always proportional and envy-free.
+
+\medskip
+
+\deff{Dubin-Spanier Protocol} - 1) Referee moves a knife over the cake from the left. 2) Whenever the current piece is worth $1/n$ to some player, that player leaves the procedure with that piece. 3) The last player gets the remaining cake.
+\\
+\underline{Analysis}: [1] Proportional for any $n$. [2] $O(n^2)$ queries.
+
+\medskip
+
+\deff{Even-Paz Protocol} （for $n=2^k$ players) - 1）Each player marks the point that divides the cake into two of equal value according to his valuation. 2) Let $t$ be the $n/2$-th mark from the left, recurse on $[0, t], [t, 1]$ each with $n/2$ agents. 3) Terminate with one player getting the whole cake.
+\\
+\underline{Analysis}: [1] Proportional for any $n$. [2] Require $O(n \log n)$ queries (optimal query number in all proportional protocols).
+
+
+\subsection{Envy-freeness}
+Envy-free protocols are complicated. \deff{Cut-and-Choose} is EF for $n=2$. \deff{Selfridge-Conway Protocol} is EF for $n=3$.
+
+\subsubsection{Envy-Free Approximation}
+1) Referee moves a knife over the cake from the left. 2) Whenever the current piece is worth $1/3$ to some player, that player leaves the procedure with that piece. 3) When the knift reaches the right end, 3a) if there are still agents left, the remaining is given to any of them; 3b) otherwise the remaining is given to the last agent.
+\\
+\underline{Analysis}: EF up to $1/3$, i.e. any player envies any other by at most a numeric value of $1/3$.
+
+\subsection{Truthfulness}
+Cut-and-Choose is truthful for the choose not for the cutter.
+
+
+\section{Rent Division}
+\subsection{Definitions}
+Given players (roommates) $N = \{ 1, ..., n \}$ and $n$ rooms of an apartment, and rental price for the entire apartment, $r$, each Player $i$ has a value for room $j$, $v_{ij}$ subject to $\sum_j v_{ij} = r$.
+\\
+The objective is to output an outcome $(\sigma, \vec{p})$
+\begin{itemize}
+    \item Room allocation function $\sigma : N \to N$, mapping player to room
+    \item Rent division $\vec{p} = (p_1, ..., p_n)$ s.t. $\sum_{j}p_j = r$
+\end{itemize}
+\underline{Note}: $p_j$ is the rent for Room $j$, not for Player $j$ by convention.
+
+
+\subsection{Allocation Algorithms}
+\subsubsection{Envy-free Outcomes}
+An outcome $(\sigma, \vec{p})$ is \deff{Envy-Free} if for all $i, j \in N$,
+\[
+v_{i, \sigma(i)} - p_{\sigma(i)} \ge v_{ij} - p_j
+\]
+Intuitively, it means no one prefers anyone's room for the price that person is charged.
+\\
+\underline{Analysis}: EF Outcomes can be computed using Linear Programming, but it is not always fair.
+
+\subsubsection{Equitability \& Maximin Outcomes}
+\deff{Equitability} - Maximum difference in utility of any two players. To maximise equitability is to minimise the following expression
+\[
+D(\vec{p}) = \max_{i, j \in N}
+(u_i(\vec{p}) - u_j(\vec{p}))
+\]
+
+\smallskip
+
+\deff{Maximin} - Minimum utility any player derives. It is the \textbf{Egalitarian Utility}, defined as 
+\[
+U(\vec{p}) = \min_{i \in N} u_i(\vec{p})
+\]
+
+\smallskip
+
+\underline{Theorem}: There is a unique Maximin price vector and it is also equitable. (Yet there are still equitable, non-Maximin price vectors).
+
+
+
+
+
+\section{Committee Voting}
+\subsection{Definitions}
+\subsubsection{Problem Specifications}
+\deff{Approval Voting} is the game where each voter submits a subset of candidates he / she approves. It consists of voters $N = \{1, ..., n\}$, candidates $C = \{1, ..., m \}$, and set of candidates $A_i \subseteq C$ that Voter $i$ approves for $i=1, ..., n$. The goal is to choose a committee $W \subseteq C$ of size $|W| = k$ given.
+\\
+Voter $i$'s utility is number of committee members he approves:
+\[
+u_i(W) = |A_i \cap W|
+\]
+
+
+\subsubsection{Social Welfare \& Coverage}
+For a given committee,
+\begin{itemize}
+    \item \deff{Social Welfare} - $\sum_{i \in N} u_i(W)$, total number of approvals committee members receive
+    \item \deff{Coverage} - Total number of voters who approves at least one committee member.
+\end{itemize}
+A candidate \deff{Covers} a voter if the voter approves the candidate.
+\\
+Some solutions based on the two
+\begin{itemize}
+    \item \deff{Approval Voting} (AC) - Select a committee that maximises social welfare,
+    \[
+    W_{AC} = \max_{W \subseteq C, |W| = k} \sum_{i \in N} u_i(W)
+    \]
+    \item \deff{Chamberlin-Courant} (CC) - Select a committee that maximises coverage,
+    \[
+    W_{CC} = \max_{W \subseteq C, |W| = k} |\{ i \in N | A_i \cap W \neq \emptyset \}|
+    \]
+\end{itemize}
+\underline{Note}: Both solutions are not unique.
+
+
+
+\subsection{Justified Representation}
+A group of voters $S \subseteq N$ is a \deff{Cohesive Group} if
+$
+|S| \ge n / k \land  |\cap_{i \in S} A_i| \ge 1
+$
+\\
+\deff{Justified Representation} (JR) - For any cohesive group of voters $S \subseteq N$, there exists $i \in S$ such that
+$
+A_i \cap W \neq \emptyset
+$
+
+\subsubsection{GreedyCC}
+Find a CC committee is NP-hard, equivalent to SET-COVER.
+\\
+\deff{GreedyCC} is one greedy solution: 1) Start with an empty set of candidates. 2) In each step, choose a candidate that covers as many uncovered voters as possible. 3) Repeat this until $k$ candidates have been chosen.
+\\
+\underline{Analysis}: GreedyCC satisfies JR.
+
+
+
+\subsection{Extended JR}
+For a positive integer $t \in \mathbb{Z}_{> 0}$, a group of voters $S \subseteq N$ is a \deff{$t$-Cohesive Group} if
+$
+|S| \ge t \times n / k \land  |\cap_{i \in S} A_i| \ge t
+$
+\\
+\deff{Extended Justified Representation} (EJR) - For any positive integer $t \in \mathbb{Z}_{> 0}$ and any $t$-cohesive group of voters $S \subseteq N$, there exists $i \in S$ such that
+$
+|A_i \cap W| \ge t
+$
+\\
+\underline{Note}: A cohesive group is a $1$-cohesive group. JR is only EJR of the case $t = 1$.
+
+
+\subsubsection{Thiele Method}
+\deff{Thiele Method} - A generalised method for finding out a group of candidates that satisfies a specific criterion.
+\begin{itemize}
+    \item Choose an infinite non-increasing sequence $\{ s_n \}^\infty_{n=1}$, based on the criterion of interest.
+    \item Choose a committee $W$ that maximises
+    \[
+    \sum_{i \in N} \sum_{j \in u_i(W)} s_j = \sum_{i \in N } (s_1 + s_2 + ... + s_{u_i(W)})
+    \]
+\end{itemize}
+\underline{Note}: If a voter approves $r$ candidates, he contributes a value of $s_1 + ... + s_r $ to the score.
+\\
+\underline{Analysis}: [1] $s_i = 1, \forall i$ for AV. [2] $s_1 = 1, \ s_2 = s_3 = ... = 0$ for CC.
+
+
+\subsubsection{Proportional Approval Voting}
+\deff{Proportional Approval Voting} (PAV) - The solution when we set $s_n = 1/n$, i.e. the Harmonic Sequence, then apply Thiele Method.
+\\
+PAV satisfies EJR.
+\\
+\underline{Note}: PAV is NP-Hard. Greedy variant of PAV is not EJR or even JR.
+
+
+
+\subsubsection{Method of Equal Shares}
+\deff{Method of Equal Shares} (MES) - Another procedure for finding a EJR solution
+\begin{enumerate}
+    \item Each voter has a budget of $k/n$. Each candidate costs $1$. The voters who approve this candidate have to “pool” their money to add this candidate to the committee.
+    \item Start with an empty committee.
+    \item In each round, we want to add a candidate whose approved voters have a total budget of $≥ 1$ left.
+    \item If there are several such candidates, choose one such that the maximum amount that any agent has to pay is minimised.
+    \item If no more candidate can be afforded but the committee still has size $< k$, fill in the rest of the committee using some tie-breaking criterion.
+\end{enumerate}
+\underline{Note}: We do not require all players to pool a candidate must provide the equal amount.
+\underline{Analysis}: MES satisfies EJR, and can be implemented in polynomial time.
 
 
 
@@ -545,6 +730,63 @@ Any deterministic EFX algorithm needs queries \textbf{exponential} in $m$.
 
 
 
+
+
+\section{Tournaments}
+\subsection{Definitions}
+A \deff{Tournament} $T = (A, \succ)$ consists of a set of \deff{Alternatives} (players), $A$, and a dominance relation $\succ$ such that $\forall i \neq j \in A, i \succ j \lor j \succ i$.
+\\
+\underline{Note}: [1] By convention, we draw a direct edge from $i$ to $j$ for $i \succ j$.
+
+\smallskip
+
+\deff{Outdegree} of an alternative $x \in A$ is number of alternatives dominated by $x$. A \deff{Condorcet Winner} / \deff{Loser} is an alternative that dominates / is dominated by all others (i.e. outdegree $n-1$ / $0$).
+
+\smallskip
+
+A \deff{Tournament Solution}, $S$, is a method for choosing tournament winners, satisfying conditions: [1] It returns a \textbf{non-empty} subset of alternatives for any tournament (can be $A$ trivially), $\forall T = (A, \succ), S(T) \subseteq A$. [2] \deff{Invariant Under Isomorphism}: for $h: A \to A'$ an isomorphism between $T = (A, \succ)$ and $T' = (A', \succ')$, satisfying
+\[
+S(T') = h(S(T))
+\]
+\underline{Analysis}: By symmetric, in a cyclic tournament of $|A|=3$, every tournament solution must select all alternatives.
+
+
+\subsection{Tournament Solutions}
+A summary of types of tournament solutions:
+\begin{itemize}
+    \item \deff{Copeland Set} (CO) - Alternatives with highest outdegrees.
+    \item \deff{Top Cycle} (TC) - Alternatives that can reach every other alternative via a directed path (of any length)
+    \item \deff{Uncovered Set} (UC) - Alternatives that can reach every other alternative via a directed path of length $\le 2$
+    \item \deff{Banks Set} (BA) - Alternatives that appear as the maximal (i.e., strongest) element of some transitive sub-tournament that cannot be extended
+\end{itemize}
+\underline{Note}:  \deff{Transitive Tournament} - A tournament where alternatives can be ordered a sequence $a_1, …, a_k$ s.t. $\forall 1 \le i < j \le k, a_i \succ a_j$.
+
+\subsubsection{Top Cycle}
+\underline{Equivalent Definition} for TC: The unique smallest nonempty set $B$ of alternatives such that all in $B$ dominates all outside $B$.
+
+\subsubsection{Uncovered Set}
+$x$ \deff{Covers} $y$ if [1] $x \succ y$, and [2] $\forall z \in A, y \succ z \implies x \succ z$.
+\\
+\underline{Equivalent Definition} fot UC: The set of all uncovered alternatives.
+
+\subsubsection{Axioms}
+CO, TC, UC, and BA all satisfy Condorcet-Consistency and Monotonicity
+\begin{itemize}
+    \item \deff{Condorcet-Consistency} - If there is a Condorcet winner $x$, then $x$ is uniquely chosen.
+    \item \deff{Monotonicty} - If $x$ is chosen, then it should remain chosen when it is strengthened against another alternative $y$ (and everything else stays the same).
+\end{itemize}
+For $y \succ x$, \deff{Strengthen} $x$ against $y$ is to change $y \succ x$ to $x \succ y$.
+
+
+\subsection{Tournament Fixing Problem}
+In a \textbf{balanced knockout tournament}, given alternatives $A$, (probabilistic) dominance relation $\succ$ and our favourite alternative $x \in A$, the goal is find a tournament bracket that maximises win-rate for $x$. If such a bracket exists, such a winner is called \deff{Knockout Winner}.
+
+\subsubsection{String King Theorem}
+An alternative is $x$ is a \deff{King} if it is in UC. \underline{Note}: it beats any other directly or via a third alternative.
+
+For $x$ is a king, suppose $x \in A$ beats $P \subseteq A$ and loses to $Q \subseteq A$. if $|P| \ge n / 2$, $x$ is a knockout winner.
+\\
+\underline{Analysis}: Any alternative in CO is a knockout winner.
 
 
 
