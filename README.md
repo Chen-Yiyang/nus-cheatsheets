@@ -21,7 +21,8 @@ If you have noticed any typos or errors, please let me know. Thank you!
 
 
 ### CS3241 Computer Graphics
-- Cheatsheet: Updated for Midterm. Worked together with [Zihao](https://github.com/9teMare) for the cheatsheet.
+- Midterm: A detailed summary sheet for Midterm, covering till Chapter 6 Rasterisation. Worked together with [Zihao](https://github.com/9teMare).
+- Cheatsheet: A detailed summary sheet for Final, including all content for the module. Worked together with [Zihao](https://github.com/9teMare).
 
 ### CS3243 Introduction to Artificial Intelligence
 - Midterm: A 2-page summary sheet for Midterm.

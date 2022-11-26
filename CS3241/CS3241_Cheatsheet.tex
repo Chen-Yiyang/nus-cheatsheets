@@ -133,7 +133,7 @@ Colour info is stored in each vertex of a polygon, and the shading mode determin
 
 
 
-\section{Interaction}
+\section{3. Interaction}
 \subsection{Overview}
 Input devices generate \deff{Triggers}, namely signals, and return \deff{Measures}, which are trigger with other meta-info from the input devices, to the OS. Each trigger generates an \deff{Event} whose measure is put in an \deff{Event Queue} to be examined by the user program.
 \\
@@ -156,7 +156,7 @@ x_\text{opengl} = x_\text{win}, \;\; y_\text{opengl} = h - 1 - y_\text{win}
 
 
 
-\section{Geometry}
+\section{4. Geometry}
 \subsection{Representation}
 \deff{Affine Space} - A frame formed by an origin point and basis vectors.
 
@@ -260,7 +260,7 @@ OpenGL also maintains a stack for each matrix mode.
 
 
 
-\section{Camera \& Viewing}
+\section{5. Camera \& Viewing}
 OpenGL Spaces: \deff{Object Space}, for modelling each object where the object is centred in the frame. \deff{World Space}, a common frame for all objects, and for defining lightning and camera pose. \deff{Camera Space}, the local frame for camera where it is at the origin and looking into the \textbf{Negative z-direction}, initially the same as the world frame.
 
 \smallskip
@@ -377,7 +377,7 @@ M_\text{persp} =
 
 
 
-\section{Rendering}
+\section{6. Rendering}
 \subsection{Overview}
 \subsubsection{Pipeline Stages}
 \deff{Vertex Process} - The stage where Model-View and Projection transformations, and lighting and textures are applied. The result is in Clip Space.
@@ -486,11 +486,360 @@ Use a \deff{Decision Variable}, $p_k$ to determine which $y$-value to rasterise 
 
 
 
+\section{7. Illumination \& Shading}
+\deff{Illumination} \textasciitilde To compute colour of a point on the surface, given the light source, and the viewpoint. It can be \textbf{Local} (between a light source, a surface point and a viewpoint) or \textbf{Global} (of all light sources, surfaces and their reflections \& shadows).
 
-% \noindent\rule{8cm}{0.4pt}
+\subsection{Phong Illumination Equation (PIE)}
+PIE model calculates colour at a point, using \deff{Ambient}, \deff{Diffuse}, and \deff{Specular} terms.
+\[
+I_\text{Phong} = 
+I_ak_a 
++ f_{att}I_p k_d(N \cdot L) 
++ f_{att}I_p k_s (R \cdot V)^n
+\]
+\underline{Note}: [1] All $I$'s are \deff{Luminance} column vectors for RGB values. [2] All \deff{Material Property} constants $k$'s are column vectors $k = (k_r, k_g, k_b)^T$. [3] $N, L, R, V$ are directional (unit) vectors. [4] $n$ is {Shininess Coefficient}, and $n = 1, ..., 128$ in OpenGL.
+
+\smallskip
+
+\deff{Lamber's Cosine Law} - The diffusion intensity is proportionate to the cosine of the angle between the reflection angle and the normal:
+\[
+\text{diffusion reflection}
+\propto \cos \theta = N \cdot L
+\]
+
+\subsubsection{PIE For Multiple Light Sources}
+Simply apply each point light sources to each surface for diffuse and specular term
+\[
+I_\text{Phong}
+= I_ak_a
++ \sum_{i}
+f_{\text{att}, i} I_{p, i}
+[k_d (N \cdot L_i) + k_s(R_i \cdot V)^n]
+\]
+
+\subsubsection{Point Source \& Attenuation}
+\deff{Attenuation} captures the effect that When distance increases, light received decreases, up to the inverse of quadratic terms.
+\[
+f_\text{att}I_p = \frac{1}{a+bd+cd^2} I_p
+\]
+\underline{Note}: $a, b, c$ are customisable parameters in OpenGL, but they are usually disabled, with $a = 1, b = c = 0$.
+
+
+\subsection{OpenGL Illumination}
+% TODO: fill in OpenGL concepts here if needed
+Illumination is calculated in \textbf{Vertex Processing States} in OpenGL pipeline, after \textbf{Model View} transformation and before \textbf{Projection Transformation}, i.e. in \textbf{Eye Space}.
 
 
 
+\subsection{Shading}
+\deff{Shading} ~ How we assembly vertices’ information to colour the polygons.
+
+\subsubsection{Flat Shading}
+\deff{Flat Shading} - Colour the whole polygon with colour of one point on each polygon (in OpenGL the first vertex).
+\\
+\underline{Implementation}: \codein{glShadeModel(GL\_FLAT)}
+\\
+\underline{Analysis}: Distinctive colour differences between neighbouring polygons. Not photo-realistic.
+
+\subsubsection{Gouraud Shading}
+\deff{Gouraud Shading} - 1) For each vertex, compute average normal vector of polygons sharing the vertex. 2) Apply PIE at the vertex using the average normal vector. 3) For each polygon, interpolate computed colours at the vertices to the interior of the polygon.
+\\
+\underline{Implementation}: \codein{glShadeModel(GL\_SMOOTH)}
+\\
+\underline{Analysis}: [1] \textbf{Per-Vertex Lighting} [2] Require polygon connectivity information. [3] No colour difference between neighbouring polygons. [4] Linear interpolation of colour, cannot show specular.
+
+\subsubsection{Phong Shading}
+\deff{Phong Shading} - 1) For each vertex, compute average normal vector of polygons sharing the vertex. 2) For each fragment in a polygon, interpolate the normal vectors from the vertices. 3) At each fragment, apply PIE on the interpolated normal to compute a colour.
+\\
+\underline{Implementation}: Not available in OpenGL unless custom shader.
+\\
+\underline{Analysis}: [1] \textbf{Per-Pixel Lighting}, so computationally expensive. [2] Require polygon connectivity information. [3] Able to render faithful results, especially highlights.
+
+
+
+
+
+\section{8. Texture Mapping}
+\deff{Forward Mapping} \textasciitilde Start with a 2D texture space, wrap it around a 3D object to be mapped.
+\\
+\deff{Inverse Mapping} \textasciitilde For each pixel on 3D object surface, draw from the texture space, known as \deff{Pre-image}, during rasterisation.
+
+\subsection{Inverse Mapping}
+\deff{Surface Parameterisation} \textasciitilde A function mapping between 3D surface point $(x_w, y_w, z_w) \in \mathbb{R}^{3}$ and 2D texture map $(s, t) \in [0, 1]^2$. It usually consists of two steps:
+\begin{itemize}
+    \item \deff{S Mapping} (Shape Mapping) - Project 2D texture map onto an "easy" intermediate surface (of a simple 3D geometry)
+    \item \deff{O Mapping} (Object Mapping) - Map from 3D intermediate surface onto object surface.
+\end{itemize}
+
+
+\deff{Texture Filtering} - Performance of bilinear interpolation of adjacent $4$ \deff{texels} at each fragment.
+
+\medskip
+
+\deff{Texture Coordinates Wrapping} - OpenGL's handling of vertex texture coordinates that $(s, t) \not\in [0, 1]^2$, an implementation feature. Two wrapping modes are supported:
+\begin{itemize}
+    \item Clamp - Clamp to $[0, 1]$
+    \item Repeat - Ignore integer part of texture coordinates
+\end{itemize}
+
+
+\subsubsection{Anti-Aliasing}
+\deff{Aliasing} happens when [1] texture map is point-sampled at each fragment, or [2] during \deff{Texture minification}, where a larger region of texture image is supposed to be mapped to one fragment. 
+
+\medskip
+
+\textbf{Area-Sampling} addresses aliasing - a fragment is mapped to a \textbf{quadrilateral} area of pre-image in the texture space.
+\\
+\deff{Mipmapping} is one implementation of Area Sampling Solution: 1) A \deff{Mipmap} is created by averaging down the original image successively by halving the resolution. 2) During texture mapping of a fragment, find the appropriate mipmap level according to the amount of texture minification.
+
+
+\subsection{Texture Mapping Application}
+\deff{Environment / Reflection Mapping} \textasciitilde a shortcut to render shiny objects with reflection: 1) Capture the image of the surroundings from the position where the object is placed and store in a texture map. 2) During rendering of the object, the reflected eye ray is used to reference the texture map.
+\\
+\underline{Analysis}: [1] There is no \textbf{self-reflection}. [2] When the object is close, reflection does not look real (distortion arises). 
+
+\medskip
+
+\deff{Bump Mapping} - Simulation of small complex geometric features on the surface by using textures instead of modelling real geometry.
+\\
+\underline{Analysis}: Only applicable to small bumps, may not look normal  when viewing from a close distance.
+
+\medskip
+
+\deff{Billboarding} - Rendering of simple objects as images that are always rotating and facing the viewer. A type of image-based rendering, used in old 2D games.
+
+% \subsection{OpenGL Texture Mapping}
+% TODO: fill in OpenGL concepts here if needed
+
+
+
+
+
+\section{9. Ray Tracing}
+\deff{Ray Casting} ~ For each pixel, construct a ray from the eye through the pixel, and find the first object it intersects with, if any, and compute shading.
+\\
+\underline{Pros}: [1] Ray tracing achieves hidden surface removal implicitly.
+\\
+\underline{Cons}: [1] (Whitted) Ray tracing produces hard shadow, and there is inconsistency between highlights and reflections, and there is aliasing. [2] Ray tracing requires entire scene data to be available when computing each pixel.
+
+
+
+\subsection{Whitted Ray Tracing}
+\deff{Whitted Ray Tracing} / \deff{Recursive Ray Tracing} - One ray casting algorithm using PIE model for shading, with secondary rays from closest points of intersection, in terms of 1) Reflection Rays, 2) Refraction Rays, and 3) Shadow Rays:
+\begin{align*}
+I &= I_\text{local} + k_\text{rg} I_\text{reflected} + k_\text{tg}I_\text{transmitted}
+\\
+I_\text{local} &= I_ak_a + I_\text{source} [
+k_d (N\cdot L) + k_r(R\cdot V)^n + k_t (T\cdot V)^m ]
+\end{align*}
+Here the unit vectors are $L$: Incident, $N$: Normal, $R$: Reflected, $V$: Observer, $T$: Refracted.
+
+
+\subsubsection{Reflection \& Refraction}
+Reflection follows that $L$ and $R$ are symmetric about $N$:
+\[
+R = 2N\cos\theta - L = 2 (N \cdot L) N - L
+\]
+Refraction follows \deff{Snell's Law}: $\mu_1 \sin\theta = \mu_2 \sin\phi$. Define $\mu = \mu_1 / \mu_2$ for the two materials:
+\begin{align*}
+T &= -\mu L + \Big( \mu\cos\theta - \sqrt{1-\mu^2(1-\cos^2\theta)} \Big)  N
+\\
+&= -\mu L + \Big( \mu (N\cdot L) - \sqrt{1 - \mu^2 (1-(N\cdot L)^2)} \Big) N
+\end{align*}
+
+
+\subsubsection{Shadow Rays}
+At each surface intersection point, a \deff{Shadow Ray} (aka. light ray, shadow feeler) is shot towards each light source to determine any occlusion between light source and surface point.
+\\
+The local equation with shadow rays:
+\[
+I_\text{local} = I_ak_a + k_\text{shadow}I_\text{source} [
+k_d (N\cdot L) + k_r(R\cdot V)^n + k_t (T\cdot V)^m ]
+\]
+Here, $k_\text{shadow}$ is the shadow coefficient
+\begin{itemize}
+    \item For opaque objects, it is $0$ when occluded or $1$ when un-occluded
+    \item For translucent occluders, it is attenuated by $t_\text{tg}$ of the occluder.
+\end{itemize}
+
+\subsubsection{Recursive Ray Tracing}
+Recursive ray tracing can be represented as a \deff{Ray Tree}, and it has the equation
+\begin{align*}
+I(\mathbf{P}) 
+&= I_\text{local}(\mathbf{P}) + I_\text{global}(\mathbf{P})
+\\
+&= I_\text{local}(\mathbf{P}) + k_\text{rg} I_\text{}(\mathbf{P}_r) + k_\text{tg} I_\text{}(\mathbf{P}_t)
+\end{align*}
+\underline{Note}: $\mathbf{P}, \mathbf{P}_r, \mathbf{P}_t$ are hit point, hit point by tracing the reflected, and by tracing the transmitted from $\mathbf{P}$.
+
+\medskip
+
+Cases for recursion termination: [1] When surface is totally diffuse (no reflection) and opaque (no refraction). [2] When rays hit nothing. [3] When a preset maximum recursion depth is reached. [4] When contribution of rays to top level colour negligible, i.e. for some preset small value $\delta > 0$:
+\[
+(k_\text{rg1} | k_\text{tg1}) \times ... \times (k_\text{rg(n-1)} | k_\text{tg(n-1)})
+< \delta
+\]
+
+
+
+\subsection{Ray-Object Intersection}
+Let $\mathbf{R}(t) = \mathbf{R}_o + t \times \mathbf{R}_d, \ t \ge0$ be the ray, for $\mathbf{R}_o, \mathbf{R}_d$ ray origin and ray direction vector, with $|\mathbf{R}_d| = 1$.
+
+\subsubsection{Ray-Plane}
+For plane $\pi(\mathbf{P}): \mathbf{N} \cdot \mathbf{P} + D = 0$,
+\\
+\underline{Intersection}: Solve $\mathbf{N}\cdot \mathbf{R}(t_0) +D = 0$ for $t_0 > 0$ to get $t_0$ - a) If $t_0 = \infty$ no solution, otherwise b) intersection $\mathbf{R}(t_0)$.
+\\
+\underline{Normal}: $\pm \mathbf{N}$.
+
+
+\subsubsection{Ray-Sphere}
+For sphere centered at origin $\Tau(\mathbf{P}): \mathbf{P} \cdot \mathbf{P} - r^2 = 0$ (apply translation if not origin),
+\\
+\underline{Intersection}: Solve quadratic equation
+\[
+\mathbf{R}(t)\cdot \mathbf{R}(t) 
+= \mathbf{R}_d\cdot\mathbf{R}_d t^2 + 2 \mathbf{R}_d
+\cdot \mathbf{R}_o t + \mathbf{R}_o\cdot \mathbf{R}_o - r^2 = 0
+\]
+Choose $t_0$ as the closest positive $t$ value if exists.
+\\
+\underline{Normal}: $\mathbf{R}(t_0) / |\mathbf{R}(t_0)|$.
+
+
+\subsubsection{Ray-Box}
+For a \textbf{axis-aligned} 3D box specified by coordinates of two diagonally opposite corners,
+\\
+\underline{Intersection}: 1) For each parallel plane pair, find distance to first and second plane from ray origin, $0 < t_\text{near} \le t_\text{far}$ 2) Repeat for all $3$ pairs, and keep $\max{t_\text{near}}$ and $\min{t_\text{far}}$. 3a) if $t_\text{near, max} > t_\text{far, min}$, no intersection, otherwise 3b) intersect at $t_\text{near, max}$.
+
+
+\subsubsection{Ray-Triangle}
+For a triangle with vertices $\mathbf{A}, \mathbf{B}, \mathbf{C}$, the \deff{Barycentric Coordinates} of an interior point $\mathbf{P}$ is $(\alpha, \beta, \gamma) \in [0, 1]^3$ that
+\[
+\mathbf{P} = \alpha \mathbf{A} + \beta \mathbf{B} + \gamma \mathbf{C}, \ \alpha + \beta + \gamma = 1
+\]
+\underline{Intersection}: Solve $4$ linear equations (sum to 1, and each coordinate value of $\mathbf{P}$) involving $\alpha, \beta, \gamma, t$.
+\\
+\underline{Normal}: $\mathbf{N}_P // \alpha \mathbf{N}_A + \beta \mathbf{N}_B + \gamma \mathbf{N}_C$, need normalisation.
+
+
+\subsubsection{The Epsilon Problem}
+\deff{The Epsilon Problem} - Ray traced image with noisy shadows due to false intersection for very small positive $t$.
+\\
+\underline{Solution}: [1] Pre-determine a small value $\epsilon > 0$, and accept intersection for $t > \epsilon$ instead of $t > 0$. [2] Advance ray origin by $\epsilon \mathbf{R}_t$ when a new ray is spawned.
+
+
+\section{10. Curves}
+\subsection{Parametric Polynomial Representations}
+A 3D parametric polynomial curve of degree $n$ is
+\[
+\mathbf{p}(u) 
+= \begin{bmatrix}
+    x(u) \\ y(u) \\ z(u)
+\end{bmatrix}
+= \sum_{k=0}^n u^k \mathbf{c}_k, \text{ where }
+\mathbf{c}_k = \begin{bmatrix}
+    c_{xk} \\ c_{yk} \\ c_{zk}
+\end{bmatrix}
+\]
+\underline{Note}: [1] There are $3(n+1)$ coefficients needed. [2] A \deff{curve segment} is defined $u_{min} \le u \le u_{max}$, and we typically choose $0 \le u \le 1$.
+
+\medskip
+
+A 3D parametric polynomial surface is \[
+\mathbf{p}(u, v) 
+= \begin{bmatrix}
+    x(u, v) \\ y(u, v) \\ z(u, v)
+\end{bmatrix}
+= \sum_{i=0}^n \sum_{j=0}^m \mathbf{c}_{ij} u^i v^j
+\]
+\underline{Note}: [1] There are $3(n+1)(m+1)$ coefficients in $\{c_{ij}\}$. [2] Normally we choose $n = m$. [3] A \deff{Surface Patch} is defined for $0 \le u, v, \le 1$.
+
+\subsubsection{Joint Curves}
+Long curves can be drawn by joining multiple curve segments of lower degree. A \deff{Joint Point} is where the endpoints of two curve segments meet.
+\\
+We typically use \textbf{Cubic} parametric polynomials. \underline{Rationale}: [1] Local control of shape. [2] Stability, as higher terms are more sensitive to small input changes.
+
+\subsubsection{Geometric Properties of Joining Curves}
+\deff{G\textsuperscript{\deff{n}} Parametric Continuity} \textasciitilde Whether two curve segments have $n$-th order gradient \textbf{in the same direction}, for $n = 1, 2, ...$
+\\
+\deff{C\textsuperscript{\deff{n}} Parametric Continuity} \textasciitilde Whether two curves segments have identical $n$-th order gradient, for $n = 0, 1, ...$.
+\\
+\underline{Analysis}: $C^n$ is stronger than $G^n$, for all $n = 1, 2, ...$. 
+\\
+\underline{Examples}: Assuming two segments have joining point $\mathbf{p}(0) = \mathbf{q}(1)$, then $C^0: \mathbf{p}(1) = \mathbf{q}(0)$, $C^1: \mathbf{p}'(1) = \mathbf{q}'(0)$, and $G^1: \mathbf{p}'(1) = \alpha \mathbf{q}'(0)$ for some $a \gt 0$.
+
+
+
+\subsection{Cubic Parametric Curves \& Surfaces}
+\[
+\mathbf{p}(u) = \mathbf{c}_0 + \mathbf{c}_1 u + \mathbf{c}_2 u^2 + \mathbf{c}_3 u^3 = \sum_{k=0}^3 u^k \mathbf{c}_k = \mathbf{u}^T \mathbf{C} 
+\]
+Here $\mathbf{C} = [\mathbf{c}_0, \mathbf{c}_1, \mathbf{c}_2, \mathbf{c}_3]^T \in \mathbb{R}_{4 \times }3$, $\mathbf{u} = [1, u, u^2, u^3]^T \in \mathbb{R}_{4 \times 1}$.
+
+\medskip
+
+Supposed the curve interpolates $\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2, \mathbf{p}_3$ corresponding to values $u = 0, 1/3, 2/3, 1$, to determine coefficients
+\[
+\mathbf{P} = \begin{bmatrix}
+    \mathbf{p}_0 \\ \mathbf{p}_1 \\ \mathbf{p}_2 \\ \mathbf{p}_3
+\end{bmatrix}
+= \mathbf{AC}
+= \begin{bmatrix}
+1   &0              &0              &0               \\
+1   &\frac{1}{3}    &\frac{1}{9}    &\frac{1}{27}    \\
+1   &\frac{2}{3}    &\frac{4}{9}    &\frac{8}{27}    \\
+1   &1              &1              &1
+\end{bmatrix} \mathbf{C}
+\]
+Then we have $\mathbf{C} = \mathbf{M}_I\mathbf{P}$, for $\mathbf{M}_I$ the \deff{Geometry Matrix},
+\[
+\mathbf{M}_I = \mathbf{A}^{-1}
+= \begin{bmatrix}
+1       &0              &0              &0      \\
+-5.5    &9              &-4.5           &1      \\
+9       &-22.5          &18             &-4.5   \\
+-4.5    &13.5           &-13.5          &4.5
+\end{bmatrix}
+\]
+To get a new point on curve, $\mathbf{p}(u) = \mathbf{b}(u)^T\mathbf{P}$ where $\mathbf{b}(u)^T = \mathbf{M}_I^T \mathbf{u}$ is the \deff{Blending Function}, consisting of $4$ \deff{Blending Polynomials}.
+\\
+\underline{Note}: $\mathbf{M}_I$ and $\mathbf{b}(u)$ are the same for all curves specified this way.
+
+
+\subsection{Cubic Bezier Curves \& Surfaces}
+\deff{Bezier Curve} - Given control points $\mathbf{p}_0, \mathbf{p}_1, \mathbf{p}_2, \mathbf{p}_3$, we want a curve that satisfies
+\begin{align*}
+    \mathbf{p}(0) &= \mathbf{p}_0
+    \\
+    \mathbf{p}(1) &= \mathbf{p}_3
+    \\
+    \mathbf{p}'(0) &= 3(\mathbf{p}_1 - \mathbf{p}_0)
+    \\
+    \mathbf{p}'(1) &= 3(\mathbf{p}_3 - \mathbf{p}_2)
+\end{align*}
+
+The \textbf{Bezier Geometry Matrix} and \textbf{Blending Functions} are
+\[
+\mathbf{M}_B = \begin{bmatrix}
+1       &0      &0      &0      \\
+-3      &3      &0      &0      \\
+3       &-6     &3      &0      \\
+-1      &3      &-3     &1  
+\end{bmatrix}, \ \mathbf{b}(u) = \begin{bmatrix}
+(1-u)^3     \\
+3u(1-u)^2   \\
+3u^2(1-u)   \\
+u^3 
+\end{bmatrix}
+\]
+
+
+
+
+
+\noindent\rule{8cm}{0.4pt}
+% ==================================================
 
 \section{Others}
 % % For intermediate results, code usage, and images/screenshots
@@ -516,9 +865,9 @@ Colour Theory, Transformation Pipeline
 \\
 \begin{center}
 \begin{multicols}{2}
-    \includegraphics[width=3cm]{img/rgb.jpeg}
-    \includegraphics[width=3cm]{img/cmyk.jpeg}
-    \includegraphics[width=4cm]{img/03_transformation_pipeline.png}
+    \includegraphics[width=3cm]{img/01_colours_rgb.jpeg}
+    \includegraphics[width=3cm]{img/01_colours_cmyk.jpeg}
+    \includegraphics[width=4cm]{img/05_transformation_pipeline.png}
 \end{multicols}
 
 \end{center}
@@ -527,8 +876,8 @@ Colour Theory, Transformation Pipeline
 Outcode
 \\
 \begin{center}
-\includegraphics[width=4cm]{img/2d-outcode.png}
-\includegraphics[width=2.5cm]{img/3d-outcode.png}
+\includegraphics[width=4cm]{img/06_2d-outcode.png}
+\includegraphics[width=2.5cm]{img/06_3d-outcode.png}
 \end{center}
 
 Rendering Pipeline
@@ -539,7 +888,7 @@ gluLookAt Coordinate Specification
 \\
 ($u, v, n$ for $x, y, z$ of the Camera)
 \\
-\includegraphics[width=8cm]{img/04_glulookat.png}
+\includegraphics[width=8cm]{img/05_glulookat.png}
 
 
 
@@ -553,6 +902,9 @@ gluLookAt Coordinate Specification
 
 
 
+
+% ==================================================
+% Write OpenGL function usages here. For graphics concepts used in OpenGL, put in previous sections.
 \section{OpenGL Reference}
 \subsection{Miscellaneous}
 \subsubsection{Settings}
