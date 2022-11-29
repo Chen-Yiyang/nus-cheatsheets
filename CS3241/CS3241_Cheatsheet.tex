@@ -596,11 +596,13 @@ Illumination is calculated in \textbf{Vertex Processing States} in OpenGL pipeli
 \subsection{Texture Mapping Application}
 \deff{Environment / Reflection Mapping} \textasciitilde a shortcut to render shiny objects with reflection: 1) Capture the image of the surroundings from the position where the object is placed and store in a texture map. 2) During rendering of the object, the reflected eye ray is used to reference the texture map.
 \\
-\underline{Analysis}: [1] There is no \textbf{self-reflection}. [2] When the object is close, reflection does not look real (distortion arises). 
+\underline{Analysis}: [1] There is no \textbf{self-reflection}. [2] When the object is close, reflection does not look real (distortion arises). [3] Works for scene with moving objects. \citeqn{(AY21/22 Sem1 Final Section B Qn(d))}
 
 \medskip
 
 \deff{Bump Mapping} - Simulation of small complex geometric features on the surface by using textures instead of modelling real geometry.
+\\
+\underline{Note}: Should use \textbf{Per Fragment} lighting, as each small surface can have a different normal. \citeqn{(AY20/21 Sem1 Final Qn3)}
 \\
 \underline{Analysis}: Only applicable to small bumps, may not look normal  when viewing from a close distance.
 
@@ -702,7 +704,7 @@ For sphere centered at origin $\Tau(\mathbf{P}): \mathbf{P} \cdot \mathbf{P} - r
 = \mathbf{R}_d\cdot\mathbf{R}_d t^2 + 2 \mathbf{R}_d
 \cdot \mathbf{R}_o t + \mathbf{R}_o\cdot \mathbf{R}_o - r^2 = 0
 \]
-Choose $t_0$ as the closest positive $t$ value if exists.
+Choose $t_0$ as the closest positive $t$ value if exists. \underline{Note}: Consider larger $t$ if ray origin inside sphere. \citeqn{(AY20/21 Sem 1 Final Qn20)}
 \\
 \underline{Normal}: $\mathbf{R}(t_0) / |\mathbf{R}(t_0)|$.
 
@@ -720,7 +722,7 @@ For a triangle with vertices $\mathbf{A}, \mathbf{B}, \mathbf{C}$, the \deff{Bar
 \]
 \underline{Intersection}: Solve $4$ linear equations (sum to 1, and each coordinate value of $\mathbf{P}$) involving $\alpha, \beta, \gamma, t$.
 \\
-\underline{Normal}: $\mathbf{N}_P // \alpha \mathbf{N}_A + \beta \mathbf{N}_B + \gamma \mathbf{N}_C$, need normalisation.
+\underline{Normal}: $\mathbf{N}_P // \alpha \mathbf{N}_A + \beta \mathbf{N}_B + \gamma \mathbf{N}_C$, need normalisation. \underline{Analysis}: Ray (almost) parallel to triangle when $\beta, \gamma$ or $t$ extremely large.
 
 
 \subsubsection{The Epsilon Problem}
@@ -846,7 +848,9 @@ u^3
 \subsection{From Tutorials \& Assignments}
 \citeqn{(Tut1 Qn2)} Human eyes' sensitivity to change in colour: G > R > B.
 \\
-\citeqn{(Tut5 Qn4)} \deff{z-Fighting} \textasciitilde when different fragments at the same pixel have the same or very similar z-buffer values. \underline{Solution}: [1] Minimise distance \codein{far-near}. [2] Use z-buffers with higher precision.
+\citeqn{(Tut5 Qn4)} \deff{z-Fighting} \textasciitilde when different fragments at the same pixel have the same or very similar z-buffer values. It is more serious when FOV larger \citeqn{(AY21/22 Sem1 Final Qn 4)}. \underline{Solution}: [1] Minimise distance \codein{far-near}. [2] Use z-buffers with higher precision.
+\\
+\citeqn{(Tut7 Qn5} To distinguish Bump Mapping from real geometry, check whether the silhouette is flat.
 
 
 \subsection{From Past Year Papers}
@@ -855,6 +859,10 @@ u^3
 \citeqn{(AY20/21 Sem1 Midterm Qn22)} z-fighting is more serious for polygons further away in a \textbf{perspective} projection; z-fighting is unaffected by how far a polygon is in a \textbf{orthographic} projection.
 \\
 \citeqn{(AY20/21 Sem1 Midterm Qn24)} Back-Face Culling can be performed in Window Sapce or Camera Space, but cannot be performed in the Vertex Processing stage.
+\\
+\citeqn{(AY19/20 Sem1 Final Qn4)} Bilinear interpolation of quadrilaterals are not rotation-invariant.
+\\
+\citeqn{(AY20/21 Sem1 Final Qn4} When rendering a rectangle with texture, subdivide  many small rectangles and render, so as to avoid missing specular highlights, and improve highlight quality / sharpness.
 
 
 
