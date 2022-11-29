@@ -468,7 +468,6 @@ $
 v_i(A_i) \ge v_i(A_j \backslash \{ g \})
 \]
 \underline{Analysis}: EF1 allocations always exist.
-
 \\
 \deff{Envy-freeness Up to Any Good} (EFX) - For any $i, j \in N$ and any $g \in A_j$, we have
 \[
@@ -623,7 +622,6 @@ U(\vec{p}) = \min_{i \in N} u_i(\vec{p})
 
 \section{Committee Voting}
 \subsection{Definitions}
-\subsubsection{Problem Specifications}
 \deff{Approval Voting} is the game where each voter submits a subset of candidates he / she approves. It consists of voters $N = \{1, ..., n\}$, candidates $C = \{1, ..., m \}$, and set of candidates $A_i \subseteq C$ that Voter $i$ approves for $i=1, ..., n$. The goal is to choose a committee $W \subseteq C$ of size $|W| = k$ given.
 \\
 Voter $i$'s utility is number of committee members he approves:
@@ -634,24 +632,20 @@ u_i(W) = |A_i \cap W|
 
 \subsubsection{Social Welfare \& Coverage}
 For a given committee,
-\begin{itemize}
-    \item \deff{Social Welfare} - $\sum_{i \in N} u_i(W)$, total number of approvals committee members receive
-    \item \deff{Coverage} - Total number of voters who approves at least one committee member.
-\end{itemize}
-A candidate \deff{Covers} a voter if the voter approves the candidate.
 \\
-Some solutions based on the two
-\begin{itemize}
-    \item \deff{Approval Voting} (AC) - Select a committee that maximises social welfare,
-    \[
-    W_{AC} = \max_{W \subseteq C, |W| = k} \sum_{i \in N} u_i(W)
-    \]
-    \item \deff{Chamberlin-Courant} (CC) - Select a committee that maximises coverage,
-    \[
-    W_{CC} = \max_{W \subseteq C, |W| = k} |\{ i \in N | A_i \cap W \neq \emptyset \}|
-    \]
-\end{itemize}
-\underline{Note}: Both solutions are not unique.
+\deff{Social Welfare} - $\sum_{i \in N} u_i(W)$, total number of approvals committee members receive.
+\\
+\deff{Coverage} - Total number of voters who approves at least one committee member. \underline{Note}:A candidate \deff{Covers} a voter if the voter approves the candidate.
+\\
+\deff{Approval Voting} (AC) - Select a committee that maximises social welfare,
+\[
+W_{AC} = \max_{W \subseteq C, |W| = k} \sum_{i \in N} u_i(W)
+\]
+\deff{Chamberlin-Courant} (CC) - Select a committee that maximises coverage,
+\[
+W_{CC} = \max_{W \subseteq C, |W| = k} |\{ i \in N | A_i \cap W \neq \emptyset \}|
+\]
+\underline{Note}: Both AV and CC solutions are not unique.
 
 
 
@@ -724,6 +718,20 @@ PAV satisfies EJR.
 \underline{Note}: We do not require all players to pool a candidate must provide the equal amount.
 \underline{Analysis}: MES satisfies EJR, and can be implemented in polynomial time.
 
+\subsection{Summary}
+\begin{center}
+\begin{tabular}{c|c c c}
+    \hline
+            & JR    & EJR   & Poly-time \\
+    \hline
+     AV     & No    & No    & Yes       \\
+     CC     & Yes   & No    & No        \\
+     GreedyCC & Yes & No    & Yes       \\
+     PAV    & Yes   & Yes   & No        \\
+     MES    & Yes   & Yes   & Yes       \\
+     \hline
+\end{tabular}
+\end{center}
 
 
 
@@ -760,6 +768,8 @@ A summary of types of tournament solutions:
     \item \deff{Banks Set} (BA) - Alternatives that appear as the maximal (i.e., strongest) element of some transitive sub-tournament that cannot be extended
 \end{itemize}
 \underline{Note}:  \deff{Transitive Tournament} - A tournament where alternatives can be ordered a sequence $a_1, …, a_k$ s.t. $\forall 1 \le i < j \le k, a_i \succ a_j$.
+\\
+\underline{Containment Relations}: $UC \subseteq TC$, $CO \subseteq UC$, $BA \subseteq UC$.
 
 \subsubsection{Top Cycle}
 \underline{Equivalent Definition} for TC: The unique smallest nonempty set $B$ of alternatives such that all in $B$ dominates all outside $B$.
@@ -780,6 +790,8 @@ For $y \succ x$, \deff{Strengthen} $x$ against $y$ is to change $y \succ x$ to $
 
 \subsection{Tournament Fixing Problem}
 In a \textbf{balanced knockout tournament}, given alternatives $A$, (probabilistic) dominance relation $\succ$ and our favourite alternative $x \in A$, the goal is find a tournament bracket that maximises win-rate for $x$. If such a bracket exists, such a winner is called \deff{Knockout Winner}.
+\\
+\underline{Analysis}: Any alternative who dominates $< \log_2 n$ others are not knockout winners.
 
 \subsubsection{String King Theorem}
 An alternative is $x$ is a \deff{King} if it is in UC. \underline{Note}: it beats any other directly or via a third alternative.
@@ -787,6 +799,8 @@ An alternative is $x$ is a \deff{King} if it is in UC. \underline{Note}: it beat
 For $x$ is a king, suppose $x \in A$ beats $P \subseteq A$ and loses to $Q \subseteq A$. if $|P| \ge n / 2$, $x$ is a knockout winner.
 \\
 \underline{Analysis}: Any alternative in CO is a knockout winner.
+\\
+\underline{Note}: Players not in UC, or those in UC with $|P| < n/2$ can still be knockout winners.
 
 
 
