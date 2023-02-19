@@ -100,7 +100,285 @@
 
 
 % -----------------------------------------------------------------------
+\section{1. Poisson Processes}
+\subsection{Overview}
+\subsubsection{Definition 1}
+A \deff{Poisson Process} with rate $\lambda > 0$ is an integer-valued stochastic process $\{ X(t), t \ge 0 \}$ for which
+\begin{itemize}
+	\item for any time points $t_0 = 0 < t_1 < t_2 < ... < t_n$, increments
+	\[
+		X(t_1) - X(t_0), X(t_2) - X(t_1), ..., X(t_n) - X(t_{n-1})
+	\]
+	are independent r.v.
+	\item for $s \ge 0$ and $t > 0$, the r.v. $X(s+t) - X(s) \sim Pois(\lambda t)$
+	\item $X(0) = 0$
+\end{itemize}
 
+\underline{Note}: The process above is \deff{homogeneous}. If $\lambda = \lambda(t)$ varies with time, then the process is \deff{non-homogeneous}, and replace the second property above with
+\[
+X(s+t) - X(s) \sim Pois \Big(  \int_{s}^{s+t} \lambda (u) du \Big)
+\]
+\\
+\underline{Note}: A \deff{Cox Process} is where $\lambda(t)$ is a stochastic process itself.
+
+
+\subsubsection{Definition 2 - LRE}
+Let $N \big( (s, t] \big)$ be a r.v. counting number of occurrences in the interval $(s, t]$. Then $N \big( (s, t] \big)$  is a \deff{Poisson Point Process} of intensity $\lambda > 0$ if
+\begin{itemize}
+	\item for any time points $t_0 = 0 < t_1 < ... < t_n$, increments
+	\[
+		N \big( (t_0, t_1] \big),  N \big( (t_1, t_2] \big), ..., N \big( (t_{n-1}, t_n] \big)
+	\]
+	are independent r.v.
+	\item $\exists \lambda > 0$, s.t. as $h \to 0$, $P( N \big( (t, t+h] \big) \ge 1 ) = \lambda h + o(h)$.
+	\item as $h \to 0$, $P( N \big( (t, t+h] \big) \ge 2 ) = \lambda  + o(h)$.
+\end{itemize}
+
+\underline{Note}: For non-homogeneous, $P( N \big( (t, t+h] \big) \ge 1 ) = \lambda(t) h + o(h)$.
+
+
+\subsubsection{Law of Rare Events}
+Let $\epsilon_1, \epsilon_2, ...$ be independent Ber. r.v.'s with $P(\epsilon_i = 1) = p_i$ and let $S_n = \sum{i=1}^n \epsilon_i$. The exact probability for $S_n$ and Poisson probability with $\lambda = \sum_{i=1}^n p_i$ differ by at most
+\[
+|P(S_n = k) - e^{-\lambda} \frac{\lambda^k}{k!}| \le \sum{i=1}^n p_i^2
+\]
+
+\underline{Note}: In the case of $p_1 = ... = \lambda / n$, RHS becomes $\lambda^2 / n$.
+
+
+\subsubsection{Definition 3 - Sojourn Time}
+Consider a sequence $\{ S_n, n \ge 0  \}$ of i.i.d. $Exp(\lambda)$. Define a counting process by specifying the occurrence time of $n$-th event
+\[
+W_n = S_0 + S_1 + ... + S_n
+\]
+The new counting process will be a Poisson Process with rate $\lambda$.
+
+
+\subsubsection{Waiting \& Sojourn Time}
+The \deff{Waiting Time}, $W_n$ of a Poisson Process $X(t)$ is the time of $n$-th occurrence, for $n \in \mathbb{N}$. We set $W_0 = 0$.
+
+\medskip
+
+The \deff{Sojourn Time}, $S_n = W_{n+1} - W_n$ is the time where the process sojourns in state $n$, for $n \in \mathbb{Z}_{\ge 0}$.
+
+\medskip
+
+For homogeneous Poisson Processes,
+\begin{align*}
+    S_n &\sim Exp(\lambda) 
+	\\
+	W_n &\sim Gamma(n, \lambda) 
+\end{align*}
+
+
+\subsection{Properties}
+\subsubsection{Arrival Time}
+% TODO: ranked?
+Given $X(t) = n$, the joint distribution of waiting time $W_1, ..., W_n$ is
+\[
+f(w_1, w_2, ..., w_n | X(t) = n) = \frac{n!}{t^n}, 0 \le w_1 \le w_2 \le ... \le 2_n \le t
+\]
+It is the joint distribution of $n$ \textbf{ranked} independent $Unif(0, t)$ r.v.'s.
+
+\medskip
+
+Given $X(t) = n$, the distribution of the $k$-th waiting time has the same distribution as that of the $k$-th order statistic of $n$ independent $Unif(0, t)$ r.v.'s.
+\[
+f_k(x) = \frac{n!}{(n-k)! (k-1)!} \frac{1}{t} (\frac{x}{t})^{k-1} (1 - \frac{x}{t})^{n-k}, 0 \le k \le n
+\]
+
+
+\subsubsection{Merging \& Splitting Processes}
+For $\{ N_1(t), t \ge 0 \}, \{ N_2(t), t \ge 0 \}, ..., \{ N_m(t), t \ge 0 \}$ independent Poisson Processes with rates $\lambda_1, \lambda_2, ..., \lambda_m$, let $N(t) = \sum_{i=1}^m N_i(t), t \ge 0$ be the \deff{Merging Process}. Then $\{ N(t), t \ge 0 \}$ is also a Poisson Process with rate $\lambda = \lambda_1 + \lambda_2 + ... + \lambda_m$.
+
+\medskip
+
+For $\{ N(t), t \ge 0 \}$ a Poisson Process with rate $\lambda$, if each event occurred can be of type A and B with probability $p$ and $1-p$ independently, then let  $X(t)$ and  $Y(t)$ be the \deff{Splitting Processes} counting number of type A and B occurrences. Then $\{ X(t), t \ge 0 \}$ and  $\{ Y(t), t \ge 0 \}$ are Poisson Processes with rates $\lambda p$ and $\lambda (1-p)$, and they are independent.
+
+
+\subsubsection{Comparision of Two Processes}
+Consider $\{ X(t), t \ge 0 \}$ and  $\{ Y(t), t \ge 0 \}$ two independent Poisson Processes with rates $\lambda_1$ and $\lambda_2$. Define $W_{n}^{X}$ and $W_{m}^{Y}$ as the waiting time of the $n$-th and $m$-th waiting time of $X(t)$ and $Y(t)$ respectively.
+\[
+P(W_{n}^{X} < W_{m}^{Y}) = \sum_{k=n}^{n+m-1}    {{n+m-1}\choose{k}}    (\frac{\lambda_1}{\lambda_1 
+	+ \lambda_2})^k (\frac{\lambda_2}{\lambda_1 + \lambda_2})^{n+m-1-k}
+\]
+\underline{Analysis}: It is equivalent as getting $n$ or more heads in $n+m-1$ tosses where getting a head has probability $\lambda_1 / (\lambda_1 + \lambda_2)$.
+
+
+
+\subsection{Variants}
+\subsubsection{Compound Poisson Process}
+A stochastic process $\{ X(t), t \ge 0 \}$ is a \deff{Compound Poisson Process} if it can be represented as
+\[
+X(t) = \sum_{i=1}^{N(t)} Y_i, \ t \ge 0
+\]
+, where $\{ N(t), t \ge 0\}$ is a Poisson Process with rate $\lambda$ and $Y_i \sim F$ is a family of i.i.d. r.v.'s independent of $\{ N(t), t \ge 0\}$.
+\\
+\underline{Note}: We need [1] rate $\lambda$, and [2] distribution $F$ to specify a compound Poisson Process.
+
+\medskip
+
+$E[X(t)] = \lambda t E[Y_i]$
+\\
+$Var[ X(t) ] = \lambda t \Big( E[Y_i]^2 +  Var(Y_i) \Big)$
+
+\medskip
+
+To merge two compound Poisson Processes $X(t)$ and $Y(t)$ with parameters $(\lambda_1, F_1)$ and $(\lambda_2, F_2)$ as $N(t) = X(t) + Y(t)$, the result is a compound Poisson Process with parameters
+\begin{align*}
+\lambda &= \lambda_1 + \lambda_2
+\\
+F(x) &= \frac{\lambda_1}{\lambda_1 + \lambda_2} F_1(x) + \frac{\lambda_2}{\lambda_1 + \lambda_2} F_2(x)
+\end{align*}
+
+
+\subsubsection{Conditional Poisson Process}
+A stochastic process $\{ N(t), t \ge 0 \}$ is a \deff{Conditional Poisson Process} if there is a positive r.v. $L$ such that $\{ N(t) | L = \lambda, t \ge 0 \}$ is a Poisson Process with rate $\lambda$.
+\\
+If $L$ has pdf $g(\cdot )$, then pdf for increment of $N(t)$ is
+\[
+P(N(t+s) - N(s) = n) = \int_{0}^{\infty} e^{-\lambda t} \frac{(\lambda t)^n}{n!} g(\lambda) d \lambda
+\]
+
+$E[N(t)] = E(L) t$ 
+\\
+$Var(N(t)) = t E(L) + t^2 Var(L)$
+\\
+Conditional probability of $L$ given $N(t) = n$ (posterior),
+\[
+P(L \le x | N(t) = n) = \frac{
+	\int_{0}^x e^{-\lambda t} (\lambda t)^n g(\lambda) d \lambda
+}
+{
+	\int_{0}^\infty e^{-\lambda t} (\lambda t)^n g(\lambda) d \lambda}
+\]
+
+
+\subsubsection{Multi-Dimensional Poisson Process}
+Let $S$ be a subset of $\mathbb{R}$, $\mathbb{R}^2$, or $\mathbb{R}^3$. Let $\mathcal{A}$ be the set of subsets of $S$ and for any set $A \in \mathcal{A}$, define $|A|$ as the size of $A$. Then $\{N(A) : A \in \mathcal{A} \} $ is a homogeneous Poisson process with $\lambda > 0$ if,
+\begin{itemize}
+	\item for each $A \in \mathcal{A}$, $N(A) \sim Pois(\lambda |A|)$
+	\item for every finite collection $\{ A_1, ..., A_n \}$ of disjoint subsets of $S$, r.v.'s $N(A_1), ..., N(A_n)$ are independent. 
+\end{itemize}
+
+
+
+% ------------
+\section{2. Continusous Time Markov Chains}
+\subsection{Overview}
+\subsubsection{Definition}
+For a stochastic process $\{ X(t), t \ge 0 \}$, if for all $s > u \ge 0, t > 0$,
+\[
+P(X(s+t) = j | X(s) = i, X(u) = k) = P(X(s+t) = j | X(s) = i)
+\]
+, then we call $\{ X(t), t \ge 0 \}$ a \deff{Continuous-Time Markov Chain}, and the property \deff{Markovian Property}.
+
+\medskip
+
+A CTMC $\{ X(t), t \ge 0 \}$ has \deff{Stationary / Homogeneous Transition Probabilities} if for all $s \ge 0, t > 0$ and states $i, j$,
+\[
+P(X(s+t) = j | X(s) = i) \text{ is independent of $s$}
+\]
+
+\subsubsection{Parameterisation 1}
+A CTMC $\{ X(t), t \ge 0 \}$ can be specified with
+\begin{itemize}
+	\item \deff{State Space} $S$
+	\item \deff{Waiting Time Rate Vector} $\vec{\nu}$, where the time $X(t)$ stays in state $i \in S$ follows $Exp(\nu_i)$
+	\item \deff{Jump Probabilities} $P_{ij}$, the probability of $X(t)$ currently in state $i\in S$ and moves to $j \in S$ at first transition.
+\end{itemize}
+\underline{Note}: By definition, $P_{ii} = 0$ and $\sum_{j \neq i} P_{ij} = 1 $ for all $i \in S$.
+
+
+\subsubsection{Transition Probability Function}
+Define the \deff{Transition Probabilities} of a CTMC $X(t)$ as
+\[
+P_{ij}(t) := P(X(t+s) = j | X(s) = i)
+\]
+\underline{Note}: A transition probability matrix can uniquely specify a CTMC.
+\\
+\underline{Note}: $P_{ij} \neq P_{ij}(t)$ since there might not be exactly one transition.
+
+
+\subsubsection{Chapman-Kolmogorov Equation}
+\[
+P_{ij} (t + s) = \sum_{k \in S} P_{ik} (t) P_{kj} (s)
+\]
+
+
+\subsubsection{Discretisation of CTMC}
+For a CTMC $\{ X(t), t \ge 0 \}$, $\{Y_1(n) \}_{n \ge 0}$ discretises it at equal intervals if for some constant $l > 0$,
+\[
+Y_1(n) = X(nl), n = 0, 1, 2, ...
+\]
+\underline{Analysis}: $Y_1(n)$ has state space $S$ and transition matrix $P(l)$.
+
+\medskip
+
+For a CTMC $\{ X(t), t \ge 0 \}$, $\{Y_2(n) \}_{n \ge 0}$ is the \deff{Embedded Chain} if it only considers the states visited by $X(t)$.
+\\
+\underline{Analysis}: $Y_2(n)$ has state space $S$ and transition matrix $P$.
+
+
+\subsection{Infinitesimal Generator}
+\subsubsection{Instantaneous Transition Rates}
+Lemma: Transition Rates, for a CTMC,
+\begin{itemize}
+	\item $\lim_{h \to 0} \frac{P_{ii}(h) - P_{ii}(0)}{h} = - \nu_i$
+    \item $\lim_{h \to 0} \frac{P_{ij}(h) - P_{ij}(0}){h} = \nu_i P_{ij}$, for all $i \neq j$
+\end{itemize}
+
+For any pair of states $i \neq j \in S$, define \deff{Instantaneous Transition Rates} as
+\[
+q_{ij} := \nu_i P_{ij}
+\]
+
+The \deff{Infinitesimal Generator} $G$ of a CTMC is defined as
+\[
+G_{ii} = - \nu_i, \; G_{ij} = q_{ij}, \; i \neq j
+\]
+\underline{Note}: $P'(0) = G$.
+
+
+\subsubsection{Kolmogorov's Forward Equations}
+For all states $i, j$, and times $t \ge 0$,
+\begin{align*}
+    P_{ij}'(t) &= \sum_{k \neq i} P_{ik}(t)q_{kj} - \nuj P_{ij}(t)
+    \\
+    \equiv P'(t) &= P(t)G
+\end{align*}
+
+
+\subsubsection{Kolmogorov's Backward Equations}
+For all states $i, j$, and times $t \ge 0$,
+\begin{align*}
+    P_{ij}'(t) &= \sum_{k \neq i} q_{ik}P_{kj}(t) - \nu_i P_{ij}(t)
+    \\
+    \equiv P'(t) &= GP(t)
+\end{align*}
+\underline{Note}: $G$ uniquely decides $P(t)$.
+
+
+
+\noindent\rule{8cm}{0.4pt}
+
+
+
+% \section{Intermediate Results \& Lemmas}
+% \subsection{From Tutorials}
+
+
+
+
+
+
+
+
+
+
+% -----
+% KIV:
+% 1. conversion between homogeneous.
 
 
 \end{multicols}
