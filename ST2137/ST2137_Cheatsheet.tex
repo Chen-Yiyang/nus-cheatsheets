@@ -1,0 +1,289 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Original Source: Dave Richeson (divisbyzero.com), Dickinson College
+% Modified By: Chen Yiyang
+% 
+% A one-size-fits-all LaTeX cheat sheet. Kept to two pages, so it 
+% can be printed (double-sided) on one piece of paper
+% 
+% Feel free to distribute this example, but please keep the referral
+% to divisbyzero.com
+% 
+% Guidance on the use of the Overleaf logos can be found here:
+% https://www.overleaf.com/for/partners/logos 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt,landscape,letterpaper]{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{physics}  % for vectors
+\usepackage{bbm}  % for mathbb-ed digits
+%\usepackage{fonts}
+\usepackage{multicol,multirow}
+\usepackage{spverbatim}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,urlcolor=olgreen]{hyperref}
+\usepackage{booktabs}
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX]{TeX Gyre Pagella}
+\setsansfont{Fira Sans}
+\setmonofont{Inconsolata}
+\usepackage{unicode-math}
+\setmathfont{TeX Gyre Pagella Math}
+\usepackage{microtype}
+
+\usepackage{empheq}
+
+% new:
+\def\MT@is@uni@comp#1\iffontchar#2\else#3\fi\relax{%
+  \ifx\\#2\\\else\edef\MT@char{\iffontchar#2\fi}\fi
+}
+\makeatother
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{margin=0.4in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\sffamily\large}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\sffamily\normalsize\itshape}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\itshape}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+% -----------------------------------------------------------------------
+
+\usepackage{academicons}
+
+\begin{document}
+
+\definecolor{mathBlue}{cmyk}{1,.72,0,.38}
+\definecolor{defOrange}{cmyk}{0, 0.5, 1, 0.3}
+\definecolor{codeInlineRed}{cmyk}{0, 0.9, 0.9, 0.45}
+
+\everymath{\color{mathBlue}}
+\everydisplay{\color{mathBlue}}
+
+% for vector notation in this module
+\newcommand{\vect}[1]{\pmb{#1}}
+\newcommand{\deff}[1]{\textcolor{defOrange}{\textbf{#1}}}
+\newcommand{\codein}[1]{\textcolor{codeInlineRed}{\texttt{#1}}}
+\newcommand{\citeqn}[1]{\underline{\textit{#1}}}
+
+\footnotesize
+%\raggedright
+
+\begin{center}
+  {\huge\sffamily\bfseries ST2137 Cheatsheet} \huge\bfseries\\
+  by Yiyang, AY22/23
+\end{center}
+\setlength{\premulticols}{0pt}
+\setlength{\postmulticols}{0pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{1.8em}
+\begin{multicols}{3}
+
+
+% -----------------------------------------------------------------------
+\section{4. Numerical Data Analysis}
+Variables can be \deff{Quantitative} (\deff{Discrete} or \deff{Continuous}) or \deff{Categorical} (\deff{Ordinal} or \deff{Nominal}).
+
+\subsection{Single Quantitative Variable}
+For a unimodal distribution, \deff{Skewness} value represents the amount and direction of skew:
+\[
+	\frac{\sqrt{n(n-1)}}{n-2} \times \frac{m_3}{(m_2)^{3/2}}
+\]
+where $m_2 = \frac{1}{n}\sum_{i=1}^n (x_i - \bar x)^2$ and $m_3 = \frac{1}{n}\sum_{i=1}^n (x_i - \bar x)^3$.
+\\
+A distribution is \deff{Skewed Right} / \deff{Positively Skewed} if peak is towards the left and the right tail is longer (e.g. income). A \deff{Symmetric} distribution has close to $0$ skewness.
+
+\smallskip
+
+\deff{Kurtosis} measures shape of a distribution, with higher (lower) values indicate a higher \& shaper (lower \& less distinct) peak:
+\[
+\frac{n-1}{(n-2)(n-3)} \Big[ \frac{(n+1)m_4}{m_2^2} - 3(n-1) \Big]
+\]
+
+\smallskip
+
+Graphical summaries for 1 quantitative: [1] Histogram \& Density Plot, [2] Boxplot, [3]  QQ Plots, plots of standardised sample quantiles against theoretical quantiles of a standard normal.
+
+
+
+\subsection{Association between Two Variables}
+
+Summaries for 2 quantitiative: [1] Correlation Val., [2] Scatterplot.
+\\
+Summaries for quantitative \& categorical: [1] Boxplots by Groups, [2] Histogram by Groups.
+
+
+
+
+\section{5. Robust Estimators}
+A statistical method is \deff{Robust} wrt. a particular assumption if it performs adequately even when that assumption is modestly violated.
+
+
+\subsection{Robust Estimation of Location}
+Location Estimators: [1] Arithmetic mean, [2] Trimmed mean, [3] Winsorized mean, [4] M-Estimates.
+
+
+\smallskip
+
+The \deff{$100 \alpha \%$ Trimmed Mean} is calculated by: [1] Discard lowest $100 \alpha \%$ and highest $100 \ \alpha \%$. [2] Arithmetic mean of remaining.
+\\
+\underline{Note}: [1] $2 \alpha$ of extreme data discarded. [2] Usually $\alpha \in [0.1, 0.2]$.
+
+
+\smallskip
+
+The \deff{$100 \alpha \%$ Winsorized Mean} is calculated by: [1] Sort observations as $x_{(1)}, x_{(2)}, …, x_{(n)}$. [2] Replace $[n\alpha]$ smallest observations with $x_{([n\alpha]+1)}$, and $[n\alpha]$ largest with $x_{(n-[n\alpha])}$. Here, $[a]$ denotes as the nearest integer of $a$. [3] Arithmetic mean of replaced.
+
+
+\smallskip
+
+\deff{M-Estimator} with a non-constant error function $\rho$, $T$, is defined as
+% TODO: \argmin not \arg\min
+\[
+T = \arg\min_T \sum_{i=1}^n \rho(x_i - T) 
+\]
+
+
+\subsection{Robust Estimation of Scale}
+Scale Estimators:
+\begin{itemize}
+	\item \deff{Inter-Quartile Range} $\text{IQR} = Q_3 - Q_1$
+	\item \deff{Median Abs Deviation} $\text{MAD} = \text{med}_i  ( |x_i - \text{med}_j(x_j)| )$
+	\item \deff{Gini's Mean Difference} $G = \sum_{i < j} |x_i - x_j| / {n \choose 2}$
+\end{itemize}
+\underline{Note}: For a normal distribution, $\text{IQR} = 1.35 \sigma, \text{MAD} = 1.4826 \sigma, \sqrt{\pi} G / 2 = \sigma$.
+
+
+
+
+\section{6. Categorical Data Analysis}
+Summaries for 1 categorical: [1] Frequency Table (with category of highest frequency as \deff{Modal Category}), [2] Bar plot.
+
+
+\subsection{Two Categorical}
+% TODO
+Association between 2 categorical: [1] Contingency Table, [2] 
+
+\subsubsection{Contingency Table}
+\underline{Note}:  Row for explanatory variables $x$ and column for response variables $Y$ (success or fail).  Measures of association: [1] Sample Diff. $= p_1 - p_2$, [2] Relative risk $= p_1 / p_2$, [3] Odds Ratio.
+
+\smallskip
+
+For a success prob. $\pi$, \deff{Odds of Success} is $\text{odds} = \pi / (1 - \pi)$. For 2-way contingency table, the \deff{Odds Ratio} (OR), $\theta$, and \deff{Sample OR}, $\hat \theta$, are defined
+\[
+\theta = \frac{\pi_1 / (1 - \pi_1)}{\pi_2 / (1 - \pi_2)}, \; \hat{\theta} = \frac{p_1 / (1 - p_1)}{p_2 / (1 - p_2)} = \frac{n_{11} \times n_{22}}{n_{12} \times n_{21}}
+\]
+where $n_{11}, n_{12}, n_{21}, n_{22}$ are $4$ cell counts. 
+
+The $100\%(1-\alpha)$ Confidence Interval for OR:
+\[
+\exp \{ \log \hat{\theta} \pm z_{\alpha / 2} \times ASE(\log \hat{\theta})  \}
+\]
+where
+\[
+ASE(\log \hat{\theta}) = \sqrt{ 1/n_{11} + 1/n_{12} + 1/n_{21} + 1/n_{22}  }
+\]
+\underline{Note}: If $x$ and $Y$ independent, $\theta = 1$.
+
+
+\subsubsection{Prospective \& Retrospective Studies}
+\deff{Prospective Studies} sample subjects randomly from a population and randomly assign exposure variables or record exposure status. All 3 measures above are valid.
+\\
+\deff{Retrospective Studies} sample a group of cases and a group of controls (i.e. based on $Y$), and check each subject's exposure. As such, \textbf{cannot} obtain valid estimates of $\pi_1, \pi_2$, as we obtain $Pr(x|Y)$ but need to estiamte $Pr(Y|x)$.
+
+
+
+\subsection{Dependence Tests}
+\subsubsection{Chi-squared Test}
+\underline{Assumption}: All $e_{ij} \ge 5$. \underline{Note}: \deff{Fisher Exact Test} for small samples.
+
+\underline{Null Hypo.}: Two variables are independent.
+
+\underline{Test Statistic}
+\[
+\chi^2 = \sum \frac{(|o_{ij} - e_{ij}| - 0.5)^2}{e_{ij}} \sim \chi^2_1
+\]
+, where $o_{ij}, e_{ij}$ are observed and expected count for each cell, and expected count is $\text{RowTotal} \times \text{ColTotal} / \text{Total}$.
+
+
+\subsubsection{McNemar's Test}
+\underline{Settings}: $x$ and $Y$ represent num. of students passing \& failing a test before \& after a lesson. \textbf{Dependent samples}. 
+
+\underline{Null Hypo.}: Before and after are independent. 
+
+\underline{Test Statistic}: let $b$ and $c$ denotes pass-then-fail \& fail-then-pass:
+\[
+\chi^2 = \frac{(b-c)^2}{b+c}, \; \text{or (if small sample, ) } \frac{(|b-c|-1)^2}{b+c} \sim \chi^2_1
+\]
+
+
+\subsubsection{Chi-Square Test for General Tables}
+\underline{Assumption}: Large samples, or $\le 25\%$ cells with expected $< 5$.
+
+\underline{Settings}: Contingency table with $r$ rows \& $c$ cols now.
+
+Same \underline{hypotheses} and \underline{test statistic} as previous case but follows $\chi^2$ with d.f. ${(c-1) \times (r-1)}$ now.
+
+\deff{Standardised / Adjusted Residual} for each cell:
+\[
+r_{ij} = \frac{o_{ij} - e_{ij}}{SE(o_{ij} - e_{ij})}, 
+\; 
+SE = \sqrt{ e_{ij} (1 - p_{i+}) (1 - p_{+j}) }
+\]
+where $p_{i+}$ and $p_{+j}$ marginal prob. of row $i$ and of col $j$. 
+\underline{Note}: $|r_{ij}| > 2$ indicates lack of fit of $H_0$ in the cell.
+
+% Test for Ordinal Data & Linear by Linear Test not yet covered
+
+
+
+% -----
+\noindent\rule{8cm}{0.4pt}
+\section{R Coding}
+
+
+
+
+% -----
+\noindent\rule{8cm}{0.4pt}
+\section{Python Coding}
+
+
+
+
+% -----
+\noindent\rule{8cm}{0.4pt}
+\section{SAS Coding}
+
+
+
+
+% -----
+% KIV:
+% 4. how to read qq plots
+% 5. rho & T examples for M-estimator
+
+
+
+
+\end{multicols}
+\end{document}
