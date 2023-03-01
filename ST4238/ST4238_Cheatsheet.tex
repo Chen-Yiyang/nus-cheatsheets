@@ -121,6 +121,15 @@ X(s+t) - X(s) \sim Pois \Big(  \int_{s}^{s+t} \lambda (u) du \Big)
 \\
 \underline{Note}: A \deff{Cox Process} is where $\lambda(t)$ is a stochastic process itself.
 
+\medskip
+
+To \textbf{homogeniz a non-homogeneous Poisson Process}:
+\begin{enumerate}
+    \item Define $\Lambda (t) = \int_0 ^t \lambda(u) du$
+    \item Define a new process $Y(s) = X(t)$ where $s = \Lambda(t)$
+    \item Now $Y(s)$ is a homogeneous Poisson Process with rate $1$.
+\end{enumerate}
+
 
 \subsubsection{Definition 2 - LRE}
 Let $N \big( (s, t] \big)$ be a r.v. counting number of occurrences in the interval $(s, t]$. Then $N \big( (s, t] \big)$  is a \deff{Poisson Point Process} of intensity $\lambda > 0$ if
@@ -149,7 +158,7 @@ Let $\epsilon_1, \epsilon_2, ...$ be independent Ber. r.v.'s with $P(\epsilon_i 
 \subsubsection{Definition 3 - Sojourn Time}
 Consider a sequence $\{ S_n, n \ge 0  \}$ of i.i.d. $Exp(\lambda)$. Define a counting process by specifying the occurrence time of $n$-th event
 \[
-W_n = S_0 + S_1 + ... + S_n
+W_n = S_0 + S_1 + ... + S_{n-1}
 \]
 The new counting process will be a Poisson Process with rate $\lambda$.
 
@@ -199,7 +208,7 @@ For $\{ N(t), t \ge 0 \}$ a Poisson Process with rate $\lambda$, if each event o
 \subsubsection{Comparision of Two Processes}
 Consider $\{ X(t), t \ge 0 \}$ and  $\{ Y(t), t \ge 0 \}$ two independent Poisson Processes with rates $\lambda_1$ and $\lambda_2$. Define $W_{n}^{X}$ and $W_{m}^{Y}$ as the waiting time of the $n$-th and $m$-th waiting time of $X(t)$ and $Y(t)$ respectively.
 \[
-P(W_{n}^{X} < W_{m}^{Y}) = \sum_{k=n}^{n+m-1}    {{n+m-1}\choose{k}}    (\frac{\lambda_1}{\lambda_1 
+P(W_{n}^{X} < W_{m}^{Y}) = \sum_{k=n}^{n+m-1} {{n+m-1}\choose{k}}    (\frac{\lambda_1}{\lambda_1 
 	+ \lambda_2})^k (\frac{\lambda_2}{\lambda_1 + \lambda_2})^{n+m-1-k}
 \]
 \underline{Analysis}: It is equivalent as getting $n$ or more heads in $n+m-1$ tosses where getting a head has probability $\lambda_1 / (\lambda_1 + \lambda_2)$.
@@ -288,6 +297,8 @@ A CTMC $\{ X(t), t \ge 0 \}$ can be specified with
 	\item \deff{Jump Probabilities} $P_{ij}$, the probability of $X(t)$ currently in state $i\in S$ and moves to $j \in S$ at first transition.
 \end{itemize}
 \underline{Note}: By definition, $P_{ii} = 0$ and $\sum_{j \neq i} P_{ij} = 1 $ for all $i \in S$.
+\\
+\underline{Note}: For an absorbing state $i$ (e.g. $i = 0$ in Birth \& Death Process), we may set $\nu_i = 0$.
 
 
 \subsubsection{Transition Probability Function}
@@ -305,8 +316,14 @@ P_{ij}(t) := P(X(t+s) = j | X(s) = i)
 P_{ij} (t + s) = \sum_{k \in S} P_{ik} (t) P_{kj} (s)
 \]
 
+\subsubsection{Poisson Process as CTMC}
+A Poisson Process $\{ X(t), t \ge 0 \}$ with rate $\lambda$ can be modelled as a CTMC with state space $S = \{ 0, 1, 2, ... \}$, rates $\nu_i = \lambda, \forall i \in S$, and jump matrix $P$ where $P_{i,i+1} = 1$ and $P_{ij} = 0, \forall j \neq i + 1$.
+\\
+\underline{Note}: CTMCs are not necessarily Poisson Processes.
+
 
 \subsubsection{Discretisation of CTMC}
+
 For a CTMC $\{ X(t), t \ge 0 \}$, $\{Y_1(n) \}_{n \ge 0}$ discretises it at equal intervals if for some constant $l > 0$,
 \[
 Y_1(n) = X(nl), n = 0, 1, 2, ...
@@ -343,7 +360,7 @@ G_{ii} = - \nu_i, \; G_{ij} = q_{ij}, \; i \neq j
 \subsubsection{Kolmogorov's Forward Equations}
 For all states $i, j$, and times $t \ge 0$,
 \begin{align*}
-    P_{ij}'(t) &= \sum_{k \neq i} P_{ik}(t)q_{kj} - \nuj P_{ij}(t)
+    P_{ij}'(t) &= \sum_{k \neq i} P_{ik}(t)q_{kj} - \nu_j P_{ij}(t)
     \\
     \equiv P'(t) &= P(t)G
 \end{align*}
@@ -362,6 +379,30 @@ For all states $i, j$, and times $t \ge 0$,
 
 \noindent\rule{8cm}{0.4pt}
 
+\section{Appendix: Probability Theory}
+\subsubsection{Gamma}
+$X \sim Gamma(\alpha, \lambda)$ for shape $\alpha$, and rate $\lambda > 0$. ($1/\lambda$ is scale parameter)
+\[
+f(x) = \frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\lambda x}, \quad x \geq 0
+\]
+Statistics: $E(X) = \frac{\alpha}{\lambda}, \ \text{var}(X) = \frac{\alpha}{\lambda^2}$ \\
+MGF: $M_X(t) = \left(1 - \frac{t}{\lambda}\right)^{-\alpha},\quad t < \beta$ \\
+Special case: $Exp(\lambda) = Gamma(1, \lambda)$, $\chi^2_n = Gamma(\frac{n}{2}, \frac{1}{2})$ \\
+Properties: $Gamma(a, \lambda) + Gamma(b, \lambda) = Gamma(a+b, \lambda)$, and $cX \sim Gamma(\alpha, \frac{\lambda}{c})$
+\\
+\textbf{Gamma function} $\Gamma(\alpha) = \int_0^{\infty} e^{-y}y^{\alpha-1} \, dy$ \\
+$\Gamma(1) = 1, \ \Gamma\left(\frac{1}{2}\right) = \sqrt{\pi}$ and $\Gamma(n) = (n-1)!, \ n \in \mathbb{Z}^{+}$
+
+
+\subsubsection{Beta}
+$X \sim B(a, b)$ where $a>0, b>0$ has support $[0, 1]$
+\[
+f(X) = \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} x^{a-1} (1-x)^{b-1}, 0 \le x \le 1
+\]
+Statistics: $E(X) = \frac{1}{1 + \beta / \alpha}, \ \text{var}(X) = \frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$
+Special case: $\text{Unif}(0, 1) = B(1, 1)$
+
+\textbf{Beta function} $B(a, b) = \int_0^1 t^{a-1} (1-t)^{b-1} \ dt = \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$
 
 
 % \section{Intermediate Results \& Lemmas}
