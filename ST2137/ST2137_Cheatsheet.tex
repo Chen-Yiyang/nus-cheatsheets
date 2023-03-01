@@ -31,6 +31,8 @@
 \setsansfont{Fira Sans}
 \setmonofont{Inconsolata}
 \usepackage{unicode-math}
+\usepackage{listings}
+\usepackage{minted}
 \setmathfont{TeX Gyre Pagella Math}
 \usepackage{microtype}
 
@@ -99,6 +101,16 @@
 \begin{multicols}{3}
 
 
+
+\lstset{language=R,
+    basicstyle=\small\linespread{0.5},
+    otherkeywords={0,1,2,3,4,5,6,7,8,9},
+    morekeywords={TRUE,FALSE},
+    deletekeywords={data,frame,length,as,character},
+    keywordstyle=\color{blue},
+    commentstyle=\color{yellow},
+}
+
 % -----------------------------------------------------------------------
 \section{4. Numerical Data Analysis}
 Variables can be \deff{Quantitative} (\deff{Discrete} or \deff{Continuous}) or \deff{Categorical} (\deff{Ordinal} or \deff{Nominal}).
@@ -129,7 +141,11 @@ Graphical summaries for 1 quantitative: [1] Histogram \& Density Plot, [2] Boxpl
 
 Summaries for 2 quantitiative: [1] Correlation Val., [2] Scatterplot.
 \\
-Summaries for quantitative \& categorical: [1] Boxplots by Groups, [2] Histogram by Groups.
+Summaries for quantitative \& categorical: [1] Boxplots by Groups, [2] Histogram by Groups. \\
+R: boxplot(x~y); 
+Python: \\
+fig, ax = plt.subplots(figsize=(7,5))\\
+data.boxplot(column=['energy'], by='type', ax=ax)
 
 
 
@@ -168,9 +184,9 @@ Scale Estimators:
 \begin{itemize}
 	\item \deff{Inter-Quartile Range} $\text{IQR} = Q_3 - Q_1$
 	\item \deff{Median Abs Deviation} $\text{MAD} = \text{med}_i  ( |x_i - \text{med}_j(x_j)| )$
-	\item \deff{Gini's Mean Difference} $G = \sum_{i < j} |x_i - x_j| / {n \choose 2}$
+	\item \deff{Gini's Mean Difference} $G = \sum_{i < j} |x_i - x_j| / C_2^n$
 \end{itemize}
-\underline{Note}: For a normal distribution, $\text{IQR} = 1.35 \sigma, \text{MAD} = 1.4826 \sigma, \sqrt{\pi} G / 2 = \sigma$.
+\underline{Note}: For a normal distribution, $\text{IQR} = 1.35 \sigma, \sigma = \text{MAD} * 1.4826, \sqrt{\pi} G / 2 = \sigma$.
 
 
 
@@ -181,7 +197,6 @@ Summaries for 1 categorical: [1] Frequency Table (with category of highest frequ
 
 \subsection{Two Categorical}
 % TODO
-Association between 2 categorical: [1] Contingency Table, [2] 
 
 \subsubsection{Contingency Table}
 \underline{Note}:  Row for explanatory variables $x$ and column for response variables $Y$ (success or fail).  Measures of association: [1] Sample Diff. $= p_1 - p_2$, [2] Relative risk $= p_1 / p_2$, [3] Odds Ratio.
@@ -208,14 +223,15 @@ ASE(\log \hat{\theta}) = \sqrt{ 1/n_{11} + 1/n_{12} + 1/n_{21} + 1/n_{22}  }
 \subsubsection{Prospective \& Retrospective Studies}
 \deff{Prospective Studies} sample subjects randomly from a population and randomly assign exposure variables or record exposure status. All 3 measures above are valid.
 \\
-\deff{Retrospective Studies} sample a group of cases and a group of controls (i.e. based on $Y$), and check each subject's exposure. As such, \textbf{cannot} obtain valid estimates of $\pi_1, \pi_2$, as we obtain $Pr(x|Y)$ but need to estiamte $Pr(Y|x)$.
+\deff{Retrospective Studies} sample a group of cases and a group of controls (i.e. based on $Y$), and check each subject's exposure. As such, \textbf{cannot} obtain valid estimates of $\pi_1, \pi_2$, as we obtain $Pr(x|Y)$ but need to estiamte $Pr(Y|x)$. Can use odds ratio for test 
+only
 
 
 
 \subsection{Dependence Tests}
 \subsubsection{Chi-squared Test}
 \underline{Assumption}: All $e_{ij} \ge 5$. \underline{Note}: \deff{Fisher Exact Test} for small samples.
-
+A
 \underline{Null Hypo.}: Two variables are independent.
 
 \underline{Test Statistic}
@@ -259,15 +275,196 @@ where $p_{i+}$ and $p_{+j}$ marginal prob. of row $i$ and of col $j$.
 % -----
 \noindent\rule{8cm}{0.4pt}
 \section{R Coding}
+\subsection{Basic Syntax}
+\begin{minted}{R}
+# Vector
+numeric(n); character(n)  # vector with n 0's / ""'s
+rep(a, b)  # replicate item a by b times
+seq(from=a,to=b,by=c); seq(from=a,to=b,length=d);
+# Matrix
+matrix(v, nrows=a, ncols=b, byrow=T)  # matrix from vec
+rbind(...); cbind(...)  # Bind rows / cols to form matrix
+# Dataframes
+df <- data.frame(m)  # df from matrix
+names(df) = c(...)  # set df colname
+row.names(df) = ...  # set df rownames
+df[a, b:c]  # get row a, col b toc
+df$abc  # get col with name abc
+df[order(val),], df[rev(order(val)),]  # asc, desc
+merge(df1, df2, by="id")
 
 
+# Conditioning
+if (condition) {
+  ... # then statements	
+} else {
+  ... # else statements
+}
+# While loop
+while (condition) {
+  ... # expression
+}
+# For loop
+for (<variable> in <range>) {
+  ... # expression
+}
 
+# IO
+read.csv(..., header=T, width=c(...)), read.table(...)
+# Note: Use width if each variable spans multiple lines
+write.table(data, "C:/...")
+
+# print
+cat(...); sink()
+\end{minted}
+
+\subsection{Numerical Data Analysis}
+\begin{minted}{R}
+# descriptive stats, location
+length(x); summary(x); mean(x); median(x); quantile(x)
+# descriptive stats, variability
+range(x); var(x); sd(x); IQR(x);  x[order(x)[1:5]] # smallest 5
+# skewness
+skew <- function(x){
+  n<-length(x); m3<-mean((x-mean(x))^3); m2<-mean((x-mean(x))^2); 
+  sk=m3/m2^(3/2)*sqrt(n*(n-1))/(n-2); return(sk)
+} 
+# kurtosis
+kurt = function(x) {
+    n = length(X); m4 = mean((x-mean(x))^4);
+    m2 = mean((x-mean(x))^2)
+    kurt = (n-1)/((n-2)*(n-3)) * ((n+1)*m4 / (m2^2) - 3*(n-1))
+}
+
+# Histogram w. Density Plot
+hist(mark, freq=FALSE, main = "Hist"),
+  xlab = "mark", ylab="fre", axes = TRUE,
+  col = "grey", nclass = 10)
+x<-seq(0,30,length.out=98); y<-dnorm(x,mean(mark),sd(mark))
+lines(x, y, col = "red")
+# Boxplots
+boxplot(mark, xlab = "mark")
+# QQ plots
+qqnorm(mark, pch = 20); qqline(mark, col = "red")
+
+# For association between two
+cor(v1, v2) # Correlation
+plot(v1, v2, pch = 20) # scatter
+boxplot(energy ~ type) # Boxplots by Group
+
+# Others
+par(mfrow=c(2,2)); ...; # Subplots
+par(new=TRUE); ...; # add new plots to same graph
+\end{minted}
+
+\subsection{Robust Estimators}
+\begin{minted}{R}
+mean(x); mean(x, trim = 0.2) # arithmetic & 20% trimmed
+winsor <- function(x, alpha = 0.2){
+  n = length(x); xq = n * alpha; x = sort(x)
+  m = x[(round(xq)+1)]; M = x[(n - round(xq))]
+  x[which(x<m)] = m; x[which(x>M)] = M
+  return(c(mean(x),var(x)))
+}
+# 20% Winsorized using library
+library(MASS); hubers(x, k= 0.84)
+
+median(abs(x-median(x))); mad(x); IQR(x)
+\end{minted}
+
+\subsection{Categorical Data Analysis}
+\begin{minted}{R}
+count = table(data$type); count # frequency table
+barplot(count) # barplot
+
+# Contingency table
+ct <- matrix(c(...), ncol=2, byrow=2)
+dimnames(ct) <- list(rowname=c(...), colname=c(...))
+test <- prop.test(ct,correct=FALSE)
+RR <- (test$estimate[1])/(test$estimate[2])
+odds <- test$estimate/(1- test$estimate)
+OR <- odds[1]/odds[2]
+
+# Fisher Exact Test
+fisher.test(ct, alternative = "two.sided")
+# general Chi-squared Test
+chisq.test(ct)
+\end{minted}
 
 % -----
 \noindent\rule{8cm}{0.4pt}
 \section{Python Coding}
+\subsection{Basic Syntax}
+\begin{minted}{Python}
+# matrix
+mat = np.asmatrix([[...],[...],...])
+np.vstack((...)); np.column_stack((...))
+mat.T; mat.I
+# Dataframe
+data = {'X': [...], 'Y': [...]}
+df = pd.DataFrame(data, columns =['X', 'Y'])
+df1 = df.rename({'X': 'NewX', 'Y': 'NewY'}, axis=1) 
+\end{minted}
 
+\subsection{Numerical Data Analysis}
+\begin{minted}{Python}
+# Relevant libraries
+import pandas as pd
+import scipy.stats as scst
+import matplotlib.pyplot as plt
+import statistics as st
 
+# Descriptive stats
+df['x'].median(); df['x'].var(); df['x'].std()
+df['x'].quantile(0.25); df['x'].quantile(0.75)
+# Histogram w. Density Plot
+l = list(np.arange(0,30,0.5))
+y = scst.norm.pdf(l,loc=mean(x),scale=st.stdev(x)) # qnorm in R
+plt.plot(l, y); plt.hist(data['x1'], density=True)
+plt.title('...'); plt.xlabel('...'); plt.ylabel('...')
+# Boxplot
+plt.boxplot(data['x1'])
+# QQ Plot
+scst.probplot(x, dist="norm", plot=pylab)
+pylab.show()
+
+# Scatterplot
+plt.scatter(v1, v2)
+# Scatterplot by Group (tut3Qn2)
+groups = data.groupby("x11")
+for name, grp in groups:
+    plt.plot(grp["x"], grp["y"], 
+            marker="o", linestyle="", label=name)
+# Boxplots by Group
+fig, ax = plt.subplots(figsize=(7,5))
+bats.boxplot(column=['energy'], by='type', ax=ax, color = 'b')
+
+# Others
+plt.legend()
+plt.show()
+
+# correlation:
+np.corrcoef(x, y)[0, 1]
+\end{minted}
+
+\subsection{Categorical Data Analysis}
+\begin{minted}{Python}
+from statsmodels.stats.contingency_tables import mcnemar
+
+# Table
+tab = pd.crosstab(index=data["type"],columns="count")
+# Barplots
+plt.bar(type,counts)
+
+# Contingency table, using df or Numpy 2D array
+scst.chi2_contingency(ctable, correction = True)
+# Fisher Exact Test
+scst.fisher_exact(ctable, alternative='two-sided')
+# McNemar Test
+mcnemar(ctable, exact=False, correction=True)
+# General Chi-squared
+scst.chi2_contingency(obs, correction = True)
+\end{minted}
 
 
 % -----
