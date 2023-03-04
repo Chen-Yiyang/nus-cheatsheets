@@ -1,0 +1,423 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Original Source: Dave Richeson (divisbyzero.com), Dickinson College
+% Modified By: Chen Yiyang
+% 
+% A one-size-fits-all LaTeX cheat sheet. Kept to two pages, so it 
+% can be printed (double-sided) on one piece of paper
+% 
+% Feel free to distribute this example, but please keep the referral
+% to divisbyzero.com
+% 
+% Guidance on the use of the Overleaf logos can be found here:
+% https://www.overleaf.com/for/partners/logos 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt,landscape,letterpaper]{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{physics}  % for vectors
+\usepackage{bbm}  % for mathbb-ed digits
+%\usepackage{fonts}
+\usepackage{multicol,multirow}
+\usepackage{spverbatim}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,urlcolor=olgreen]{hyperref}
+\usepackage{booktabs}
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX]{TeX Gyre Pagella}
+\setsansfont{Fira Sans}
+\setmonofont{Inconsolata}
+\usepackage{unicode-math}
+\setmathfont{TeX Gyre Pagella Math}
+\usepackage{microtype}
+
+\usepackage{empheq}
+
+% new:
+\def\MT@is@uni@comp#1\iffontchar#2\else#3\fi\relax{%
+  \ifx\\#2\\\else\edef\MT@char{\iffontchar#2\fi}\fi
+}
+\makeatother
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{margin=0.4in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\sffamily\large}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\sffamily\normalsize\itshape}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\itshape}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+% -----------------------------------------------------------------------
+
+\usepackage{academicons}
+
+\begin{document}
+
+\definecolor{mathBlue}{cmyk}{1,.72,0,.38}
+\definecolor{defOrange}{cmyk}{0, 0.5, 1, 0.3}
+\definecolor{codeInlineRed}{cmyk}{0, 0.9, 0.9, 0.45}
+
+\everymath{\color{mathBlue}}
+\everydisplay{\color{mathBlue}}
+
+% for vector notation in this module
+\newcommand{\vect}[1]{\pmb{#1}}
+\newcommand{\deff}[1]{\textcolor{defOrange}{\textbf{#1}}}
+\newcommand{\codein}[1]{\textcolor{codeInlineRed}{\texttt{#1}}}
+\newcommand{\citeqn}[1]{\underline{\textit{#1}}}
+
+\footnotesize
+%\raggedright
+
+\begin{center}
+  {\huge\sffamily\bfseries CS4247 Cheatsheet} \huge\bfseries\\
+  by Yiyang, AY22/23
+\end{center}
+\setlength{\premulticols}{0pt}
+\setlength{\postmulticols}{0pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{1.8em}
+\begin{multicols}{3}
+
+
+% -----------------------------------------------------------------------
+%\section{1. Modern OpenGL}
+%\section{2. Geometric Transformation}
+%\section{3. GLSL}
+
+\section{Introduction}
+\subsection{OpenGL Shaders}
+\subsubsection{Vertex Shader}
+
+\subsubsection{Fragment Shader}
+
+
+\section{Texture Mapping}
+\subsection{OpenGL Cube Map}
+
+
+
+
+
+\section{Shaders}
+\subsection{Cartoon Style Shading}
+%TODO: very view-dependent
+
+\subsection{Procedural Bump \& Normal Mapping}
+Procedures for Procedural Bump Mapping:
+\begin{enumerate}
+	\item At each vertex, transform normal  \& tangent to eye space
+	\item Interpolate eye-space normal \& tangent to fragments
+	\item At each fragment, compute \deff{Binormal vector} \& compute tangent-space \deff{Perturbantion Vector} based on texture coordinates
+	\item Transofmration perturbantion from tangent space to eye space and use it for lighting computation
+\end{enumerate}
+\deff{Binormal Vector} - unit vector perpendicular to both normal \& tangent vectors.
+
+\smallskip
+
+In \deff{Normal Mapping}, use a normal map where each texel contains 3 perturbation vector components in  RGB channels.
+\\
+\underline{Note}: Need to encode from $[–1,1]$ to $[0,1]$ for each value read.
+
+
+\subsection{Refraction \& Reflection Mapping}
+Procedures:
+\begin{enumerate}
+	\item Set up an \deff{Environment Map} (e.g. cubemap)
+	\item Compute the refracted ray of the view ray
+	\item Use (interpolated) refraction ray direction to access env.map at fragment shader
+\end{enumerate}
+
+\underline{Note}: [1] We only compute refraction at the first surface (entering the object) and ignore when the ray exits the object since it is too complicated. [2] Refraction mapping is similar to reflection mapping, but need to account for Fresnel Effects and Chromatic Aberration.
+
+\subsubsection{Fresnel Effects}
+\deff{Fresnel Effects} - Refraction depends on viewing angles. Look at an object from top (side), the surface looks shinnier with more refraction (less shiny and more reflection).
+\\
+\deff{Fresnel's Equation} determines the \textbf{ratio} of reflected and transmitted light energy from a perfect surface:
+\[
+F = \frac{1}{2} \Big(  
+\frac{\sin^2(\phi - \theta)}{\sin^2(\phi + \theta)} + 
+\frac{\tan^2(\phi - \theta)}{\tan^2(\phi + \theta)}
+\Big)
+\]
+, where $\phi$ and $\theta$ are angles of incidence and refraction, and $\mu = \sin\phi / \sin\theta$ is the refractive index of the material.
+\\
+\deff{Schlick's Approximation} approximates Fresnel's Equation:
+\[
+F = f + (1 - f) (1 - V \cdot N)^5,  \; \text{for }  f = \frac{(1 - n_1 / n_2)^2}{1 + n_1 / n_2)^2}
+\]
+
+\subsubsection{Chromatic Aberration}
+\deff{Chromatic Aberration} - Realistic (flawed) cameras produce images where different colour rays do not converge on the same point. Instead, there are slightly different extents of refraction for different colour components.
+\\
+\underline{Solution}: Use different refractive indices for RGB channels.
+
+
+
+
+
+\section{FBO \& Real-Time Shadow}
+\deff{Multi-Pass Rendering} - render 3D scenes for multiple times (passes), and combine the multiple rendered images to synthesize the final frame.
+
+\subsection{Framebuffer Object}
+\deff{Framebuffer Object} (FBO) - Framebuffers created in OpenGL for storing rendering outputs, that can be non-displayable.
+\\
+Each FBO contains many \deff{Attachment Points}, i.e. rendering destinations, with two types of FBO attachable images:
+\begin{enumerate}
+	\item Texture images, render to texture
+	\item Render buffer images, offsceen rendering
+\end{enumerate}
+\underline{Note}: \deff{Mutliple Render Targets} (MRT) enables a fragment shader writes to (the same position of) multiple FBOs in one pass at the same time.
+
+
+\subsection{Real-Time Shadow}
+Point light sources produce shadows with \textbf{hard boundaries}, while extended light sources give \textbf{soft bounaries}, with \deff{Umbra} and \deff{Penumbra}.
+\\
+\underline{Note}: Real-time shadow rendering techniques assume \textbf{point light sources} and generate \deff{Geometric Shadows} (shadows with correct shapes and arbitrary intensities).
+
+\subsubsection{Shadow Volume Method}
+\underline{Idea}: An occluder casts a shadow volume. After determining the occlusion boundaries for each occluder, use stencil buffer to keep trace of how many are occluding the current pixel.
+\\
+\deff{Stencil Buffer} has the same resolution as colour buffer, and each stencil “pixel” is an integer counter.
+
+\smallskip
+
+Procedure for \deff{Depth Pass Method}:
+\begin{enumerate}
+	\item Find silhouette edges
+	\item Extend silhouette edges from light source to form shadow volume polygons
+	\item Render the scene as if it were completely in shadow
+	\item Disable writes to the depth and color buffers
+	\item Draw all \textbf{front faces} of shadow volume, and increment stencil buffer by 1 on \textbf{depth pass}
+	\item Draw all \textbf{back faces} of shadow volume, and decrement stencil buffer by 1 on \textbf{depth pass}
+	\item Render the scene again as if it were completely lit, using the stencil buffer to mask the shadowed areas
+\end{enumerate}
+\underline{Analysis}: [1] It draws only on pixels whose stencil value is 0. [2] \textbf{Fail} if the viewpoint is in a shadow volume or some shadow volume polygons are clipped by the near plane.
+
+\smallskip
+
+Procedure for \deff{Depth Fail / Carmack's Reverse Method}:
+\\
+Same steps as Depth Pass Method except for how it draws (i.e. Step 5 and 6)
+\begin{itemize}
+	\item Draw all \textbf{back faces} of shadow volume, and increment stencil buffer by 1 on \textbf{depth fail}
+	\item Draw all \textbf{front faces} of shadow volume, and decrement stencil buffer by 1 on \textbf{depth fail}
+\end{itemize} 
+
+
+\subsubsection{Shadow Mapping Method}
+\underline{Idea}: Objects are in shadow when their depth map values when viewing from the light source are smaller.
+\\
+Procedures:
+\begin{enumerate}
+	\item Render the scene using the light source as viewpoint
+	\item Save the depth buffer known as \deff{Shadow Map}
+	\item Clear the framebuffer
+	\item Render the scene from camera’s viewpoint: For each fragment, transform it to the "light space" and compare its "light space" $z$-value with shadow map $z$-value.
+	If "light space" $z$-value is larger, the fragment is in shadow \& lit with only ambient light. Otherwise, the fragment is not in shadow \& is fully lit.
+\end{enumerate}
+
+For each point $\vec{p}_M$ in modelling coordinates, its shadow mapp coordinates $\vec{p}_L$ is
+\[
+\vec{p}_L = B \cdot P_L \cdot V_L \cdot M \cdot \vec{p}_M
+\]
+, where $M, V_L, P_L$ are the \textbf{Modelling Matrix}, \textbf{Light's View Transformation Matrix}, \textbf{Light's Projection Matrix}, and $B$ is defined as
+\[
+B = S(\frac{1}{2}, \frac{1}{2}, \frac{1}{2}) \ T(1, 1, 1) = \begin{bmatrix}
+	0.5 	& 0 	& 0		& 0.5 \\
+	0	 	 & 0.5 	& 0		& 0.5 \\
+	0        & 0 	 & 0.5	& 0.5 \\
+	0 		 & 0 	& 0		& 1
+\end{bmatrix}
+\]
+
+\underline{Issue 1}: Shadow Acnes \& Self-Shadowing
+\\
+\underline{Solution}:  [1] Subtract a tolerance value from \codein{ShadowCoord.z}. [2] Offset the scene backwards when generating the shadow map using \codein{glPolygonOffset()}.
+
+\smallskip
+
+\underline{Issue 2}: Jaggies at shadow boundaries
+\\
+\underline{Solution}: Use \deff{Percentage Closer Filtering} to smoothen, which averages depth comparison results in a small neighbourhood in the shadow map.
+
+
+
+
+
+\section{Post-Rendering Processing}
+\deff{Post Rendering Image Processing} \textasciitilde Further processing of images produced by 3D rendering, in order to produce final frame.
+
+\subsection{Edge Detection}
+It uses 2D digital convolution with \deff{Sobel Operator}, which is defined as:
+\[
+S_x = \begin{bmatrix}
+-1 & 0 & 1 \\
+-2 & 0 & 2 \\
+-1 & 0 & 1
+\end{bmatrix} \ , \;
+S_y = \begin{bmatrix}
+-1 & -2 & -1 \\
+0 & 0 & 0 \\
+1 & 2 & 1
+\end{bmatrix}
+\]
+
+Procedures for edge detection:
+\begin{enumerate}
+    \item Apply convolution to the image with Sober Operator kernels. Let results be $s_x$ and $s_y$. 
+    \item Compute for each pixel $g = \sqrt{s^2_x + s^2_y}$.
+    \item If a pixel has $g$ above a threshold, consider it an edge pixel. 
+\end{enumerate}
+
+
+\subsubsection{Window Coordinates \& Texel Coordinates}
+\underline{Window Coordinates}: A fragment’s 2D position relative to the window. Consider \textbf{the center of} the fragment. For bottom-leftmost pixel, it is \codein{gl\_FragCoord.x == gl\_FragCoord.y == 0.5}.
+\\
+\underline{Texel Coordinates}: Indices of the texture map (as a 2D array). For bottom-leftmost toxel, it is $(0, 0)$. Used in \codein{texelFetch()}.
+\\
+\underline{Texture Coordinates}: Normalised coordinate values of the texture map $\in [0, 1]^2$. For the bottom-leftmost corner, it is $(0.0, 0.0)$. To calculate the coordinates of the center of a texel, average the coordinates of the corners. Used in \codein{texture()}.
+\\
+\underline{Note}: For all coordinate systems above, $x$ \& $y$-coordinate correspond to width from left to right, \& height from bottom to top.
+
+\subsection{Gaussian Blurring}
+2D \deff{Gaussian Kernel / Filter} is defined as:
+\[
+\begin{aligned}
+G(x, y) &= \frac{1}{2\pi\sigma^2} e^{-\frac{x^2+y^2}{2\sigma^2}}
+\\
+&= G(x)G(y) \ , \; G(x) = \frac{1}{2\pi\sigma^2} e^{-x^2/2\sigma^2}
+\end{aligned}
+\]
+
+It is \deff{separable} as we can express the operation as two 1D Gaussian operations.
+\\
+2D Digital Convolution for Gaussian Blurring is:
+
+\[
+\begin{aligned}
+C_{lm} 
+& \leftarrow \sum_{i=-4}^{4} \sum_{i=-4}^{4} \frac{G(i,j)}{k} C_{l+i, m+j}
+\\
+& \leftarrow \sum_{i=-4}^{4} \frac{G(i)}{k} \sum_{j=-4}^{4} \frac{G(i,j)}{k} C_{l+i, m+j}
+\\
+\text{for } k &= \sum_{i=-4}^4 G(i)
+\end{aligned}
+\]
+
+\underline{Note}: All Gaussian weights must sum to $1$.
+
+Since it can be done using two 1D convolution, we can perform it in 3 passes efficiently:
+\begin{enumerate}
+    \item Bind to 1st FBO \& render 3D scene normally to a texture.
+    \item Bind to 2nd FBO \& apply \textbf{vertical} Gaussian blur to Pass 1 texture \& write to another texture.
+    \item Bind to 3rd FBO \& apply \textbf{horizontal} Gaussian blur to Pass 2 texture \& write to output colour buffer.
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+% \noindent\rule{8cm}{0.4pt}
+% \section{Others}
+% \subsection{From Tutorials \& Assignments}
+
+
+% \subsection{From Past Year Papers}
+% \citeqn{(AY20/21 Sem2 Midterm QnD3)} Differences between \codein{texture()} and \codein{texelFetch()}:
+% \begin{itemize}
+%     \item Data - Former takes a normalised value in $[0, 1]^2$ while latter uses exact int-valued texel coordinates.
+%     \item Retrieval - Former performs texture filtering based on the sampling parameters specified, while latter retrieves the exact one texel.
+% \end{itemize}
+
+% \citeqn{(AY20/21 Sem2 Midterm QnG)} When to use Shadow Volume vs. Shadow Mapping Algorithms:
+% \\
+% \citeqn{(AY21/22 Sem2 Midterm Qn14)} Advantage of Shadow Volume methods over Shadow Mapping: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+% -----
+\noindent\rule{8cm}{0.4pt}
+\section{GLSL Coding}
+\subsection{Math}
+\codein{genType sqrt(genType x)} - To compute the square root of input.
+\\
+\codein{genType min(genType x, genType y)} - To compute the min of two inputs. Similarly for \codein{min(x,y)}.
+\\
+\codein{genType pow(genType x, genType y)} - To compute the power $x^y$.
+\\
+\codein{genType dFdx(genType p)} - To compute the partial derivative of input wrt. $x$. Similarly for \codein{dFdy()}.
+\codein{float dot(genType x, genType y)} - To compute the dot produce. Similarly for \codein{cross()}.
+\\
+\codein{float length(genType x)} - To compute the L2 length of the vector.
+\\
+\codein{genType normalize(genType v)} - To normalize the input vector.
+\\
+\codein{genType reflect(genType I, genType N)} - To calculate reflected direction vector.
+
+
+
+\subsection{Fragment Shader}
+\codein{gvec4 texture(sampler, P)} - To sample texture from the sampler using texture coordinates.
+\\
+\codein{gvec4 textureProj(sampler, P)} - To first compute the query vector of $P$ using perspective division, then sample texture.
+\\
+\codein{gvec4 textureProjOffset(sample, P, offset)} - To compute a texture lookup with projection and offset.
+\\
+\codein{gvec4 texelFetch(sampler, P, lod)} - To sample texture from sampler using texel coordinates. Usually \codein{lod = 0} for Level of Details.
+\\
+\underline{Note}: Return types, \codein{P} \& \codein{offset} can all be vectors of size $1~4$ depending on params.
+
+% -----
+% KIV:
+% 
+
+% -----
+% Others:
+% 5. check whats n_1, n_2 in Schlick's Approx.
+
+
+% -----
+% Include img:
+% opengl pipeline
+
+
+\end{multicols}
+\end{document}
