@@ -111,14 +111,14 @@
 \subsubsection{Fragment Shader}
 
 
-\section{Texture Mapping}
+\section{4. Texture Mapping}
 \subsection{OpenGL Cube Map}
 
 
 
 
 
-\section{Shaders}
+\section{5. Shaders}
 \subsection{Cartoon Style Shading}
 %TODO: very view-dependent
 
@@ -175,7 +175,7 @@ F = f + (1 - f) (1 - V \cdot N)^5,  \; \text{for }  f = \frac{(1 - n_1 / n_2)^2}
 
 
 
-\section{FBO \& Real-Time Shadow}
+\section{6. FBO \& Real-Time Shadow}
 \deff{Multi-Pass Rendering} - render 3D scenes for multiple times (passes), and combine the multiple rendered images to synthesize the final frame.
 
 \subsection{Framebuffer Object}
@@ -264,7 +264,7 @@ B = S(\frac{1}{2}, \frac{1}{2}, \frac{1}{2}) \ T(1, 1, 1) = \begin{bmatrix}
 
 
 
-\section{Post-Rendering Processing}
+\section{7. Post-Rendering Processing}
 \deff{Post Rendering Image Processing} \textasciitilde Further processing of images produced by 3D rendering, in order to produce final frame.
 
 \subsection{Edge Detection}
@@ -337,25 +337,413 @@ Since it can be done using two 1D convolution, we can perform it in 3 passes eff
 
 
 
+\section{8. Deferred Shading}
+% \subsection{Overview}
+\deff{Deferred Shading} - Techniques to avoid applying complex shaders on fragments not appeared in the final image, based on multi-pass rendering.
+\begin{enumerate}
+    \item 1st Pass uses a simple shader to render scene into off-screen buffers with depth info, stored in \deff{Geometry Buffer / G-Buffer} for shading computations.
+    \item 2nd pass applies frag.shader on G-buffer data to compute for each output pixel.
+\end{enumerate}
+\underline{Note}: Writing to G-buffer can be (time \& memory) expensive, so deferred shading is used only when direct computation very expensive. Usually used when: 1) High depth complexity / many overdraw, 2) Almost fill entire viewport, \&/or 3) Expensive shading.
+
+
+\subsection{Screen Space Techniques}
+\deff{Ambient Occlusion} - Technique to simulate illumination on \textbf{diffuse} surfaces by a \deff{uniform hemispherical area light source}.
+\\
+\underline{Procedures}: [1] For each surface point, pre-computing \deff{Visibility / Accessibility} factor, proportion of hemisphere centered about the surface normal visible from the point. [2] Use the factor to modulate direct diffuse illumination during rendering.
+\\
+\underline{Issues}: [1] Accessibility factor at each vertex can be computed by shooting rays around, expensive! [2] Pre-computed factors cannot be used for dynamic scenes.
+
+\smallskip
+
+Solution for expensive AO: \deff{Screen-Space Ambient Occlusion} (SSAO) \textasciitilde Apply deferred shading and compute accessibility only for output fragments based on depth map info.
+
+% TODO: need more?
+
+
+
+
+
+\section{9. Ray Tracing}
+In modern OpenGL, ray tracing is performed in \textbf{fragment shader}.
+
+\subsection{Ray Tracing Acceleration}
+\subsubsection{Bounding Volume Methods}
+\deff{(Naive) Bounding Volume} \textasciitilde Use a simple shape to enclose each complex object. Quick reject if ray does not intersect the volume.
+\\
+\underline{Note}: Trade-off between intersection efficiency \& tightness for rejection rate.
+
+\smallskip
+
+\deff{Bounding Volume Hierarchy} \textasciitilde Improvement to Bounding Volume method by organising volumes into hierarchies.
+\\
+\underline{Note}: Good hierarchies usually constructed manually.
+
+
+\subsubsection{Spatial Subdivision Methods}
+\deff{Spatial Subdivision Method} - Subdivide 3D space into regions \& associate each region with a list of objects that occupy (fully or partially) the region. When a ray is traced into a region, query the object list and perform intersection tests with objects.
+\\
+Choices for subdivision shape: 1) Uniform Grid, 2) Octree, 3) Binary Space Partitioning (BSP).
+
+\smallskip
+
+\deff{Octree} \textasciitilde Each cube region is conditionally \& recursively subdivided into 8 equal subregions.
+\\
+Two subdivision schemes
+\begin{enumerate}
+    \item Subdivide a cell if occupied by more than 1 object
+    \item Subdivide a cell if occupied, until maximum depth
+\end{enumerate}
+
+
+
+\subsection{Distribution Ray Tracing}
+\deff{Distribution Ray Tracing} - For each pixel, shoot multiple random rays to perform ray tracing. At each intersection, \textbf{randomly perturb} reflection, refraction \& shadow rays according to some distribution.
+\\
+\underline{Analysis}: Two sources of randomness: 1) shoot random rays, 2) add random perturbations during interaction.
+
+
+
+
+% -----
+\section{10. Local Reflection}
+\deff{Local Reflection} \textasciitilde Consider relationship between a light source, a surface point \& a view point.
+\\
+\deff{Global Illumination} \textasciitilde Consider all light sources \& surfaces.
+\\
+\underline{Note}: [1] Local reflection involves no interaction with other objects. [2] Shadow is global illumination.
+
+\smallskip
+
+Local reflection improves material appearances by improving reflection, \deff{Bi-directional Reflection Distribution Function} (BRDF), \& transmission, \deff{Bi-directional Transmission Distribution Function} (BTDF).
+
+
+\subsection{Radiometry Basics}
+\deff{Radiometry} - The study of physical measurement of light / radiation energy.
+\begin{itemize}
+    \item \deff{Radiant Power} / \deff{Radiant Flux}, $\Phi$ - Total energy flows from/to/through a surface per unit time. (Unit Watts, $W$)
+    \item \deff{Irradiance}, $E$ - Incident (incoming) radiant power on a surface per unit surface area, $E = \frac{d\Phi}{dA}$. (Unit $W / m^2$)
+    \item \deff{Radiant Exitance}, $M$ / \deff{Radiosity}, $B$ - Exitant (outgoing) radiant power from a surface per unit surface area, $M = B = \frac{d\Phi}{dA}$. (Unit $W/m^2$)
+    \item \deff{Radiance}, $L$ - Radiant power per unit projected surface area per unit solid angle. (Unit $W / (sr \ m^2)$)
+    \[
+    L = \frac{d^2\Phi}{d\omega dA\cos\theta}
+    \]
+\end{itemize}
+\underline{Notes}: [1] $L$ invariant along straight paths. [2] Sensors' response proportionate to $L$ incident upon them.
+
+
+\subsubsection{Bi-directional Reflection Distribution Function}
+\deff{Bi-directional Reflection Distribution Function} - Specify the amount of incident light reflected in an exitant direction.
+\[
+\begin{aligned}
+\text{BRDF}, \ f_r(x, \Psi \to \Theta)
+&= \frac{dL(x \to \Theta)}{dE(x \leftarrow \Psi)}
+\\
+&= \frac{dL(x\to \Theta)}{L(x \leftarrow \Psi)(N_x \cdot \Psi) d\omega_\Psi}
+\end{aligned}
+\]
+, where $x$ is surface point, $\Psi = L, \Phi = V$ light source \& sensor.
+
+\underline{Note}: Radiosity quantities vary with wavelength. \textbf{Therefore we need a separate BRDF for each of RGB components}.
+\\
+
+BRDF Properties
+\begin{itemize}
+    \item \deff{Helmholtz Reciprocity} - BRDF is symmetric wrt. the incident and reflected directions.
+    \[
+    f_r(x, \Psi \to \Theta) = f_r(x, \Theta \to \Psi)
+    \]
+    \item Energy Conservation - Total power reflected in all directions must be equal or less than incident power.
+    \[
+    \int_{\Omega_x} f_r(x, \Psi\to\Omega) (N_x \cdot\Theta)d\omega_\Theta \le 1, \ \forall \Psi
+    \]
+\end{itemize}
+
+%TODO: Examples
+
+
+\subsection{Cook-Torrance Reflection Model}
+\deff{Cook-Torrance / Torrance-Sparrow Reflection Model} - A physically based \textbf{specular reflection} model that models surfaces using \deff{Microfacets} which are simplified as symmetric V-shaped grooves.
+\[
+f_r(x, \Psi \leftrightarrow \Theta) = \frac{D(\alpha) GF}{(N\cdot \Psi)(N\cdot \Theta)\pi} 
++ \frac{k_d}{\pi}
+\]
+\underline{Note}: Diffuse one can be calculated using other methods \& overall effect is $sR_s + dR_d$ subject to $s+d=1$.
+\\
+\underline{Analysis}: [1] Assume microfacets are perfectly clearn. [2] CTRM BRDF is isotropic, \& cannot model anisotropic behaviours for objects like brushed metals, clothes or fur.
+\\
+\deff{Isotropic} - BRDF is independent of the azimuth angle $\phi$ of incident light (look the same around $360^\circ$ left to right).
+\[
+f_r(x, (\theta_o, \phi_i) \leftrightarrow (\theta_o, \phi_o))
+= f_r(x, (\theta_o, 0) \leftrightarrow (\theta_o, \phi_o - \phi_i))
+\]
+A BRDF that is not isotropic is \deff{Anisotropic}.
+
+\smallskip
+
+Four components
+\begin{enumerate}
+    \item Statistical distribution of microfacets' orientation $D(\alpha)$
+    \item Shadowing \& Masking effects, $G$
+    \item Glare effect, $(N \cdot V)$
+    \item Fresnel term, $F$
+\end{enumerate}
+
+\subsubsection{CTRM - Microfacet Distribution}
+Model proportion of microfacets facing a given direction, $D(a)$, typically using a simple \textbf{Normal Distribution}:
+\[
+D(\alpha) = k \exp(-(\alpha / m)^2)
+\]
+, where $\alpha$ is angle between $N$ and $H$, and $m$ controls mean surface roughness.
+
+\subsubsection{CTRM - Shadowing \& Masking}
+Some light might be trapped or intercepted, leading to \deff{Masking}, cannot go out along reflected, \&/or \deff{Shadowing}, incident light being blocked.
+\[
+\begin{aligned}
+G &= \min \{1, G_s, G_m \}
+\\
+G_m &= 2(N\cdot H)(N\cdot V) / V \cdot H
+\\
+G_s &= 2(N\cdot H)(N \cdot L)/V\cdot H
+\end{aligned}
+\]
+
+\subsubsection{CTRM - Glare Effect}
+\deff{Glare Effect} - When angle between the view vector and the mean surface normal increases, an observer sees more microfacets.
+\\
+\underline{Implementation}: [1] Modelled with the term $1/{N \cdot V}$. [2] Countered by masking effect if viewing direction almost parallel to mean surface.
+
+
+
+\section{11. Global Illumination}
+\subsection{Rendering Equation}
+\deff{Hemispherical Formulation}
+\[
+\begin{aligned}
+L_\text{ref}(\mathbf{x}, \omega_\text{ref}) 
+&= L_e(\mathbf{x}, \omega_\text{ref}) 
+\\
+&+ \int_s \rho(\mathbf{x}, \omega_\text{in} \to \omega_\text{ref})L_\text{in}(\mathbf{x}', \omega_\text{in}) \cos \theta_\text{in} d\omega_\text{in}
+\end{aligned}
+\]
+\deff{Area Formulation}:
+\[
+\begin{aligned}
+L_\text{ref}(\mathbf{x}, \omega_\text{ref}) 
+&= L_e(\mathbf{x}, \omega_\text{ref}) 
+\\
+&+ \int_s \rho(\mathbf{x}, \omega_\text{in} \to \omega_\text{ref})L_\text{in}(\mathbf{x}', \omega_\text{in}) g(\mathbf{x}, \mathbf{x}') \cos \theta_\text{in} \, \frac{\cos \theta_0 dA}{\lVert \mathbf{x} - \mathbf{x}' \rVert}^2
+\end{aligned}
+\]
+, where $g(\mathbf{x}, \mathbf{x}')$ is the \deff{Visibility Function}, \& $d\omega_\text{in} = \frac{\cos \theta_0 dA}{\lVert \mathbf{x} - \mathbf{x}' \rVert}^2$ projected area of the differential surface region visible in direction $\omega_\text{in}$.
+\\
+\underline{Analysis}: [1] View-independent. [2] Recursive \& complicated, cannot be evaluated analytically, so numeric methods like Monte Carlo are used.
+
+\subsubsection{Monte Carlo Integration}
+\deff{Monte Carlo Integration} - A method of evaluating an integral by generating random samples of the integrand \& taking the average.
+\\
+Sampling techniques determine accuracy / efficiency of Monte Carlo estimates:
+\begin{itemize}
+    \item \deff{Uniform Sampling}. Error $\propto 1 / \sqrt{N}$.
+    \item \deff{Stratified Sampling} - Subdivide domain into non-overlapping regions, \& take one random sample per region. Error $\propto 1/ N$.
+    \item \deff{Importance Sampling} - Sample the integrand with probability similar to the value of the integrand. Error depends on choice of probability function chosen.
+\end{itemize}
+
+
+\subsection{Ray Tracing Models}
+\deff{Light Transport Model} \textasciitilde Consider reflection as (totally) specular or (totally) diffuse for surface-to-surface interaction. Use regex-liked notations to describe light transportation.
+
+\begin{itemize}
+    \item \codein{L} light source; \codein{E} eye; \codein{S} specular reflection; \codein{D} diffuse.
+    \item For any event \codein{e}: \codein{(e)+} one or more; \codein{(e)*} zero or more; \codein{(e)?} zero or one; \codein{(e|f)} either one.
+\end{itemize}
+
+
+\subsubsection{Model: Whitted Ray Tracing}
+\underline{Analysis}: [1] View-independent. [2] Simulate \codein{LD?S*E}. [3] A hybrid method: both global \& local model, and global parts only covers \textbf{pure specular-specular interaction}.
+
+
+\subsubsection{Model: Distribution Ray Tracing}
+\underline{Analysis}: [1] View-dependent. [2] Simulate \codein{LD?S*E}, but all specular paths are calculated, not just in mirror reflection direction.
+
+
+\subsubsection{Model: Path Tracing}
+\underline{Procedures}: 1) For each pixel, shoot multiple random primary rays. 2) At each intersection, shoot any one secondary ray. 3) Terminate either when the ray hits nothing or based on \deff{Russian Roulette Technique} for absorption, where randomly at an intersection, absorb / despawn with a probability proportional to material absorption.
+\\
+\underline{Note}: Linear complexity, as one secondary ray every time.
+\\
+\underline{Analysis}: [1] View-dependent. [2] Simulate \codein{L(D|S)*E}. [3] Complete global illumination. [4] Linear complexity but high computational cost, need many rays for indirect illumination effects like caustics.
+
+
+\subsubsection{Model: Two-Pass Ray Tracing}
+\underline{Procedures}
+\begin{itemize}
+    \item First Pass, \deff{Light Pass}: Rays are shot from the light sources \& followed through transparent \& specular objects until they hit a diffuse surface. Cache light energy on diffuse surfaces.
+    \item Second Pass, \deff{Eye Pass}:  Use conventional ray tracing. Terminate on the diffuse surface \& uses the stored energy in the illumination map.
+\end{itemize}
+
+\underline{Analysis}: [1] First pass view independent, second view-dependent. [2] Simulate \codein{LS+DS*E}. [3] More efficient than path tracing.
+
+
+\subsubsection{Model: Photon Mapping}
+\deff{Photon Mapping} \textasciitilde Emit photons towards all surfaces, \& store when hitting a diffuse surface. Randomly determine to reflect, transmit or absorb. For each photon, store [1] incoming direction, \& [2] light power, using \textbf{KD-Tree} based on 3D location.
+\\
+\underline{Procedsures} based on Two-Pass Rendering
+\begin{itemize}
+    \item First pass, \textbf{Photon Tracing}: Build photon map structure by tracing photons from lights through the model.
+    \item Second Pass, \textbf{Rendering}: Render model from eye using photon map information.
+\end{itemize}
+
+
+\subsubsection{Model: Radiosity + Path Tracing}
+\deff{Radiosity} \textasciitilde Discretise scene into patches, consider interaction between patches. Solution expressed in terms of a constant radiosity for each patch.
+\\
+\underline{Analysis}: [1] View-independent. [2] Simulate \codein{LD*E}.
+
+\smallskip
+
+\textbf{Radiosity with Path Tracing}: Trace rays from light sources \& cache the irradiance on diffuse surfaces. Radiosity solution uses the cached irradiance as patch emission.
+\\
+\underline{Analysis}: Simulate \codein{LS*D*S*E}.
 
 
 
 
 
 
+\section{12. Radiosity}
+\deff{Radiosity} \textasciitilde An approximation algorithm for modelling diffuse-to-diffuse interaction in the scene by discretising the scene into patches \& calculating diffuse-to-diffuse interaction between patches. Based on Rendering Equation:
+\[
+\begin{aligned}
+B_i 
+&= E_i + R_i \int_j B_j F_{ij}
+\\
+&\approx E_i + R_i \sum_{j=1}^n B_j F_{ij}
+\end{aligned}
+\]
+\underline{Intuitively}, it is $\text{radiosity} \times \text{area} = \text{emited power} + \text{reflected power}$.
+\\
+\underline{Note}: Iterative / numerical methods are used to solve the system of linear systems for $B_i$. [2] $E_i, R_i$ are \textbf{wavelength-dependent}, a separate set of equations for each of RGB.
 
 
-% \noindent\rule{8cm}{0.4pt}
-% \section{Others}
+\subsection{Solving Linear Equations}
+\subsubsection{Algorithm: Gaussian Elimination}
+\underline{Analysis}: [1] Able to get exact solution but unnecessary for radiosity. [2] Time complexity $O(n^3)$.
+
+\subsubsection{Algorithm: Jacobi Iteration / Gauss-Seidel Method}
+\deff{Jacobi Iteration} - For a system of linear equations $A\mathbf{x} = E$, 
+\begin{enumerate}
+    \item Initial approximation $x_i^{(0)} = E_i / a_{ii}$
+    \item Compute $x_i^{(k+1)}$ iteratively using:
+    \[
+    x_i^{(k+1)} = (E_i - \sum_{j=1}^n a_{ij}x_j^{(k)}) / a_{ii}, \ \forall i
+    \]
+    \item Stop iteration if $|x_i^{(k+1)} - x_i^{(k)}| < \epsilon$ for pre-set threshold $\epsilon > 0$.
+\end{enumerate}
+\deff{Gauss-Seidel Method} - It improves Jacobi Iteration by using previous unknowns' estimates from the current iteration for all subsequent unknowns:
+\[
+x_i^{(k+1)} = (E_i - \sum_{j=1}^{i-1} a_{ij}x_j^{(k+1)}- \sum_{j=i}^{n} a_{ij}x_j^{(k)}) / a_{ii}, \ \forall i
+\]
+
+
+\subsection{Form Factors}
+\deff{Form Factor}, $F_{ij}$ - proportion of energy leaving surface $i$ \& striking surface $j$ directly over total energy that leaving surface $i$.
+\\
+Form factor for patches can be approximated by sum over $A_i$.
+\[
+\begin{aligned}
+F_{ij} &= \frac{1}{A_i} \int_{A_i} \int_{A_j} \frac{\cos \phi_i \cos \phi_j}{\pi r^2} dA_j dA_i
+\\
+F_{dA_iA_j} &\approx \int_{A_j} \frac{\cos \phi_i \cos \phi_j}{\pi r^2} dA_j
+\end{aligned}
+\]
+\underline{Note}: $\int F_{ij} dA_j = 1$.
+
+\subsubsection{Nusselt Analogue \& Hemicube}
+\deff{Nusselt Analogue} - The form factor between $dA_i$ and $A_j$ can be obtained by projecting $A_j$ onto the surface of a \textbf{unit hemisphere} then projecting onto a \deff{unit circle} on plane of $dA_i$, both centered at $dA_i$.
+
+\smallskip
+
+\deff{Hemicube} \textasciitilde Replace the unit hemisphere with half of a cube, i.e. $C = [-1, 1]\times[-1, 1]\times [0, 1]$.
+\\
+\underline{Analysis}: Instead of double projection onto the plane, now there is one projection, onto the top or side faces of the hemicube.
+\\
+\deff{Delta Form Factor} - Amount of form factor contributed by a pixel on hemicube surface, if it is projected,
+\begin{itemize}
+    \item Top $(x, y, 1)$: $\triangle F_q = \frac{1}{\pi(x^2+y^2+1)^2} \triangle A$
+    \item Side $(1, y, z)$: $\triangle F_q = \frac{x}{\pi(1+y^2+z^2)^2} \triangle A$, same for other 3
+\end{itemize}
+\underline{Implementation}: 1) Consider a hemicube centred at patch $i$ 2) Render and project all other patches onto the hemicube using hidden surface removal. 3) Find the pixels covered by each patch, and sum up their delta form factors.
+\\
+\underline{Note}: Based on \deff{Item Buffering}, namely using colour buffer where each colour servers as a unique identifier.
+
+
+\subsection{Adaptive Subdivision}
+\subsubsection{Subdivision Methods}
+\deff{(Naive) Adaptive Subdivision}: 1) Use initial patches to compute a radiosity solution. 2) For every patch, subdivide if its local radiosity variation is large. 3) Recompute radiosity solution (from scratch) using all patches and sub-patches. 4) Repeat Step 2 \& 3 until all local radiosity variations are within a threshold.
+\\
+\underline{Analysis}: Excessive re-computation: complexity $O((n+k)^2)$ for initial number of patches $n$ new sub-patches $k$.
+
+\smallskip
+
+\deff{Sub-structuring Adaptive Subdivision} \textasciitilde (Improvement) During each subdivision of patch $i$, only compute form factors from each new sub-patch $i1, ..., ik$ to initial patches:
+\[
+B_{iq} = E_i + R_i \sum_{j=1}^n B_j F_{(iq)j}, \, q = 1, 2, ..., k
+\]
+\underline{Analysis}: [1] Complexity $O(nk)$. [2] Simple heuristic for hemicube: Subdivide if patch area is large compared to distance to nearest patches.
+
+
+\subsubsection{Progressive Refinement}
+\deff{Progressive Refinement} \textasciitilde A stream-based approach that continuously subdivides large (in terms of radiosity) patches until all small enough, addressing the issue of huge number of patches need to be first calculated requiring excess memory.
+\\
+\underline{Procedure}: 1) Find patch $i$ with greatest unshot radiosity / emitted energy. 2) Compute form factors from patch $i$ to all others. 3) Update the radiosity of each of the receiving patches.
+4) If the new greatest unshot radiosity is below a threshold, stop the algorithm, otherwise repeat from Step 1.
+\\
+Progressive Refinement updates patches using \deff{Shooting} \textasciitilde A single step commutes form factors from shooting patch to all receiving patches \& distribute unshot energy $\triangle B_i$:
+\[
+B_j^{(k+1)} = B_j^{(k)} + R_j F_{ji} \triangle B_i
+\]
+\underline{Note}: Update in $B_j$ leads to unshot energy in $B_j$, for update in next iteration.
+
+
+
+
+
+\noindent\rule{8cm}{0.4pt}
+
+\section{Others}
+\subsection{Multi-Variable Calculus Misc}
+For a 3D surface $z = f(x, y), (x, y) \in D$ and $D \subseteq \mathbb{R}^2$, normal vector at surface point $(x, y, z)$ is parallel to:
+\[
+(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}, \pm 1)
+\]
+
+\smallskip
+
+Projected area of a plane with area $s$ \& normal $N$ onto unit dir. $\Psi$:
+\[
+s_\text{proj} = \cos \langle N, \Psi \rangle s = (N \cdot \Psi) s 
+\]
+
+
 % \subsection{From Tutorials \& Assignments}
 
 
-% \subsection{From Past Year Papers}
-% \citeqn{(AY20/21 Sem2 Midterm QnD3)} Differences between \codein{texture()} and \codein{texelFetch()}:
-% \begin{itemize}
-%     \item Data - Former takes a normalised value in $[0, 1]^2$ while latter uses exact int-valued texel coordinates.
-%     \item Retrieval - Former performs texture filtering based on the sampling parameters specified, while latter retrieves the exact one texel.
-% \end{itemize}
+\subsection{From Past Year Papers}
+\citeqn{(AY19/20 Sem2 Midterm Qn2B)} Vectors like \codein{ecNormal} need to be normalised again in fragment shader even though the corresponding ones in vertex shader is normalsied, because normal vectors at vertices are bilinearly interpolated to the fragment, \& resultings vector may not be a unit vector anymore.
+\\
+\citeqn{(AY19/20 Sem2 Midterm Qn5B)} Encoded perturbed normal vectors stored in a RGB image appears light blue, because unperturbed normal is $(0, 0, 1) \in [-1, 1]^3$ and encoded to $(0.5, 0.5, 1) \in [0, 1]^3$.
+\\
+\citeqn{(AY19/20 Sem2 Midterm Qn6B)} Mipmapping is not effective for shadow mapping boundary jaggies, as mipmapping only averages depth values while comparison results are still binary.
+\\
+\citeqn{(AY19/20 Sem2 Final Qn29)} If all patches in an enclosed space reflect all incoming light, the equilibrium radiosity will be \textbf{infinity} for all patches (\& the linear system inconsistent).
+\\
+\citeqn{(AY20/21 Sem2 Midterm QnD3)} Differences between \codein{texture()} and \codein{texelFetch()}:
+\begin{itemize}
+    \item Data - Former takes a normalised value in $[0, 1]^2$ while latter uses exact int-valued texel coordinates.
+    \item Retrieval - Former performs texture filtering based on the sampling parameters specified, while latter retrieves the exact one texel.
+\end{itemize}
+
 
 % \citeqn{(AY20/21 Sem2 Midterm QnG)} When to use Shadow Volume vs. Shadow Mapping Algorithms:
 % \\
