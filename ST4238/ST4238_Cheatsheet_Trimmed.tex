@@ -88,10 +88,10 @@
 \footnotesize
 %\raggedright
 
-\begin{center}
-  {\huge\sffamily\bfseries ST4238 Cheatsheet} \huge\bfseries\\
-  by Yiyang, AY22/23
-\end{center}
+% \begin{center}
+%   {\huge\sffamily\bfseries ST4238 Cheatsheet} \huge\bfseries\\
+%   by Yiyang, AY22/23
+% \end{center}
 \setlength{\premulticols}{0pt}
 \setlength{\postmulticols}{0pt}
 \setlength{\multicolsep}{1pt}
@@ -101,82 +101,17 @@
 
 % -----------------------------------------------------------------------
 \section{1. Poisson Processes}
-\subsection{Overview}
-\subsubsection{Definition 1}
-A \deff{Poisson Process} with rate $\lambda > 0$ is an integer-valued stochastic process $\{ X(t), t \ge 0 \}$ for which
-\begin{itemize}
-	\item for any time points $t_0 = 0 < t_1 < t_2 < ... < t_n$, increments
-	\[
-		X(t_1) - X(t_0), X(t_2) - X(t_1), ..., X(t_n) - X(t_{n-1})
-	\]
-	are independent r.v.
-	\item for $s \ge 0$ and $t > 0$, the r.v. $X(s+t) - X(s) \sim Pois(\lambda t)$
-	\item $X(0) = 0$
-\end{itemize}
-
-\underline{Note}: The process above is \deff{homogeneous}. If $\lambda = \lambda(t)$ varies with time, then the process is \deff{non-homogeneous}, and replace the second property above with
-\[
-X(s+t) - X(s) \sim Pois \Big(  \int_{s}^{s+t} \lambda (u) du \Big)
-\]
+To \textbf{homogenize a non-homogen. \textasciitilde}: [1] Define $\Lambda (t) = \int_0 ^t \lambda(u) du$ [2] $Y(s) = X(t)$ where $s = \Lambda(t)$ homogen. PoisProc. rate $1$.
 \\
-\underline{Note}: A \deff{Cox Process} is where $\lambda(t)$ is a stochastic process itself.
-
-\smallskip
-
-To \textbf{homogeniz a non-homogeneous Poisson Process}:
-\begin{enumerate}
-    \item Define $\Lambda (t) = \int_0 ^t \lambda(u) du$
-    \item Define a new process $Y(s) = X(t)$ where $s = \Lambda(t)$
-    \item Now $Y(s)$ is a homogeneous Poisson Process with rate $1$.
-\end{enumerate}
 
 
-\subsubsection{Definition 2 - LRE}
-Let $N \big( (s, t] \big)$ be a r.v. counting number of occurrences in the interval $(s, t]$. Then $N \big( (s, t] \big)$  is a \deff{Poisson Point Process} of intensity $\lambda > 0$ if
-\begin{itemize}
-	\item for any time points $t_0 = 0 < t_1 < ... < t_n$, increments
-	\[
-		N \big( (t_0, t_1] \big),  N \big( (t_1, t_2] \big), ..., N \big( (t_{n-1}, t_n] \big)
-	\]
-	are independent r.v.
-	\item $\exists \lambda > 0$, s.t. as $h \to 0$, $P( N \big( (t, t+h] \big) \ge 1 ) = \lambda h + o(h)$.
-	\item as $h \to 0$, $P( N \big( (t, t+h] \big) \ge 2 ) = \lambda  + o(h)$.
-\end{itemize}
-
-\underline{Note}: For non-homogeneous, $P( N \big( (t, t+h] \big) \ge 1 ) = \lambda(t) h + o(h)$.
+% \subsubsection{Law of Rare Events}
+% Let $\epsilon_1, \epsilon_2, ...$ be independent Ber. r.v.'s with $P(\epsilon_i = 1) = p_i$ and let $S_n = \sum{i=1}^n \epsilon_i$. The exact probability for $S_n$ and Poisson probability with $\lambda = \sum_{i=1}^n p_i$ differ by at most
+% \[
+% |P(S_n = k) - e^{-\lambda} \frac{\lambda^k}{k!}| \le \sum{i=1}^n p_i^2
+% \]
 
 
-\subsubsection{Law of Rare Events}
-Let $\epsilon_1, \epsilon_2, ...$ be independent Ber. r.v.'s with $P(\epsilon_i = 1) = p_i$ and let $S_n = \sum{i=1}^n \epsilon_i$. The exact probability for $S_n$ and Poisson probability with $\lambda = \sum_{i=1}^n p_i$ differ by at most
-\[
-|P(S_n = k) - e^{-\lambda} \frac{\lambda^k}{k!}| \le \sum{i=1}^n p_i^2
-\]
-
-\underline{Note}: In the case of $p_1 = ... = \lambda / n$, RHS becomes $\lambda^2 / n$.
-
-
-\subsubsection{Definition 3 - Sojourn Time}
-Consider a sequence $\{ S_n, n \ge 0  \}$ of i.i.d. $Exp(\lambda)$. Define a counting process by specifying the occurrence time of $n$-th event
-\[
-W_n = S_0 + S_1 + ... + S_{n-1}
-\]
-The new counting process will be a Poisson Process with rate $\lambda$.
-
-
-\subsubsection{Waiting \& Sojourn Time}
-The \deff{Waiting Time}, $W_n$ of a Poisson Process $X(t)$ is the time of $n$-th occurrence, for $n \in \mathbb{N}$. We set $W_0 = 0$.
-
-\smallskip
-
-The \deff{Sojourn Time}, $S_n = W_{n+1} - W_n$ is the time where the process sojourns in state $n$, for $n \in \mathbb{Z}_{\ge 0}$.
-
-\smallskip
-
-For homogeneous Poisson Processes, $S_n \sim Exp(\lambda)$ and $W_n \sim Gamma(n, \lambda)$
-
-
-\subsection{Properties}
-\subsubsection{Arrival Time}
 % TODO: ranked?
 Given $X(t) = n$, the joint distribution of waiting time $W_1, ..., W_n$ is
 \[
@@ -192,15 +127,6 @@ f_k(x) = \frac{n!}{(n-k)! (k-1)!} \frac{1}{t} (\frac{x}{t})^{k-1} (1 - \frac{x}{
 \]
 
 
-\subsubsection{Merging \& Splitting Processes}
-For $\{ N_1(t), t \ge 0 \}, \{ N_2(t), t \ge 0 \}, ..., \{ N_m(t), t \ge 0 \}$ independent Poisson Processes with rates $\lambda_1, \lambda_2, ..., \lambda_m$, let $N(t) = \sum_{i=1}^m N_i(t), t \ge 0$ be the \deff{Merging Process}. Then $\{ N(t), t \ge 0 \}$ is also a Poisson Process with rate $\lambda = \lambda_1 + \lambda_2 + ... + \lambda_m$.
-
-\smallskip
-
-For $\{ N(t), t \ge 0 \}$ a Poisson Process with rate $\lambda$, if each event occurred can be of type A and B with probability $p$ and $1-p$ independently, then let  $X(t)$ and  $Y(t)$ be the \deff{Splitting Processes} counting number of type A and B occurrences. Then $\{ X(t), t \ge 0 \}$ and  $\{ Y(t), t \ge 0 \}$ are Poisson Processes with rates $\lambda p$ and $\lambda (1-p)$, and they are independent.
-
-
-\subsubsection{Comparision of Two Processes}
 Consider $\{ X(t), t \ge 0 \}$ and  $\{ Y(t), t \ge 0 \}$ two independent Poisson Processes with rates $\lambda_1$ and $\lambda_2$. Define $W_{n}^{X}$ and $W_{m}^{Y}$ as the waiting time of the $n$-th and $m$-th waiting time of $X(t)$ and $Y(t)$ respectively.
 \[
 P(W_{n}^{X} < W_{m}^{Y}) = \sum_{k=n}^{n+m-1} {{n+m-1}\choose{k}}    (\frac{\lambda_1}{\lambda_1 
@@ -208,46 +134,21 @@ P(W_{n}^{X} < W_{m}^{Y}) = \sum_{k=n}^{n+m-1} {{n+m-1}\choose{k}}    (\frac{\lam
 \]
 \underline{Analysis}: It is equivalent as getting $n$ or more heads in $n+m-1$ tosses where getting a head has probability $\lambda_1 / (\lambda_1 + \lambda_2)$.
 
-
-
-\subsection{Variants}
-\subsubsection{Compound Poisson Process}
-A stochastic process $\{ X(t), t \ge 0 \}$ is a \deff{Compound Poisson Process} if it can be represented as
-\[
-X(t) = \sum_{i=1}^{N(t)} Y_i, \ t \ge 0
-\]
-, where $\{ N(t), t \ge 0\}$ is a Poisson Process with rate $\lambda$ and $Y_i \sim F$ is a family of i.i.d. r.v.'s independent of $\{ N(t), t \ge 0\}$.
-\\
-\underline{Note}: We need [1] rate $\lambda$, and [2] distribution $F$ to specify a compound Poisson Process.
-
 \smallskip
 
-$E[X(t)] = \lambda t E[Y_i]$
+\deff{Compound Poisson Process}
 \\
-$Var[ X(t) ] = \lambda t \Big( E[Y_i]^2 +  Var(Y_i) \Big)$
-
-\smallskip
-
-To merge two compound Poisson Processes $X(t)$ and $Y(t)$ with parameters $(\lambda_1, F_1)$ and $(\lambda_2, F_2)$ as $N(t) = X(t) + Y(t)$, the result is a compound Poisson Process with parameters
+$E[X(t)] = \lambda t E[Y_i]$ and $Var[ X(t) ] = \lambda t \Big( E[Y_i]^2 +  Var(Y_i) \Big)$
 \[
-\begin{aligned}
-\lambda &= \lambda_1 + \lambda_2
-\\
-F(x) &= \frac{\lambda_1}{\lambda_1 + \lambda_2} F_1(x) + \frac{\lambda_2}{\lambda_1 + \lambda_2} F_2(x)
-\end{aligned}
+\lambda = \lambda_1 + \lambda_2
+\, 
+F(x) = \frac{\lambda_1}{\lambda_1 + \lambda_2} F_1(x) + \frac{\lambda_2}{\lambda_1 + \lambda_2} F_2(x)
 \]
 
-\subsubsection{Conditional Poisson Process}
-A stochastic process $\{ N(t), t \ge 0 \}$ is a \deff{Conditional Poisson Process} if there is a positive r.v. $L$ such that $\{ N(t) | L = \lambda, t \ge 0 \}$ is a Poisson Process with rate $\lambda$.
-\\
-If $L$ has pdf $g(\cdot )$, then pdf for increment of $N(t)$ is
-\[
-P(N(t+s) - N(s) = n) = \int_{0}^{\infty} e^{-\lambda t} \frac{(\lambda t)^n}{n!} g(\lambda) d \lambda
-\]
 
-$E[N(t)] = E(L) t$ 
+\deff{Conditional Poisson Process}
 \\
-$Var(N(t)) = t E(L) + t^2 Var(L)$
+$E[N(t)] = E(L) t$ and $Var(N(t)) = t E(L) + t^2 Var(L)$
 \\
 Conditional probability of $L$ given $N(t) = n$ (posterior),
 \[
@@ -259,47 +160,17 @@ P(L \le x | N(t) = n) = \frac{
 \]
 
 
-\subsubsection{Multi-Dimensional Poisson Process}
-Let $S$ be a subset of $\mathbb{R}$, $\mathbb{R}^2$, or $\mathbb{R}^3$. Let $\mathcal{A}$ be the set of subsets of $S$ and for any set $A \in \mathcal{A}$, define $|A|$ as the size of $A$. Then $\{N(A) : A \in \mathcal{A} \} $ is a homogeneous Poisson process with $\lambda > 0$ if,
-\begin{itemize}
-	\item for each $A \in \mathcal{A}$, $N(A) \sim Pois(\lambda |A|)$
-	\item for every finite collection $\{ A_1, ..., A_n \}$ of disjoint subsets of $S$, r.v.'s $N(A_1), ..., N(A_n)$ are independent. 
-\end{itemize}
-
-
 
 % ------------
 \section{2. Continusous Time Markov Chains}
 \subsection{Overview}
-For a stochastic process $\{ X(t), t \ge 0 \}$, if for all $s > u \ge 0, t > 0$,
-\[
-P(X(s+t) = j | X(s) = i, X(u) = k) = P(X(s+t) = j | X(s) = i)
-\]
-, then we call $\{ X(t), t \ge 0 \}$ a \deff{Continuous-Time Markov Chain}, and the property \deff{Markovian Property}.
-
-\smallskip
-
-A CTMC $\{ X(t), t \ge 0 \}$ has \deff{Stationary / Homogeneous Transition Probabilities} if for all $s \ge 0, t > 0$ and states $i, j$,
-\[
-P(X(s+t) = j | X(s) = i) \text{ is independent of $s$}
-\]
-
-% \subsubsection{Parameterisation 1}
-A CTMC $\{ X(t), t \ge 0 \}$ can be specified with: [1] \deff{State Space} $S$, [2] \deff{Waiting Time Rate Vector} $\vec{\nu}$, where the time $X(t)$ stays in state $i \in S$ follows $Exp(\nu_i)$, \& [3] \deff{Jump Probabilities} $P_{ij}$, the probability of $X(t)$ currently in state $i\in S$ and moves to $j \in S$ at first transition.
+\underline{Note}: For an absorbing state $i$, we may set $\nu_i = 0$.
 \\
-\underline{Note}: By definition, $P_{ii} = 0$ and $\sum_{j \neq i} P_{ij} = 1 $ for all $i \in S$.
-\\
-\underline{Note}: For an absorbing state $i$ (e.g. $i = 0$ in Birth \& Death Process), we may set $\nu_i = 0$.
-
-
-\subsubsection{Transition Probability Function}
 Define the \deff{Transition Probabilities} of a CTMC $X(t)$ as
 \[
 P_{ij}(t) := P(X(t+s) = j | X(s) = i)
 \]
-\underline{Note}: A transition probability matrix can uniquely specify a CTMC.
-\\
-\underline{Note}: $P_{ij} \neq P_{ij}(t)$ since there might not be exactly one transition.
+\underline{Note}: [1] $P(t)$ uniquely specifies a CTMC. [2] $P_{ij} \neq P_{ij}(t)$.
 
 
 \subsubsection{Chapman-Kolmogorov Equation}
@@ -407,19 +278,13 @@ P_j = \lim_{t \to \infty} P_{ij}(t)
 
 \smallskip
 
-If $X(t)$ satisfies conditions below, it is \deff{Ergodic} (converse not true):
-\begin{itemize}
-    \item All states of $X(t)$ \textbf{communicate}.
-    \item $X(t)$ is \textbf{positive recurrent}, i.e. for all $i, j \in S$, 
-    \[
-    \mathbb{E}[\min_{t \ge 0} \{ X(t) = j | X(0) = i \}] < \infty
-    \]
-\end{itemize}
+If $X(t)$ satisfies conditions below, it is \deff{Ergodic} (converse not true): [1] All states of $X(t)$ \textbf{communicate}. [2] $X(t)$ is \textbf{positive recurrent}, i.e. for all $i, j \in S$, $\mathbb{E}[\min_{t \ge 0} \{ X(t) = j | X(0) = i \}] < \infty$ 
+\\
 An ergodic chain has stationary \& limiting distributions \& equal.
 
 \smallskip
 
-Suppose the embedded chain of $\{ X(t), t \ge 0 \}$, $\{E(n) \}_{n=0}^\infty$ has stationary distribution $\pmb{\psi}$. Then for all state $i$,
+Suppose embedded chain stationary distribution $\pmb{\psi}$. Then $\forall i, j \in S$,
 \[
 \psi_i = \frac{\pi_i \nu_i}{\sum_{j} \pi_j \nu_j}
 \iff
@@ -622,12 +487,8 @@ And the conditional distribution is still normal:
 
 \subsection{Overview}
 \subsubsection{(Standard) Brown Motion}
-Process $\{X(t), t \ge 0 \}$ is a \deff{Brownian Motion} with parameter $\sigma$ if
-\begin{itemize}
-    \item $X(0) = 0$,
-    \item $\{ X(t), t \ge 0 \}$ has stationary \& independent increments,
-    \item For every $t > 0$, $X(t) \sim \mathcal{N}(0, \sigma^2 t)$.
-\end{itemize}
+Process $\{X(t), t \ge 0 \}$ is a \deff{Brownian Motion} with parameter $\sigma$ if: [1] $X(0) = 0$, [2] $\{ X(t), t \ge 0 \}$ has stationary \& independent increments, and [3] For every $t > 0$, $X(t) \sim \mathcal{N}(0, \sigma^2 t)$.
+\\
 A \deff{Standard Brownian Motion} $\{ B(t), t \ge 0 \}$ has $\sigma = 0$.
 
 \smallskip
@@ -649,13 +510,7 @@ For any time $s, t > 0$,
 
 
 \subsubsection{Brownian Motion with Drift}
-A \deff{Brownian Motion with Drift} $\{ X(t), t \ge 0 \}$ with parameters $\mu$ and $\sigma$ satisfies
-\begin{itemize}
-    \item $X(0) = 0$,
-    \item $\{ X(t), t\ge 0 \}$ has stationary \& independent increments,
-    \item For every $t > 0$, $X(t) \sim \mathcal{N}(\mu t, \sigma^2 t)$.
-\end{itemize}
-\underline{Note}: $X(t) = \sigma B(t) + \mu t$.
+A \deff{Brownian Motion with Drift} $\{ X(t), t \ge 0 \}$ with parameters $\mu$ and $\sigma$: $X(t) = \sigma B(t) + \mu t$.
 
 \smallskip
 
@@ -711,6 +566,9 @@ When $k = 0$: $E[X_1] = 1/p$,  $\text{Var}(X_1) = 1/p^2 - (2r-1)/p$.
 \\
 When $k > 0$: $E[X_1] = E[X_{y_1, ..., y_k}] + 1/p$, and $\text{Var}(X_1) = \text{Var}(X_{y_1, ..., y_k}) + p^{-2} - (2r-1)/p + 2p^{-3} \sum_{j=r-k}^{r-1} E[I(r)I(r+j)]$.
 
+\smallskip
+
+\citeqn{(Tut5Qn2)} For $X_1 \sim Exp(\lambda_1)$ and $X_2 \sim Exp(\lambda_2)$ independent, we have $\min(X_1, X_2) \sim Exp(\lambda_1 + \lambda_2)$.
 
 
 

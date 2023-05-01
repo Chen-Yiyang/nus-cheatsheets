@@ -30,7 +30,10 @@ If you have noticed any typos or errors, please let me know. Thank you!
 
 
 ### CS4261 Algorithmic Mechanism Design
+- Cheatsheet: A detailed summary sheet for Final.
 
+### CS4247 Graphics Rendering Techniques
+- Cheatsheet: A detailed summary sheet for Final.
 
 ### MA1101R Linear Algebra I
 - Exercise Question Summary: A compilation of Lemmas / statements left as proving questions in the Exercises of the textbook.
@@ -60,6 +63,9 @@ If you have noticed any typos or errors, please let me know. Thank you!
 ### ST3236 Stochastic Processes I
 - Cheatsheet: A short summary sheet for Final.
 
+### ST4238 Stochastic Process II
+- Cheatsheet: A detailed summary sheet for Final.
+- Cheatsheet trimmed: A short 2-page summary sheet for Final.
 
 -----
 ## Todos
