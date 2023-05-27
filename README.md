@@ -1,4 +1,4 @@
-# NUS Cheatsheets
+#NUS Cheatsheets
 This repo contains cheatsheets and/or summary notes for modules I have taken for Undergraduate at NUS.
 
 Feel free to take and use, and make contribution.
@@ -55,6 +55,9 @@ If you have noticed any typos or errors, please let me know. Thank you!
 
 ### ST2132 Mathematical Statistics
 - Cheatsheet: A 2-page summary sheet for Final, worked together with [Ng Wei En](https://github.com/weien2912) for the cheatsheet.
+
+### ST2137 Statistical Computing and Programming
+- Cheatsheet: A short summary sheet for Final, with theory and code usage in R, Python, and SAS. (Hint: remove title to make it fit into 3 pages.)
 
 
 ### ST3131 Regression Analysis
