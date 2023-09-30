@@ -16,7 +16,8 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{amsthm}
-\usepackage{physics} % for vectors
+\usepackage{physics}  % for vectors
+\usepackage{bbm}  % for mathbb-ed digits
 %\usepackage{fonts}
 \usepackage{multicol,multirow}
 \usepackage{spverbatim}
@@ -30,9 +31,11 @@
 \setsansfont{Fira Sans}
 \setmonofont{Inconsolata}
 \usepackage{unicode-math}
+\usepackage{listings}
+\usepackage{minted}
 \setmathfont{TeX Gyre Pagella Math}
 \usepackage{microtype}
-
+\usepackage{ulem}  % cuz \underline affected by everymath
 \usepackage{empheq}
 
 % new:
@@ -72,18 +75,32 @@
 \begin{document}
 
 \definecolor{mathBlue}{cmyk}{1,.72,0,.38}
+\definecolor{defOrange}{cmyk}{0, 0.5, 1, 0.3}
+\definecolor{codeInlineRed}{cmyk}{0, 0.9, 0.9, 0.45}
+\definecolor{theoremRed}{cmyk}{0, 0.9, 0.9, 0.45}
+% Note: code and thm color are pretty similar, but typically they wont appear in the same file. Both are set to be dim so that the file is not overwhelmed by bright colors (since deff organe is quite bright).
+
 \everymath{\color{mathBlue}}
 \everydisplay{\color{mathBlue}}
 
 % for vector notation in this module
-\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\vect}[1]{\pmb{#1}}
+\newcommand{\deff}[1]{\textcolor{defOrange}{\textbf{#1}}}
+\newcommand{\codein}[1]{\textcolor{codeInlineRed}{\texttt{#1}}}
+\newcommand{\citeqn}[1]{\underline{\textit{#1}}}
+\newcommand{\thm}[1]{
+    \color{theoremRed}{
+        \uline{{\textbf{#1}}}
+    }
+    \color{black}
+}
 
 \footnotesize
 %\raggedright
 
 \begin{center}
   {\huge\sffamily\bfseries MA2108 Cheatsheet} \huge\bfseries\\
-  by Yiyang, AY21/22
+  by Yiyang, AY23/34
 \end{center}
 \setlength{\premulticols}{0pt}
 \setlength{\postmulticols}{0pt}
@@ -96,7 +113,260 @@
 
 % -----------------------------------------------------------------------
 
-\section{Chapter 01 -  Real Number}
+\section{1. Pre-requisites}
+% \subsubsection{}
+\thm{Well-Ordering Principle of $\mathbb{N}$} Every non-empty subset $S \in \mathbb{N}$ has a least (smallest) element.
+
+
+
+
+
+\section{2. The Real Numbers}
+\subsection{Algebric Properties, \textasciitilde}
+Different types of means 
+\begin{itemize}
+    \item \deff{Arithmetic Means} $A_n = \frac{1}{n} \sum_{k=1}^n a_k$
+    \item \deff{Geometric Means} $G_n = \Big( \prod_{k=1}^n a_k \Big) ^{1/n}$ 
+    \item \deff{Harmonic Means} $H_n = n \Big( \sum_{k=1}^n a_k^{-1} \Big)^{-1}$
+\end{itemize}
+, for $n \in \mathbb{N}_{\ge 2}$ and $a_1, a_2, ..., a_n \in \mathbb{R}$ are positive. For the means, we have the \thm{AM-GM-HM Inequality}:
+\[
+H_n \le G_n \le A_n
+\]
+, taking "$=$" iff. $a_1 = ... = a_n$.
+
+
+
+\thm{Bernoulli's Inequality} For $x > -1$, we have $(1+x)^n \ge 1 + nx$, for any $n \in \mathbb{N}$.
+
+
+
+\thm{Triangle Inequity} $|a+b| \le |a| + |b|$, for all $a, b \in \mathbb{R}$.
+\\
+Derived: [1] $\bigl| |a| - |b| \bigr| \le |a-b|$, [2] $|a-b| \le |a|+|b|$.
+
+
+
+\subsubsection{Neighbourhood}
+For any $a \in \mathbb{R}$ and $\epsilon > 0$, the \deff{$\epsilon$-neighbourhood of $a$} is the set:
+\[
+V_\epsilon(a) = \{ 
+x \in \mathbb{R}: |x - a| < \epsilon
+\}
+\]
+
+\thm{Theorem 2.2.8} For $a \in \mathbb{R}$, if $x \in V_\epsilon(a)$ for every $\epsilon > 0$, then $x = a$.
+
+
+
+
+
+\subsection{Completeness Properties, \textasciitilde}
+For a non-empty $S \subseteq \mathbb{R}$, it is \deff{Bounded Above} (\deff{Bounded Below}) if $S$ has an upper bound (a lower bound). $S$ is \deff{Bounded} if it is bounded above and below, and is \deff{Unbounded}, otherwise.
+
+
+\smallbreak
+
+
+For a non-empty $S \subseteq \mathbb{R}$, $u$ is the \deff{Supremum} of $S$ if the following conditions are met, and we denote it as $\sup S$:
+\begin{enumerate}
+    \item $u$ is an upper bound of $S$.
+    \item $\forall v \in \mathbb{R}$, if $v$ is an upper bound of $S$, then $v \ge u$.
+\end{enumerate}
+For a non-empty $S \subseteq \mathbb{R}$, $w$ is the \deff{Infinum} of $S$ if the following conditions are met, and we denote it as $\inf S$:
+\begin{enumerate}
+    \item $w$ is a lower bound of $S$.
+    \item $\forall v \in \mathbb{R}$, if $v$ is a lower bound of $S$, then $v \le w$.
+\end{enumerate}
+\underline{Note}: Sup. and Inf. are \textbf{uniquely determined}, if they exist.
+
+
+Alternative Definition (Similarly for Infinum):
+\\
+\thm{Lemma 2.3.4} For $u$ an upper bound of $S \subseteq \mathbb{R}$, $u = \sup S$ iff.
+\[
+\forall \epsilon > 0, \exists s_\epsilon \in S, \ u-\epsilon < s_\epsilon 
+\]
+
+
+
+\smallbreak
+
+
+For a non-empty $S \subseteq \mathbb{R}$, $u$ is the \deff{Maximum} (\deff{Minimum}) of $S$, if $u = \sup S$ ($u = \inf S$) and $u \in S$.
+\\
+\underline{Note}: Sup. and Inf. are not necessarily elements in $S$ (if they exist), but maximum and minimum are.
+
+
+
+\thm{Supremum Property of $\mathbb{R}$} Every non-empty subset of $\mathbb{R}$ that has an upper bound has a supremum.
+
+
+
+\thm{The Archimedeam Property} If $x \in \mathbb{R}$, then $\exists n_x \in \mathbb{N}$ s.t. $x < n_x$.
+
+
+
+\thm{Corollary 2.4.6} If $x > 0$, then $\exists n \in \mathbb{N}$ such that $n-1 \le x <  n$.
+
+
+
+\thm{Density Theorems} For $x, y \in \mathbb{R}$ with $x < y$, tehre exists $r \in \mathbb{Q}$ ($z \in \mathbb{R} \backslash \mathbb{Q}$) s.t. $x < r < y$ ($x < z < y$).
+
+
+% Supremum Property 
+
+% Archimedean 
+
+% Density Thm
+
+
+\subsection{Intervals}
+A sequence of intervals $I_n, n \in \mathbb{N}$ is \deff{Nested} if
+\[
+I_1 \supseteq I_2 \supseteq ... \supseteq I_n \supseteq I_{n+1} \supseteq ...
+\]
+\underline{Properties}: [1] If $I_n = [a_n, b_n], n \in \mathbb{N}$ is a nested seq. of closed bounded intervals, then $\exists \xi \in \mathbb{R}$ s.t. $\xi \in I_n, \forall n \in \mathbb{N}$. [2] If $I_n = [a_n, b_n], n \in \mathbb{N}$ satisfying $\inf \{ b_n - a_n: n \in \mathbb{N} \} = 0$, then $\xi$ contained in all $I_n$ is unique.
+
+
+
+
+
+\section{3. Sequences \& Series}
+\subsection{Sequence \& Convergence}
+% Seq def
+\deff{Sequence} in $\mathbb{R}$: a real-valued function $X: \mathbb{R} \to \mathbb{R}$. We write $x_n = X(n)$ for the $n$-th term of the sequence, and denote the sequence as $(x_n,: n \in \mathbb{N})$.
+
+
+\smallbreak
+
+
+A sequence $X = (x_n)$ in $\mathbb{R}$ is \deff{Convergent} to $x \in \mathbb{R}$ iff. for every $\epsilon > 0$, there exists $K = K(\epsilon) \in \mathbb{N}$ s.t.
+\[
+n \ge K(\epsilon) \implies |x_n - x| < \epsilon
+\]
+, and we call $x$ the \deff{Limit} of $(x_n)$, denoted as $\lim_{n \to \infty} x_n = x$. A sequence is \deff{Divergent} if it is not convergent.
+
+
+Technique for proving convergence:
+\begin{enumerate}
+    \item Express $|x_n - x|$ in terms of $n$ and find a simpler upper bound $L = L(n)$, i.e. $|x_n - x| < L$.
+    \item Let $\epsilon > 0$ be arbitrary, find $K \in \mathbb{N}$ s.t. for all $n \ge K$, $L = L(n) < \epsilon$, then
+    \[
+        n \ge K \implies |x_n - x| < L < \epsilon
+    \]
+\end{enumerate}
+
+
+\smallbreak
+
+
+\thm{Squeeze Theorem} If $x_n \le y_n \le z_n$, for all $n \in \mathbb{N}$ and $\lim_{n \to \infty} x_n = \lim_{n \to \infty} z_n = a$, then
+\[
+\lim_{n \to \infty} y_n = a
+\]
+
+
+
+A sequence $X = (x_n)$ is \deff{Bounded} if there exists $M > 0$ such that $|x_n| \le M$ for all $n \in \mathbb{N}$.
+
+% Thm 3.2.2 ~ 3.2.5 See fit
+
+
+\smallbreak
+
+
+\thm{Monotone Convergence Theorem} Let $(x_n)$ be a monotone sequence of real numbers, then $(x_n)$ is convergent iff. $(x_n)$ is bounded.
+\\
+If it is bounded and increasing, then $\lim_{n \to \infty} x_n = \sup \{ x_n: n \in \mathbb{N} \}$. (Similarly for decreasing.)
+
+
+\smallbreak
+
+
+For a sequence $(x_n)$, it \deff{tends to $+ \infty$}, i.e. $\lim_{n \to \infty} x_n = + \infty$ if for all $\alpha \in \mathbb{R}$, there exists $K = K(\alpha) \in \mathbb{N}$ such that if $n \ge K(\alpha)$, then $x_n > \alpha$. (Similarly for $\lim_{n \to \infty} x_n = - \infty$.)
+\\
+A sequence $(x_n)$ is \deff{Properly Divergent} if $\lim_{n \to \infty} x_n = \pm \infty$.
+
+
+
+
+\subsection{Subsequences}
+% Def
+A \deff{Subsequence} of $X = (x_n)$ is $X' = (x_{n_k})$:
+\[
+X' = (x_{n_1}, x_{n_2}, ..., x_{n_3})
+\]
+, where $n_1 < n_2 < ... < n_k < ... $ is a strictly increasing sequence in $\mathbb{N}$. \underline{Note}: $n_k \ge n, \forall k$.
+
+
+\thm{Theorem 3.4.2} If $(x_n)$ converges to $x$, then any subsequence $(x_{n_k})$ also converges to $x$, 
+\[
+\lim_{n_k \to \infty} x_{n_k} = \lim_{k \to \infty} x_{n_k} = x
+\]
+
+
+\thm{Theorem 3.4.5} If $(x_n)$ has either of the following properties, it is divergent: [1] $(x_n)$ has two convergent subsequences with different limits. [2] $(x_n)$ is unbounded.
+
+
+\thm{Theorem 3.4.7} Every sequence has a monotone subsequence.
+
+
+\thm{Bolzano-Weierstrass Theorem} Every bounded sequence has a convergent subsequence.
+
+
+
+
+\subsection{Cauchy Sequences}
+A \deff{Cauchy Sequence} $(x_n)$ is a sequence where for all $\epsilon > 0$, there exists $H = H(\epsilon) \in \mathbb{N}$ such that
+\[
+\forall n, m \in \mathbb{N}, n, m \ge H \implies |x_n - x_m| < \epsilon
+\]
+
+\thm{Cauchy Criterion} A sequence is convergent iff. it is Cauchy.
+
+
+\smallbreak
+
+
+A \deff{Contractive Sequence} $(x_n)$ is a sequence where there exists $C \in (0, 1)$ s.t. 
+\[
+|x_{n+2} - x_{n+1}| \le C |x_{n+1} - x_n|, \ \forall n \in \mathbb{N}
+\]
+
+
+\thm{Theorem 3.5.8} Every contractive sequence is Cauchy.
+
+
+
+
+\subsection{Infinite Series}
+For $(x_n)$, its \deff{(Infinite) Series} is sequence $(s_n)$, where $s_n = \sum{k=1}^n x_k$ is called a \deff{Partial Sum} of the series, and $x_k$ is a \deff{Term}.
+
+Tests for infinite series' convergence:
+\begin{itemize}
+    \item \deff{$n$-th Term Test} - If $\sum x_n$ converges, then $\lim_{n\to\infty} x_n = 0$.
+    
+    \item Cauchy Criterion Test
+    
+    \item \deff{Partial Sum Bounded Test}, for series w. non-negative terms - Suppose $x_n \ge 0, \forall n \in \mathbb{N}$, then $\sum_{x_n}$ converges iff. $(s_n)$ is bounded.
+    
+    \item \deff{Comparison Test} - For $(x_n), (y_n)$ with some $K \in \mathbb{N}$, s.t. $n \ge K \implies 0 \le x_n \le y_n$. Then [1] $\sum y_n$ converges $\implies$ $\sum x_n$ converges, and [2] $\sum x_n$ diverges $\implies$ $\sum y_n$ diverges.
+    
+    \item \deff{Limit Comparison Test} - For \textbf{strictly positive} $(x_n), (y_n)$ with limit $r = \lim_{n \to \infty} (\frac{x_n}{y_n})$. Then [1] if $r = 0$, $\sum y_n$ converges $\implies$ $\sum x_n$ converges. [2] if $r > 0$, $\sum y_n$ converges iff $\sum x_n$ converges.
+\end{itemize}
+
+
+
+\noindent\rule{8cm}{0.4pt}
+
+
+
+
+\section{Intermediate Results \& Lemmas}
+
+
+
 
 \end{multicols}
 \end{document}
