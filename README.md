@@ -44,7 +44,7 @@ If you have noticed any typos or errors, please let me know. Thank you!
 
 
 ### MA2108 Mathematical Analysis I
-- Cheatsheet: A detailed summary sheet for Midterm, AY23/24 Sem 1.
+- Cheatsheet: A detailed summary sheet for Final, AY23/24 Sem 1.
 
 ### MA3209 Metric and Topological Spaces
 

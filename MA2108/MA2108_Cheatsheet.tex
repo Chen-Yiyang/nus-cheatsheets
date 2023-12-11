@@ -182,7 +182,7 @@ For a non-empty $S \subseteq \mathbb{R}$, $w$ is the \deff{Infinum} of $S$ if th
 
 
 Alternative Definition (Similarly for Infinum):
-\\
+
 \thm{Lemma 2.3.4} For $u$ an upper bound of $S \subseteq \mathbb{R}$, $u = \sup S$ iff.
 \[
 \forall \epsilon > 0, \exists s_\epsilon \in S, \ u-\epsilon < s_\epsilon 
@@ -358,14 +358,313 @@ Tests for infinite series' convergence:
 
 
 
+
+
+\subsection{Absolute Convergence}
+% Def
+Series $\sum x_n$ is \deff{Absolutely Convergent} if series $\sum |x_n|$ is convergent. A series is \deff{Conditionally Convergent} if it is convergent but not absolutely convergent.
+
+Tests for absolutely convergence:
+\begin{itemize}
+    \item Limit Comparison Test - Consider convergence of positive sequences $|x_n|$ and $|y_n|$ if $(x_n), (y_n)$ non-negative.
+    \item \deff{Root Test} - For $(x_n)$, [1] if $\exists r \in \mathbb{R}, 0 < r < 1$ and $K \in \mathbb{N}$ s.t. $|x_n|^{1/n} \le r, \ \forall n \ge K$, then $\sum x_n$ is abs. convergent. [2] If $\exists r \in \mathbb{R}, r > 1$ and $K \in \mathbb{N}$ s.t. $|x_n|^{1/n} \ge r > 1, \ \forall n \ge K$, then $\sum x_n$ is \textbf{divergent}.
+    \item \deff{Ratio Test} - For $(x_n)$ nonzero, [1] if $\exists r \in \mathbb{R}, 0 < r < 1$ and $K \in \mathbb{N}$ s.t. $|\frac{x_{n+1}}{x_n}| \le r, \ \forall n \ge K$, then $\sum x_n$ is abs. convergent. [2] If $\exists K \in \mathbb{N}$ s.t. $|\frac{x_{n+1}}{x_n}| \ge 1, \ \forall n \ge K$, then $\sum x_n$ is \textbf{divergent}.
+\end{itemize}
+
+% Abs convg tests
+% TODO: check if finishes
+
+
+
+
+\section{4. Limits}
+For $A \subseteq \mathbb{R}$, $c$ is the \deff{Cluster Point} of $A$ iff. $\forall \delta > 0$, there exists $x \in A$ s.t. $0< |x-c| < \delta$.
+
+\thm{Theorem 4.1.2} (Sequential Criterion) $c \in \mathbb{R}$ is a cluster point of $A$ iff. there exists a sequence $(a_n)$ in $A$ s.t. $\lim a_n = c$ and $a_n \neq c, \forall n \in \mathbb{N}$.
+
+\deff{Limit} of a function $f: A \to \mathbb{R}$ at $c \in A$, $L = \lim_{x \to c} f(x)$ iff. $\forall \epsilon > 0$, there exists $\delta = \delta(\epsilon) > 0$ s.t. $0 < |x - c| < \delta \implies |f(x) - L| < \epsilon$.
+
+\thm{Theorem 4.1.8} (Sequential Criterion) $\lim_{x \to c} f(x) = L$ iff. for every seq. $(x_n)$ in $A$ w. $lim_{n \to \infty} x_n = c$ and $x_n \neq c, \forall n \in \mathbb{N}$, $lim_{n \to \infty} f(x_n) = L$.
+
+
+\smallbreak
+
+
+For $f: A \to \mathbb{R}$ and $c$ a cluster point of $A$, $f$ is \deff{Bounded} on a neighbourhood of $c$ if $\exists V_\delta(c)$ and constant $M > 0$ s.t. $|f(x)| < M, \forall x \in A \cap V_\delta(c)$.
+
+
+\thm{Theorem 4.2.2} If $f: A \to \mathbb{R}$has a limit at cluster point $c$, then $f$ is bounded on some neighbourhood of $c$.
+
+
+\smallbreak
+
+
+\thm{Theorem 4.2.9} If $\lim_{x\to c} f(x) > 0$, then $\exists V_\delta(c)$ s.t. $f(x) > 0, \forall x \in A \cap V_\delta(c), x \neq c$.
+\\
+Similar statements for $f(x) < 0$.
+
+
+\smallbreak
+
+
+
+For $A\subseteq \mathbb{R}$, function $f: A \to \mathbb{R}$ and a cluster point $c$ of $A$, \deff{Right Hand Limit} $L_{+}  = \lim_{x \to c^+} f(x)$ iff. $\forall \epsilon > 0, \exists \delta > 0, x \in V_{\delta}(c) \ \{ c \} \implies f(x) \in V_{\epsilon}(L_{+})$.
+\\
+Similar definition for \deff{Left-Hand Limit} $L_{-}  = \lim_{x \to c^-} f(x)$.
+\\
+Sequential Criteria for One-sided Limits exist.
+
+
+\thm{Theorem 4.3.3} $\lim_{x \to c} f(x) = L$ iff. both $\lim_{x \to c^+} f(x)$ and $\lim_{x \to c^-} f(x)$ exist and 
+\[
+\lim_{x \to c^+} f(x) = \lim_{x \to c^-} f(x) = L
+\]
+
+
+
+
+\section{5. Continuous Functions}
+\subsection{Continuity}
+For $A \subseteq \mathbb{R}$ and $f: A \to \mathbb{R}$, $f$ is \deff{Continuous} at $c \in A$ iff $\forall \epsilon > 0, \exists \delta > 0$ s.t. $x \in V_\delta(c) \implies f(x) \in V_\epsilon(f(c))$.
+\\
+$f$ is continuous at $c \in A$ iff. $\lim_{x \to c} f(x) = f(c)$.
+
+(Sequential Criterion) $f: A \to \mathbb{R}$ is continuous at $x = c$ iff. for every sequence $(x_n)$ in $A$ s.t. $x_n \to c$, we have $f(x_n) \to f(c)$.
+
+
+
+\subsection{Continuous Function on Intervals}
+\thm{Boundedness Theorem} If $f$ is continuous on $[a, b]$, then $f$ is bounded on $[a, b]$.
+\\
+\underline{Note}: It only applies to \textbf{closed bounded} intervals.
+
+
+
+
+\thm{Max-Min Theorem} If $f$ is continuous on $[a, b]$, then $f$ has an absolute maximum and an absolute minimum on $[a, b]$.
+
+
+
+
+\thm{Location of Roots Theorem} If $f$ is continuous on $[a, b]$ and $f(a)f(b) < 0$, then there exists a point $c$ in $(a, b)$ s.t. $f(c) = 0$.
+
+
+
+
+\thm{Bolzano's Intermediate Value Theorem} For interval $I$ and function $f$ continuous on $I$, and $a, b \in I$ with $f(a) \le f(b)$,  then for any $k \in [f(a), f(b)]$, $\exists c \in I$ s.t. $f(c) = k$.
+
+
+
+
+\thm{Preservation of Closed Intervals Theorem} For $f$ continuous on $[a, b]$,
+\[
+f([a, b]) := \{ f(x): x \in [a, b] \} = [m, M]
+\]
+, with $m = \inf f([a, b])$ and $M = \sup f([a, b])$.
+
+% TODO: maybe more
+
+
+
+
+\subsection{Monotonicity \& Bijectivity}
+A function $f: A \to \mathbb{R}$ is \deff{Increasing} (\deff{Decreasing}) on $A$ if $\forall x_1, x_2 \in A$, $x_1 \le x_2 \implies f(x_1) \le f(x_2)$ ($x_1 \le x_2 \implies f(x_1) \ge f(x_2)$).
+\\
+$f$ is \deff{Monotone} if it is increasing or decreasing.
+\\
+\deff{Strictly \textasciitilde}: $x_1 < x_2 \implies f(x_1) < f(x_2)$ and so on.
+
+
+\smallbreak
+
+
+For a function $f: A \to B$, it is
+\begin{itemize}
+    \item \deff{Injective} (\deff{One-One}), iff $\forall x_1 \neq x_2 \in A$, $f(x_1) \neq f(x_2)$.
+    \item \deff{Surjective}, iff $f(A) = B$.
+    \item \deff{Bijective}, iff it is injective and surjective.
+\end{itemize}
+
+
+
+
+
+\subsection{Uniform Continuity}
+For $A \subseteq \mathbb{R}$ and $f: A \to \mathbb{R}$, $f$ is \deff{Uniformly Continuous} on $A$ if for all  $\epsilon > 0$, there exists $\delta = \delta(\epsilon) > 0$ s.t.
+\[
+\forall x, y \in A, |x-y| < \delta \implies |f(x) - f(y)| < \epsilon
+\]
+i.e. $\delta = \delta(\epsilon)$ is independent of $x, y \in A$.
+\\
+\underline{Note}: $f$ is \textbf{not uniformly continuous} on $A$ iff. $\exists \epsilon_0 > 0$ s.t. $\forall \delta > 0, \exists x_\delta, y_\delta \in A$ with $|x_\delta - y_\delta| < \delta$ and $|f(x_\delta) - f(y_\delta)| \ge \epsilon$.
+
+Sequential Criterion
+\begin{itemize}
+    \item Uniformly continuous - For any $(x_n), (y_n)$ in $A$ with $\lim_{n\to \infty} x_n - y_n = 0$, we have $\lim_{n \to \infty} f(x_n) - f(y_n) = 0$.
+    \item Not uniformly continuous - There exists $\epsilon_0 > 0$ and $(x_n), (y_n)$ in $A$, $\lim_{n\to \infty} x_n - y_n = 0$ and $\lim_{n \to \infty} f(x_n) - f(y_n) \ge \epsilon_0$.
+\end{itemize}
+
+
+\thm{Uniform Continuity Theorem} If $f$ is continuous on a \textbf{closed bounded} interval $[a, b]$, then it is uniformly continuous on $[a, b]$.
+
+
+\smallbreak
+
+
+A function $f: A \to \mathbb{R}$ is a \deff{Lipschitz Function} on $A$ iff. there exists $K > 0$ s.t.
+\[
+|f(x) - f(y)| \le K |x-y|, \forall x, y \in A
+\]
+
+\thm{Theorem 5.4.5} If $f: A \to \mathbb{R}$ is a Lipschitz function, then $f$ is uniformly continuous on $A$.
+
+
+\thm{Theorem 5.4.7} If $f: A \to \mathbb{R}$ is uniformly continuous on $A$ and $(x_n)$ a Cauchy sequence in $A$, then $(f(x_n))$ is a Cauchy sequence in $\mathbb{R}$.
+\\
+i.e. Uniformly continuous functions preserve Cauchy sequences.
+
+
+
+\thm{Continuous Extension Theorem} $f$ is uniformly continuous on interval $(a, b)$ iff. it can be defined at the endpoints $a$ and $b$ s.t. the extended function is continuous on $[a, b]$.
+\\
+\underline{Note}: Define $f(a) = \lim_{x \to a^+} f(x)$ and $f(b) = \lim_{x \to b^-} f(x)$ provided both limits exist.
+
+
+
+
+
+
+\subsection{Jumps}
+\thm{Theorem 5.6.1} For interval $I \subseteq \mathbb{R}$ and increasing function $f: I \to \mathbb{R}$, $c \in I$ not an endpoint, then
+\begin{itemize}
+    \item $\lim_{x \to c^-} f(x) = \sup\{ f(x): x \in I, x < c \}$
+    \item $\lim_{x \to c^+} f(x) = \inf\{ f(x): x \in I, x > c \}$
+\end{itemize}
+
+\deff{Jump} of $f$ at $c$ is defined as $$j_f (c) = \lim_{x \to c^+} f(x) - \lim_{x \to c^-} f(x)$$, and at endpoints, $j_f(a) = \lim_{x \to a^+} f(x) - f(a)$ and so on for $b$.
+
+
+
+\thm{Theorem 5.6.4} For interval $I \subseteq \mathbb{R}$ and $f: I \to \mathbb{R}$ monotone on $I$, the set of points $D \subseteq I$ at which $f$ is discontinuous is a countable set.
+
+
+\thm{Continuous Inverse Theorem} For interval $I \subseteq \mathbb{R}$ and $f: I \to \mathbb{R}$ strictly monotone and continuous, the inverse $f^{-1}$ exists and is also strictly monotone and continuous on $J = f(I)$.
+
+
+
+
+\section{11. Topology Introduction}
+% TODO: whether we can use generalised metric definition later.
+\subsection{Open \& Closed Sets}
+A set $V$ is the \deff{Neighbourhood} of a point $x \in \mathbb{R}$ iff there exists $\epsilon > 0$ s.t. $V_\epsilon(x) \subseteq V$.
+\\
+A subset $G \subseteq \mathbb{R}$ is \deff{Open} in $\mathbb{R}$ iff. for each $x \in G$, there exists $\epsilon_x > 0$ s.t. $V_{\epsilon_x}(x) \subseteq G$.
+\\
+A subset $F \subseteq \mathbb{R}$ is \deff{Closed} in $\mathbb{R}$ if the complement $C(F) = \mathbb{R} \setminus F$ is open in $\mathbb{R}$.
+\\
+\underline{Note}: [1] $\mathbb{R}$ and $\emptyset$ are both open and closed. [2] $\mathbb{Z}$ is closed but not open. [3] $\mathbb{Q}$ is neither open nor closed.
+
+
+Open \& Closed Set Properties
+\begin{itemize}
+    \item Open: [1] Union of any collection of open subsets is open. [2] Intersection of finitely many open subsets is open.
+    \item Closed: [1] Intersection of any collection of closed subsets is closed. [2] Union of finitely many closed subsets is closed.
+\end{itemize}
+
+
+\thm{Characterisation of Closed Sets Theorem} A subset $F \subseteq \mathbb{R}$ is closed iff. any convergence sequence $(x_n)$ in F has $\lim_{n \to \infty} x_n \in F$.
+
+
+\thm{Theorem 11.1.8} A subset $F \subseteq \mathbb{R}$ is closed iff. it contains all its cluster points.
+
+\thm{Theorem 11.1.9} A subset $G \subseteq \mathbb{R}$ is open iff it is the union of countably many disjoint open intervals in $\mathbb{R}$.
+
+
+\smallbreak
+
+
+\thm{Global Continuity Theorem} A function $f: A \to \mathbb{R}$ is continuous on $A$ iff. for every open set $G \subseteq \mathbb{R}$, there exists open set $H \subseteq \mathbb{R}$ such that $H \cap A = f^{-1}(G)$ where $f^{-1}(G) = \{ x \in A: f(x) \in G \}$.
+
+\thm{Corollary 11.3.3} Function $f: \mathbb{R} \to \mathbb{R}$ is continuous iff. $f^{-1}(G)$ is open in $\mathbb{R}$ for every open $G$.
+
+
+
+\subsection{Metric Space}
+A \deff{Metric} on a set $S$ is a function $d: S \times S \to \mathbb{R}$ that satisfies
+\begin{itemize}
+    \item \deff{Positivity} $d(x, y) \ge 0, \forall x, y \in S$
+    \item \deff{Definiteness} $d(x, y) = 0 \iff x = y$
+    \item \deff{Symmetry} $d(x, y) = d(y, x), \forall x, y \in S$
+    \item \deff{Triangle Inequality} $d(x,y) \le d(x, z) + d(z, y), \forall x, y, z \in S$
+\end{itemize}
+A \deff{Metric Space} $(S, d)$ is a set $S$ with a metric $d$ on $S$.
+
+
+Generalised definition for a metric space $(S, d)$
+\begin{itemize}
+    \item \textbf{Neighbourhood}: $V_\epsilon(x_0) = \{ x \in S: d(x, x_0) < \epsilon  \}$ for $\epsilon > 0$ and $x_0 \in S$
+
+    \item \textbf{Boundedness} of $K \subseteq S$: $\exists M > 0, x_0 \in S, d(x, x_0) \le M, \forall x \in K$.
+    
+    \item \textbf{Convergence} to $x \in S$ of sequence $(x_n)$: $\forall \epsilon > 0, \exists K = K(\epsilon) \in \mathbb{N}, n \ge K \implies x_n \in V_{\epsilon}(x)$
+    
+    \item  \textbf{Continuity} of $f: S_1 \to S_2$ at $c \in S_1$: $\forall \epsilon > 0, \exists \delta > 0, d_1(x, c) < \delta \implies d_2(f(x), f(c)) < \epsilon$.
+    
+    \item  \textbf{Open \& Closed Set}
+\end{itemize}
+
+
+
+
+
+\subsection{Compact Set}
+For a metric space $S$, an \deff{Open Cover} of a subset $A \subseteq S$ is a collection $\mathcal{G} = \{ G_\lambda: \lambda \in \Lambda \}$ of open subsets of $S$ satisfying
+\[
+A \subseteq \cup_{\lambda \in \Lambda} G_\lambda
+\]
+If $\mathcal{G}' \subseteq \mathcal{G}$ whose union also contains $A$, then $\mathcal{G}'$ is a \deff{Subcover} of $\mathcal{G}$.
+\\
+If $\mathcal{G}'$ is finite, it is a \deff{Finite Subcover} of $\mathcal{G}$.
+
+
+For a metric space $S$, a subset $K \subseteq S$ is \deff{Compact} iff. for every open cover of $K$ there is a finite subcover.
+
+
+\thm{Heine-Borel Theorem} For a metric space $(S, d)$, a subset $K \subseteq S$ is compact iff. it is closed and bounded.
+
+\thm{Bolzano-Weierstrass Theorem} A bounded sequence in $(S, d)$ has a convergent subsequence.
+
+\thm{Theorem 11.2.6} $K \subseteq S$ is compact iff. every sequence in $K$ has a subsequence that converges to a point in $K$.
+
+
+\thm{Preservation of Compactness Theorem} If $(S, d)$ is compact and $f: S \to \mathbb{R}$ is continuous, then $f(S)$ is compact in $\mathbb{R}$.
+
+
+\smallbreak
+
+
+A subset $U \subseteq S$ is \deff{Disconnected} iff. $U$ has an open cover $\{ A, B\}$ s.t. $A \cap B \cap U = \emptyset$ and $A \cap U = \emptyset, B \cap U = \emptyset$. Otherwise it is \deff{Connected}.
+\\
+\underline{Note}: $E \subseteq \mathbb{R}$ is connected iff $E$ is an interval, i.e. $x, y \in E, x < y \implies [x, y] \in E$.
+
+
+\thm{Intermediate Value Theorem} For $f: S \to \mathbb{R}$ continuous, if $E$ is connected then $f(E)$ is connected.
+
+
+
 \noindent\rule{8cm}{0.4pt}
 
 
 
 
 \section{Intermediate Results \& Lemmas}
+\citeqn{(Tut10Qn4)} For any two functions $f, g: \mathbb{R} \to \mathbb{R}$ continuous on $\mathbb{R}$, if $f(x) = g(x), \forall x \in \mathbb{Q}$, then $f(x) = g(x), \forall x \in \mathbb{R}$.
 
 
+Useful statements
+\begin{itemize}
+    \item $\sum_{i=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}$.
+\end{itemize}
 
 
 \end{multicols}
